@@ -1,43 +1,68 @@
-# Astro Starter Kit: Minimal
+# IMPRIMEVERS | Lab 3D & Web Development
 
-```sh
-npm create astro@latest -- --template minimal
+Plataforma web y taller de manufactura aditiva enfocado en el desarrollo de hardware accesible, figuras articuladas y coleccionables en Cuernavaca, Morelos.
+
+## 🚀 Sobre el Proyecto
+
+**IMPRIMEVERS** es una iniciativa de desarrollo co-creada en un taller familiar, combinando programación web fullstack, modelado 3D de precisión en Blender y extrusión FDM. Diseñado para ofrecer piezas robustas de alta rotación (como coleccionables escolares de 5 a 12 gramos) con acabados y tolerancias optimizadas.
+
+## 🛠️ Stack Tecnológico & Herramientas
+
+- **Frontend Web:** Astro, Tailwind CSS, JavaScript nativo.
+  
+- **Modelado & Ingeniería 3D:** Blender (con scripts personalizados en Python y utilidades de automatización), Blockbench.
+  
+- **Manufactura:** Impresora FDM Creality Ender 3 V3 SE.
+  
+- **Despliegue:** Vercel.
+  
+
+## 📦 Estructura del Repositorio
+
+Plaintext
+
 ```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
+imprimevers/
+├── public/              # Recursos estáticos, logos y galería de fotos
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/      # Componentes modulares de Astro (Hero, Navbar, Portfolio, etc.)
+│   ├── data/            # Arreglos de configuración (FAQs, productos, etc.)
+│   └── layouts/         # Layout principal de la página
+└── astro.config.mjs     # Configuración de Astro
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## ⚙️ Instalación y Desarrollo Local
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Si deseas clonar y levantar el entorno de desarrollo en tu máquina local:
 
-Any static assets, like images, can be placed in the `public/` directory.
+1. **Clona el repositorio:**
+   
+   Bash
+   
+   ```
+   git clone https://github.com/TU_USUARIO/imprimevers.git
+   cd imprimevers
+   ```
+   
+2. **Instala las dependencias:**
+   
+   Bash
+   
+   ```
+   npm install
+   ```
+   
+3. **Ejecuta el servidor de desarrollo local:**
+   
+   Bash
+   
+   ```
+   npm run dev
+   ```
+   
+   Abre [http://localhost:3000](http://localhost:3000/) en tu navegador para ver la interfaz en tiempo real.
+   
 
-## 🧞 Commands
+## 📄 Licencia y Créditos
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Proyecto desarrollado por **Malvavysco** en colaboración creativa con **Bobonsam** (Ángel). Todos los derechos reservados © 2026.
