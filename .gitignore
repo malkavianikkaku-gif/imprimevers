@@ -22,7 +22,8 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-
+contexto_landing.txt
+*.txt
 
 # tests
 test-results/
