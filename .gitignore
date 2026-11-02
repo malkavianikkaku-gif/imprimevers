@@ -22,9 +22,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# ejecutables locales
-opencode.exe
-*.exe
+
 
 # tests
 test-results/
