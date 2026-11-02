@@ -1,0 +1,152 @@
+---
+// src/components/Hero.astro
+import Icon from './Icon.astro';
+import { whatsappUrl } from '../config/site';
+---
+<section id="hero" class="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden bg-cyber-black">
+  
+  <!-- Fondo con el Banner Real y capas de iluminación cyberpunk -->
+  <div class="absolute inset-0 z-0 opacity-40 mix-blend-screen bg-cover bg-center pointer-events-none" style="background-image: url('/IMPRIMEVERS_Portada_1200x630.svg');"></div>
+  
+  <!-- Destellos ambientales de luz neón -->
+  <div class="absolute top-1/4 -left-32 w-96 h-96 bg-cyber-purple/25 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute bottom-1/4 -right-32 w-96 h-96 bg-cyber-blue/25 rounded-full blur-[140px] pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+    
+    <!-- Narrativa Izquierda: Esfuerzo, Historia y el Ejemplo para Ángel -->
+    <div class="lg:col-span-7 space-y-6 text-left">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyber-purple/15 border border-cyber-purple/40 text-cyber-purple font-mono text-xs font-semibold shadow-lg">
+        <span class="w-2 h-2 rounded-full bg-cyber-purple animate-ping"></span>
+        TALLER FAMILIAR EN CUERNAVACA, MORELOS • IMPRIMEVERS
+      </div>
+
+      <h1 class="font-orbitron font-black text-4xl sm:text-5xl lg:text-6xl leading-tight text-white tracking-tight">
+        Tus sueños, <br>
+        <span class="text-transparent bg-clip-text bg-linear-to-r from-cyber-blue via-cyber-purple to-cyber-red drop-shadow-[0_0_25px_rgba(191,0,255,0.4)]">
+          impresos en 3D
+        </span>
+      </h1>
+
+      <p class="text-slate-300 text-sm sm:text-base font-inter font-light max-w-2xl leading-relaxed">
+        No hay fórmulas mágicas ni caminos fáciles. Somos un papá y su hijo de 7 años, empezando en Cuernavaca con <strong class="text-cyber-blue font-semibold">una sola impresora 3D y mucha imaginación</strong>. Cada línea de código, cada hora al volante y cada calibración representan constancia, resiliencia y el motor más fuerte de todos: <strong class="text-cyber-purple font-semibold">demostrarle a Ángel (Bobonsam) que si lo crees con el corazón y trabajas duro por ello, puedes materializarlo</strong> por más difícil que sea el camino.
+      </p>
+
+      <!-- Estadísticas y Valores del Taller -->
+      <div class="grid grid-cols-3 gap-4 pt-2 max-w-lg border-t border-cyber-cardBorder/80">
+        <div>
+          <div class="font-orbitron font-bold text-xl sm:text-2xl text-cyber-blue">FDM</div>
+          <div class="text-[11px] font-mono text-slate-400">CAPA POR CAPA</div>
+        </div>
+        <div>
+          <div class="font-orbitron font-bold text-xl sm:text-2xl text-cyber-purple">1</div>
+          <div class="text-[11px] font-mono text-slate-400">IMPRESORA 3D</div>
+        </div>
+        <div>
+          <div class="font-orbitron font-bold text-xl sm:text-2xl text-cyber-red">7 años</div>
+          <div class="text-[11px] font-mono text-slate-400">LA EDAD DE BOBONSAM</div>
+        </div>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="flex flex-wrap items-center gap-4 pt-4">
+        <a href="#builder" class="px-6 py-3.5 rounded-xl bg-linear-to-r from-cyber-blue via-cyber-purple to-cyber-red text-white font-orbitron font-bold text-xs tracking-wider shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(191,0,255,0.6)] transition duration-300 flex items-center gap-2">
+          <Icon name="calculator" class="w-4 h-4" /> COTIZAR MI FIGURA
+        </a>
+        <a
+          href={whatsappUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-wa="hero"
+          class="px-6 py-3.5 rounded-xl cyber-glass hover:bg-slate-800/60 text-slate-200 font-orbitron font-bold text-xs tracking-wider border border-slate-700 transition flex items-center gap-2"
+        >
+          <Icon name="message-circle" class="w-4 h-4 text-emerald-400" /> ESCRIBIRME POR WHATSAPP
+        </a>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Tarjeta Holográfica Interactiva con el Logo Real -->
+    <div class="lg:col-span-5 flex justify-center perspective-[1000px]">
+      <div id="parallax-card" class="w-full max-w-md aspect-4/5 rounded-3xl cyber-glass neon-border-purple p-6 flex flex-col justify-between relative overflow-hidden transition-transform duration-200 ease-out cursor-grab group shadow-2xl">
+        
+        <!-- Brillo holográfico diagonal -->
+        <div class="absolute inset-0 holo-overlay opacity-80 pointer-events-none"></div>
+
+        <!-- Header superior de la tarjeta HUD -->
+        <div class="flex justify-between items-center text-xs font-mono text-slate-400 z-10">
+          <span class="flex items-center gap-1.5 text-cyber-blue">
+            <Icon name="shield-check" class="w-4 h-4" /> IMPRIMEVERS_CORE
+          </span>
+          <span class="px-2 py-0.5 rounded bg-cyber-purple/20 border border-cyber-purple/40 text-cyber-purple text-[10px]">
+            HÉROES EN CASA
+          </span>
+        </div>
+
+        <!-- Contenedor Central con el Logotipo Real que nos compartiste -->
+        <div class="relative my-auto flex items-center justify-center py-6 pointer-events-none">
+          <div id="layer-bg" class="absolute w-64 h-64 rounded-full bg-linear-to-r from-cyber-purple via-cyber-blue to-cyber-red opacity-30 blur-2xl transition-transform duration-300"></div>
+          
+          <!-- Imagen del Logotipo Hexagonal -->
+          <div id="layer-shield" class="relative w-72 h-72 transition-transform duration-300 flex items-center justify-center">
+            <img
+              src="/IMPRIMEVERS_Logo_Cyberpunk.svg"
+              alt="Logo hexagonal de IMPRIMEVERS"
+              width="288"
+              height="288"
+              fetchpriority="high"
+              decoding="async"
+              class="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,229,255,0.4)] group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+        </div>
+
+        <!-- Footer de la tarjeta con dedicatoria -->
+        <div class="z-10 bg-cyber-black/85 rounded-2xl p-4 border border-slate-800/80 space-y-1 backdrop-blur-md">
+          <div class="flex justify-between items-center font-orbitron font-black text-sm text-white">
+            <span>MALVAVYSCO & BOBONSAM</span>
+            <span class="text-cyber-blue text-xs">EST. 2026</span>
+          </div>
+          <p class="text-[11px] font-mono text-slate-400">
+            "Construyendo un futuro mejor con cada capa de esfuerzo."
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Script para el efecto Parallax en la tarjeta -->
+<script>
+  const card = document.getElementById('parallax-card');
+  const layerBg = document.getElementById('layer-bg');
+  const layerShield = document.getElementById('layer-shield');
+
+  if (card) {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = ((y - centerY) / centerY) * -15;
+      const rotateY = ((x - centerX) / centerX) * 15;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+
+      const moveX = (x - centerX) / 10;
+      const moveY = (y - centerY) / 10;
+
+      if (layerBg) layerBg.style.transform = `translate3d(${-moveX * 0.5}px, ${-moveY * 0.5}px, 0px)`;
+      if (layerShield) layerShield.style.transform = `translate3d(${moveX}px, ${moveY}px, 30px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+      if (layerBg) layerBg.style.transform = `translate3d(0, 0, 0)`;
+      if (layerShield) layerShield.style.transform = `translate3d(0, 0, 0)`;
+    });
+  }
+</script>

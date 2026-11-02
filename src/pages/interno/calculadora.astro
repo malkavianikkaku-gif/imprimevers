@@ -1,0 +1,21 @@
+---
+// src/pages/interno/calculadora.astro
+// Herramienta interna de cálculo preciso. No enlazada desde la landing.
+import Layout from '../../layouts/Layout.astro';
+import PrintCalculator from '../../components/PrintCalculator.astro';
+---
+
+<Layout
+  title="Calculadora precisa (interno) | IMPRIMEVERS"
+  description="Herramienta interna de cálculo de costos de impresión 3D."
+  noindex
+>
+  <main id="main" class="pt-24 pb-16">
+    <PrintCalculator />
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      <a href="/" class="inline-flex items-center gap-2 text-xs font-mono text-slate-400 hover:text-cyber-blue transition">
+        ← Volver a la landing
+      </a>
+    </div>
+  </main>
+</Layout>

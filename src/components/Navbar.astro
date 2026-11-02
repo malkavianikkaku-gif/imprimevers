@@ -1,0 +1,225 @@
+---
+// src/components/Navbar.astro
+import Icon from './Icon.astro';
+import { SITE } from '../config/site';
+
+const links = [
+  { href: '#hero', label: 'INICIO', color: 'hover:text-cyber-blue' },
+  { href: '#slicer', label: 'SIMULADOR', color: 'hover:text-cyber-purple' },
+  { href: '#story', label: 'HISTORIA', color: 'hover:text-cyber-red' },
+  { href: '#proceso', label: 'PROCESO', color: 'hover:text-emerald-400' },
+  { href: '#paquetes', label: 'PAQUETES', color: 'hover:text-cyber-purple' },
+  { href: '#builder', label: 'COTIZADOR', color: 'hover:text-cyber-blue' },
+  { href: '#faq', label: 'FAQ', color: 'hover:text-cyber-purple' },
+];
+
+const socials = [
+  { label: 'TikTok', href: SITE.socials.tiktok, color: 'text-cyber-blue hover:bg-cyber-blue/20 border-cyber-blue/40' },
+  { label: 'Instagram', href: SITE.socials.instagram, color: 'text-cyber-red hover:bg-cyber-red/20 border-cyber-red/40' },
+  { label: 'Facebook', href: SITE.socials.facebook, color: 'text-cyber-purple hover:bg-cyber-purple/20 border-cyber-purple/40' },
+  { label: 'YouTube', href: SITE.socials.youtube, color: 'text-cyber-red hover:bg-cyber-red/20 border-cyber-red/40' },
+].filter((s) => Boolean(s.href));
+---
+<nav class="fixed top-0 left-0 right-0 z-50 cyber-glass border-b border-cyber-cardBorder" aria-label="Navegación principal">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+    <!-- Logo Brand -->
+    <a href="#hero" class="flex items-center gap-3 group shrink-0" aria-label="IMPRIMEVERS, ir al inicio">
+      <div class="w-10 h-10 rounded-xl bg-linear-to-br from-cyber-purple via-cyber-blue to-cyber-red p-0.5 transition-transform duration-300 group-hover:scale-110">
+        <div class="w-full h-full bg-cyber-black rounded-[10px] flex items-center justify-center font-orbitron font-black text-cyber-blue text-sm tracking-tighter">
+          IV
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-orbitron font-black tracking-widest text-base sm:text-lg text-transparent bg-clip-text bg-linear-to-r from-cyber-blue via-cyber-purple to-cyber-red group-hover:neon-text-glow transition-all">
+          IMPRIMEVERS
+        </span>
+        <span class="text-[9px] font-mono tracking-widest text-slate-400 uppercase">
+          Lab 3D • Malvavysco &amp; Bobonsam
+        </span>
+      </div>
+    </a>
+
+    <!-- Menu Items (desktop) -->
+    <div class="hidden lg:flex items-center gap-3 xl:gap-5 font-rajdhani font-bold tracking-wider text-xs xl:text-sm">
+      {links.map((link) => (
+        <a href={link.href} class={`text-slate-300 ${link.color} transition`}>{link.label}</a>
+      ))}
+    </div>
+
+    <!-- Acciones -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      
+      <!-- Redes Sociales en Escritorio -->
+      <div class="hidden lg:flex items-center gap-2 border-r border-slate-800/80 pr-3 mr-1">
+        {socials.map((social) => (
+          <a
+            href={social.href!}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Síguenos en ${social.label}`}
+            class={`px-2 py-1 rounded-lg border text-[11px] font-mono transition ${social.color}`}
+          >
+            {social.label}
+          </a>
+        ))}
+      </div>
+
+      <button
+        id="synth-btn"
+        type="button"
+        onclick="toggleSynthHum()"
+        class="hidden sm:flex px-3 py-1.5 rounded-lg border border-cyber-blue/40 bg-cyber-card hover:bg-cyber-blue/10 text-cyber-blue font-mono text-xs items-center gap-2 transition cursor-pointer"
+        aria-pressed="false"
+        aria-label="Activar o desactivar audio de ambiente"
+      >
+        <i data-lucide="volume-x" id="synth-icon" class="w-4 h-4"></i>
+        <span id="synth-label" class="hidden xl:inline">AUDIO FX: OFF</span>
+      </button>
+
+      <a href="#builder" class="hidden sm:inline-block px-4 py-2 rounded-lg bg-linear-to-r from-cyber-purple to-cyber-blue text-white font-orbitron font-bold text-xs shadow-lg hover:opacity-90 transition transform hover:-translate-y-0.5">
+        COTIZAR
+      </a>
+
+      <!-- Botón menú móvil -->
+      <button
+        id="menu-toggle"
+        type="button"
+        class="lg:hidden p-2 rounded-lg border border-slate-700 bg-cyber-card text-slate-200 hover:text-cyber-blue hover:border-cyber-blue/50 transition cursor-pointer"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label="Abrir menú de navegación"
+      >
+        <i data-lucide="menu" id="menu-icon" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Menú móvil -->
+  <div id="mobile-menu" class="hidden lg:hidden border-t border-cyber-cardBorder bg-cyber-black/95 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-1 font-rajdhani font-bold tracking-wider text-sm">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          data-mobile-link
+          class={`px-3 py-3 rounded-lg text-slate-300 ${link.color} hover:bg-cyber-card transition`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="#builder"
+        data-mobile-link
+        class="mt-2 px-4 py-3 rounded-lg text-center bg-linear-to-r from-cyber-purple to-cyber-blue text-white font-orbitron font-bold text-xs"
+      >
+        MATERIALIZAR IDEA
+      </a>
+      
+      <!-- Redes Sociales dentro del Menú Móvil -->
+      <div class="mt-4 pt-4 border-t border-slate-800/80 flex flex-col gap-2">
+        <span class="text-[10px] font-mono text-slate-400 tracking-wider uppercase px-1">SÍGUENOS EN REDES:</span>
+        <div class="flex items-center gap-2 flex-wrap">
+          {socials.map((social) => (
+            <a
+              href={social.href!}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={`px-3 py-1.5 rounded-lg border text-xs font-mono transition flex items-center justify-center gap-1 ${social.color}`}
+            >
+              {social.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onclick="toggleSynthHum()"
+        class="mt-3 px-3 py-3 rounded-lg border border-cyber-blue/40 bg-cyber-card text-cyber-blue font-mono text-xs flex items-center gap-2 cursor-pointer sm:hidden"
+      >
+        <i data-lucide="volume-x" class="w-4 h-4"></i>
+        <span>AUDIO FX</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<script>
+  declare global {
+    interface Window {
+      toggleSynthHum: () => void;
+      webkitAudioContext?: typeof AudioContext;
+      lucide: { createIcons: () => void };
+    }
+  }
+
+  // Menú móvil
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+
+  function setMenuOpen(open: boolean) {
+    if (!menuToggle || !mobileMenu) return;
+    mobileMenu.classList.toggle('hidden', !open);
+    menuToggle.setAttribute('aria-expanded', String(open));
+    menuToggle.setAttribute('aria-label', open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
+    if (menuIcon) {
+      menuIcon.setAttribute('data-lucide', open ? 'x' : 'menu');
+      window.lucide?.createIcons();
+    }
+  }
+
+  menuToggle?.addEventListener('click', () => {
+    setMenuOpen(menuToggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  mobileMenu?.querySelectorAll('[data-mobile-link]').forEach((link) => {
+    link.addEventListener('click', () => setMenuOpen(false));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setMenuOpen(false);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1024) setMenuOpen(false);
+  });
+
+  // Audio FX
+  let audioCtx: AudioContext | null = null;
+  let osc: OscillatorNode | null = null;
+  let synthActive = false;
+
+  window.toggleSynthHum = function () {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext!)();
+    }
+    const btnLabel = document.getElementById('synth-label');
+    const btnIcon = document.getElementById('synth-icon');
+    const btn = document.getElementById('synth-btn');
+
+    if (!btnIcon) return;
+
+    if (!synthActive) {
+      osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(55, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+
+      synthActive = true;
+      if (btnLabel) btnLabel.innerText = 'AUDIO FX: ON';
+      btnIcon.setAttribute('data-lucide', 'volume-2');
+      btn?.setAttribute('aria-pressed', 'true');
+    } else {
+      if (osc) osc.stop();
+      synthActive = false;
+      if (btnLabel) btnLabel.innerText = 'AUDIO FX: OFF';
+      btnIcon.setAttribute('data-lucide', 'volume-x');
+      btn?.setAttribute('aria-pressed', 'false');
+    }
+    window.lucide?.createIcons();
+  };
+</script>

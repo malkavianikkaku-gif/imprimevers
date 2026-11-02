@@ -1,0 +1,128 @@
+---
+// src/components/Story.astro
+import Icon from './Icon.astro';
+import { SITE } from '../config/site';
+const socials = [
+  { key: 'instagram', label: 'Instagram', href: SITE.socials.instagram, color: 'border-cyber-red/40 text-cyber-red hover:bg-cyber-red/20 hover:border-cyber-red' },
+  { key: 'facebook', label: 'Facebook', href: SITE.socials.facebook, color: 'border-cyber-purple/40 text-cyber-purple hover:bg-cyber-purple/20 hover:border-cyber-purple' },
+  { key: 'tiktok', label: 'TikTok', href: SITE.socials.tiktok, color: 'border-cyber-blue/40 text-cyber-blue hover:bg-cyber-blue/20 hover:border-cyber-blue' },
+  { key: 'youtube', label: 'YouTube', href: SITE.socials.youtube, color: 'border-cyber-red/40 text-cyber-red hover:bg-cyber-red/20 hover:border-cyber-red' },
+].filter((social) => Boolean(social.href));
+---
+<section id="story" class="py-24 relative overflow-hidden bg-cyber-black">
+  <!-- Brillo ambiental de fondo -->
+  <div class="absolute top-1/2 right-0 w-96 h-96 bg-cyber-red/10 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute bottom-10 left-0 w-96 h-96 bg-cyber-purple/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
+    
+    <!-- Encabezado de la sección -->
+    <div class="text-center space-y-3 max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyber-red/15 border border-cyber-red/40 text-cyber-red font-mono text-xs font-semibold">
+        <Icon name="heart" class="w-4 h-4" /> EL CORAZÓN DEL PROYECTO
+      </div>
+      <h2 class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-tight">
+        De la Mente al Filamento
+      </h2>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        IMPRIMEVERS nace en Cuernavaca, Morelos, del esfuerzo diario y de la pasión por la tecnología. Somos un papá y su hijo de 7 años empezando un taller familiar con una impresora 3D y mucha imaginación. Es la prueba viva de que los sueños se construyen paso a paso, con constancia y amor de padre.
+      </p>
+    </div>
+
+    <!-- Tarjetas de los Pilotos (Malvavysco & Bobonsam) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Tarjeta Malvavysco -->
+      <div class="cyber-glass rounded-3xl p-8 border border-cyber-purple/40 space-y-6 relative overflow-hidden group hover:border-cyber-purple transition duration-500 shadow-xl">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-linear-to-br from-cyber-purple to-cyber-blue p-0.5">
+            <div class="w-full h-full bg-cyber-black rounded-[14px] flex items-center justify-center font-orbitron font-black text-cyber-purple text-2xl">
+              M
+            </div>
+          </div>
+          <div>
+            <h3 class="font-orbitron font-black text-xl text-white">MALVAVYSCO</h3>
+            <p class="text-xs font-mono text-cyber-purple">FULLSTACK DEV & DISEÑADOR 3D</p>
+          </div>
+        </div>
+
+        <p class="text-slate-300 text-sm leading-relaxed font-light">
+          "Entre las horas manejando como conductor de Didi y las desveladas programando software o modelando en Blender, entendí que el esfuerzo constante rompe cualquier barrera. Hoy empezamos en Cuernavaca con una sola impresora 3D; ver las ideas y dibujos de mi hijo cobrando vida física es la recompensa más grande que un desarrollador y padre puede tener."
+        </p>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="px-2.5 py-1 rounded-md bg-cyber-black text-[11px] font-mono text-slate-300 border border-slate-800">Fullstack Web</span>
+          <span class="px-2.5 py-1 rounded-md bg-cyber-black text-[11px] font-mono text-slate-300 border border-slate-800">Blender 3D</span>
+          <span class="px-2.5 py-1 rounded-md bg-cyber-black text-[11px] font-mono text-slate-300 border border-slate-800">Impresión FDM</span>
+        </div>
+      </div>
+
+      <!-- Tarjeta Bobonsam (Ángel) -->
+      <div class="cyber-glass rounded-3xl p-8 border border-cyber-red/40 space-y-6 relative overflow-hidden group hover:border-cyber-red transition duration-500 shadow-xl">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 rounded-2xl bg-linear-to-br from-cyber-red to-cyber-purple p-0.5">
+            <div class="w-full h-full bg-cyber-black rounded-[14px] flex items-center justify-center font-orbitron font-black text-cyber-red text-2xl">
+              B
+            </div>
+          </div>
+          <div>
+            <h3 class="font-orbitron font-black text-xl text-white">BOBONSAM (ÁNGEL)</h3>
+            <p class="text-xs font-mono text-cyber-red">DIRECTOR DE IDEAS & CREATIVO JEFE</p>
+          </div>
+        </div>
+
+        <p class="text-slate-300 text-sm leading-relaxed font-light">
+          "El verdadero motor creativo del taller. Con 7 años, su imaginación inagotable, su amor por los universos cyberpunk, los videojuegos y los personajes fantásticos inspira cada figura, cada color y cada proyecto que diseñamos y materializamos juntos."
+        </p>
+
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="px-2.5 py-1 rounded-md bg-cyber-black text-[11px] font-mono text-slate-300 border border-slate-800">Diseño Blockbench</span>
+          <span class="px-2.5 py-1 rounded-md bg-cyber-black text-[11px] font-mono text-slate-300 border border-slate-800">Inspiración Neón</span>
+          <span class="px-2.5 py-1 rounded-md bg-cyber-black text-[11px] font-mono text-slate-300 border border-slate-800">Control de Calidad</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Cita Inspiradora / Reflexión -->
+    <div class="p-8 sm:p-10 rounded-3xl bg-linear-to-r from-cyber-purple/20 via-cyber-card to-cyber-blue/20 border border-cyber-blue/40 text-center space-y-4 shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 opacity-10 font-orbitron font-black text-9xl text-white pointer-events-none" aria-hidden="true">
+        IV
+      </div>
+      <Icon name="quote" class="w-8 h-8 text-cyber-blue mx-auto opacity-80" />
+      <p class="font-orbitron font-bold text-lg sm:text-2xl text-white max-w-4xl mx-auto leading-relaxed">
+        "No hay fórmulas mágicas. Si lo imaginas, lo programas y lo diseñas con constancia... la impresora 3D le dará vida para que puedas sostenerlo en tus manos."
+      </p>
+      <p class="text-xs font-mono text-cyber-purple tracking-widest uppercase">
+        — Para mi hijo Ángel: El ejemplo de que todo es posible con esfuerzo.
+      </p>
+    </div>
+
+  </div>
+</section>
+<!-- Bloque de Redes Sociales Intermedio -->
+<section class="py-12 relative bg-cyber-black border-t border-cyber-cardBorder">
+  <div class="max-w-4xl mx-auto px-4 text-center space-y-6">
+    <div class="space-y-2">
+      <span class="text-xs font-mono text-cyber-purple tracking-widest uppercase">COMUNIDAD IMPRIMEVERS</span>
+      <h3 class="font-orbitron font-bold text-2xl text-white">¡Sigue el proceso del taller en video!</h3>
+      <p class="text-slate-400 text-xs sm:text-sm">
+        Mira cómo diseñamos en Blender, las pruebas con la Ender 3 V3 SE y las locuras que inventamos con Bobonsam.
+      </p>
+    </div>
+
+    <!-- Botones de Redes -->
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      {socials.map((social) => (
+        <a
+          href={social.href!}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={`px-5 py-3 rounded-xl cyber-glass border ${social.color} flex items-center gap-2 font-mono text-xs hover:scale-105 transition duration-300 shadow-lg`}
+        >
+          <span>{social.label}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

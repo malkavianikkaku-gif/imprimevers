@@ -1,0 +1,139 @@
+---
+// src/components/HowItWorks.astro
+import Icon from './Icon.astro';
+import { whatsappUrl } from '../config/site';
+
+const steps = [
+  {
+    step: '01',
+    badge: 'IDEA O ARCHIVO',
+    title: 'Envía tu archivo o idea',
+    desc: 'Si ya tienes un modelo 3D (.STL, .OBJ) nos lo mandas directo. Si solo tienes una foto, dibujo o una idea en mente, te orientamos para modelarla desde cero.',
+    highlight: 'Archivos STL o ideas desde cero',
+    color: 'from-cyber-blue/20 border-cyber-blue/40 text-cyber-blue',
+    iconBorder: 'border-cyber-blue/40 bg-cyber-blue/10 text-cyber-blue shadow-[0_0_15px_rgba(0,229,255,0.25)]',
+    icon: 'upload-cloud',
+  },
+  {
+    step: '02',
+    badge: 'REVISIÓN Y ESTIMADO',
+    title: 'Validación y cotización clara',
+    desc: 'Revisamos dimensiones, resistencia y tiempos de impresión. Te damos una estimación transparente sin costo y resolvemos todas tus dudas antes de encender la máquina.',
+    highlight: 'Cotización gratis sin compromiso',
+    color: 'from-cyber-purple/20 border-cyber-purple/40 text-cyber-purple',
+    iconBorder: 'border-cyber-purple/40 bg-cyber-purple/10 text-cyber-purple shadow-[0_0_15px_rgba(191,0,255,0.25)]',
+    icon: 'calculator',
+  },
+  {
+    step: '03',
+    badge: 'FABRICACIÓN',
+    title: 'Impresión capa por capa',
+    desc: 'Preparamos la impresora con el filamento adecuado (PLA, PETG o TPU). Cuidamos cada capa con atención y supervisión artesanal en nuestro taller en Cuernavaca.',
+    highlight: 'Supervisión en taller familiar',
+    color: 'from-cyber-red/20 border-cyber-red/40 text-cyber-red',
+    iconBorder: 'border-cyber-red/40 bg-cyber-red/10 text-cyber-red shadow-[0_0_15px_rgba(255,0,85,0.25)]',
+    icon: 'layers',
+  },
+  {
+    step: '04',
+    badge: 'ENTREGA',
+    title: 'En tus manos, lista para disfrutar',
+    desc: 'Retiramos soportes, limpiamos la pieza y la empacamos con protección. Entrega coordinada en Cuernavaca o empaque protegido para envío seguro.',
+    highlight: 'Entrega local en Cuernavaca',
+    color: 'from-emerald-500/20 border-emerald-500/40 text-emerald-400',
+    iconBorder: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.25)]',
+    icon: 'package-check',
+  },
+];
+---
+
+<section id="proceso" class="py-24 relative bg-cyber-black border-t border-cyber-cardBorder scroll-mt-20 overflow-hidden">
+  <!-- Luces sutiles de fondo -->
+  <div class="absolute top-1/2 left-0 w-80 h-80 bg-cyber-blue/10 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute bottom-10 right-0 w-80 h-80 bg-cyber-purple/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 relative z-10">
+    <!-- Encabezado -->
+    <div class="text-center space-y-4 max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyber-blue/10 border border-cyber-blue/30 text-cyber-blue font-mono text-xs font-semibold tracking-wider">
+        <Icon name="sparkles" class="w-4 h-4" /> PASO A PASO • SIN COMPLICACIONES
+      </div>
+      <h2 class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-tight">
+        ¿Cómo funciona?
+      </h2>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        No necesitas ser experto en 3D. Te acompañamos desde tu primera idea o archivo hasta tener la pieza terminada en tus manos.
+      </p>
+    </div>
+
+    <!-- Grid de 4 Pasos -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {steps.map((item) => (
+        <div class="cyber-glass rounded-2xl p-6 border border-cyber-cardBorder hover:border-slate-600 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden">
+          <div class="absolute top-0 right-0 -mr-6 -mt-6 w-24 h-24 bg-linear-to-bl from-white/5 to-transparent rounded-full pointer-events-none"></div>
+          
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="font-orbitron font-black text-2xl text-slate-600 group-hover:text-white transition-colors duration-300">
+                {item.step}
+              </span>
+              <span class={`text-[10px] font-mono px-2 py-0.5 rounded-full border bg-linear-to-r ${item.color}`}>
+                {item.badge}
+              </span>
+            </div>
+
+            <div class={`w-12 h-12 rounded-xl border flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${item.iconBorder}`}>
+              <Icon name={item.icon} class="w-6 h-6" />
+            </div>
+
+            <div class="space-y-2">
+              <h3 class="font-orbitron font-bold text-lg text-white group-hover:text-cyber-blue transition-colors duration-300">
+                {item.title}
+              </h3>
+              <p class="text-slate-400 text-xs sm:text-sm leading-relaxed font-light">
+                {item.desc}
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center gap-2 text-[11px] font-mono text-slate-400">
+            <Icon name="check" class="w-3.5 h-3.5 text-cyber-blue shrink-0" />
+            <span>{item.highlight}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Banner de llamada a la acción inferior -->
+    <div class="cyber-glass rounded-3xl p-8 sm:p-10 border border-cyber-cardBorder max-w-4xl mx-auto text-center space-y-6 relative overflow-hidden shadow-2xl">
+      <div class="space-y-2">
+        <h3 class="font-orbitron font-bold text-xl sm:text-2xl text-white">
+          ¿Tienes un proyecto o pieza en mente?
+        </h3>
+        <p class="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto">
+          Prueba nuestro cotizador interactivo para calcular un estimado al instante o escríbenos por WhatsApp para platicar los detalles.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <a
+          href="#builder"
+          class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-linear-to-r from-cyber-purple via-cyber-blue to-cyber-red text-white font-orbitron font-bold text-xs tracking-wider shadow-lg hover:opacity-95 transition transform hover:-translate-y-0.5"
+        >
+          CALCULAR ESTIMADO EN LÍNEA
+        </a>
+        <a
+          href={whatsappUrl('Hola IMPRIMEVERS, tengo una idea para imprimir en 3D.')}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-wa="proceso-cta"
+          aria-label="Platicar proyecto por WhatsApp"
+          class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/10 font-orbitron font-bold text-xs tracking-wider transition flex items-center justify-center gap-2"
+        >
+          <Icon name="message-circle" class="w-4 h-4" />
+          CONSULTAR POR WHATSAPP
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

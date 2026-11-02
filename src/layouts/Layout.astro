@@ -1,0 +1,269 @@
+---
+// src/layouts/Layout.astro
+import '../styles/global.css';
+import { SITE, absoluteUrl } from '../config/site';
+import { ANALYTICS } from '../config/analytics';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  faq?: Array<{ question: string; answer: string }>;
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = '/og-imprimevers.png',
+  noindex = false,
+  faq,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, SITE.url).toString();
+const ogImage = absoluteUrl(image);
+const socialLinks = Object.values(SITE.socials).filter(Boolean) as string[];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE.url}/#organization`,
+      name: SITE.name,
+      url: SITE.url,
+      logo: absoluteUrl('/IMPRIMEVERS_Logo_Cyberpunk.svg'),
+      description: SITE.description,
+      telephone: SITE.phoneDisplay,
+      ...(SITE.email ? { email: SITE.email } : {}),
+      ...(socialLinks.length ? { sameAs: socialLinks } : {}),
+    },
+    {
+      '@type': 'LocalBusiness',
+      '@id': `${SITE.url}/#localbusiness`,
+      name: SITE.name,
+      url: SITE.url,
+      image: ogImage,
+      logo: absoluteUrl('/IMPRIMEVERS_Logo_Cyberpunk.svg'),
+      description: SITE.description,
+      telephone: SITE.phoneDisplay,
+      ...(SITE.email ? { email: SITE.email } : {}),
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: SITE.city,
+        addressRegion: SITE.state,
+        addressCountry: SITE.countryCode,
+      },
+      parentOrganization: { '@id': `${SITE.url}/#organization` },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE.url}/#website`,
+      url: SITE.url,
+      name: SITE.name,
+      description: SITE.description,
+      publisher: { '@id': `${SITE.url}/#organization` },
+      inLanguage: 'es-MX',
+    },
+    ...(faq && faq.length > 0
+      ? [
+          {
+            '@type': 'FAQPage',
+            '@id': `${SITE.url}/#faq`,
+            mainEntity: faq.map((item) => ({
+              '@type': 'Question',
+              name: item.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: item.answer,
+              },
+            })),
+          },
+        ]
+      : []),
+  ],
+};
+---
+
+<!DOCTYPE html>
+<html lang="es-MX" class="h-full bg-[#07070e] scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="author" content={SITE.name} />
+  <meta name="theme-color" content="#07070e" />
+  <link rel="canonical" href={canonical} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+  <!-- Open Graph / WhatsApp / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:locale" content="es_MX" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={`${SITE.name} — impresión 3D personalizada`} />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+  <!-- Google Fonts: Orbitron, Rajdhani, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  {ANALYTICS.ga4Id && (
+    <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS.ga4Id}`}></script>
+      <script is:inline define:vars={{ ga4Id: ANALYTICS.ga4Id }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', ga4Id, { anonymize_ip: true });
+      </script>
+    </>
+  )}
+
+  {ANALYTICS.metaPixelId && (
+    <script is:inline define:vars={{ pixelId: ANALYTICS.metaPixelId }}>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', pixelId);
+      fbq('track', 'PageView');
+    </script>
+  )}
+</head>
+
+<body class="min-h-full bg-cyber-black text-slate-100 font-inter antialiased relative overflow-x-hidden selection:bg-cyber-purple selection:text-white">
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:bg-cyber-blue focus:px-4 focus:py-2 focus:text-cyber-black focus:font-bold"
+  >
+    Saltar al contenido
+  </a>
+
+  <!-- Partículas de fondo -->
+  <canvas id="particle-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40" aria-hidden="true"></canvas>
+
+  <slot />
+
+  <!-- Script global de iconos, partículas y eventos -->
+  <script>
+    import { trackWhatsAppClick } from '../lib/analytics';
+
+    (globalThis as any).lucide?.createIcons();
+
+    // Canvas de partículas
+    const pCanvas = document.getElementById('particle-canvas') as HTMLCanvasElement | null;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (pCanvas && !prefersReducedMotion) {
+      const pCtx = pCanvas.getContext('2d');
+      if (pCtx) {
+        let particles: Array<{
+          x: number;
+          y: number;
+          radius: number;
+          color: string;
+          vx: number;
+          vy: number;
+        }> = [];
+
+        let rafId = 0;
+        let running = false;
+
+        function resizeParticles() {
+          pCanvas!.width = window.innerWidth;
+          pCanvas!.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeParticles);
+        resizeParticles();
+
+        const particleCount = window.innerWidth < 768 ? 20 : 45;
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            radius: Math.random() * 2 + 1,
+            color: ['#bf00ff', '#00e5ff', '#ff0055'][Math.floor(Math.random() * 3)],
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+          });
+        }
+
+        function animateParticles() {
+          if (!running) return;
+          pCtx!.clearRect(0, 0, pCanvas!.width, pCanvas!.height);
+          particles.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0) p.x = pCanvas!.width;
+            if (p.x > pCanvas!.width) p.x = 0;
+            if (p.y < 0) p.y = pCanvas!.height;
+            if (p.y > pCanvas!.height) p.y = 0;
+
+            pCtx!.beginPath();
+            pCtx!.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            pCtx!.fillStyle = p.color;
+            pCtx!.fill();
+          });
+          rafId = requestAnimationFrame(animateParticles);
+        }
+
+        function startParticles() {
+          if (running) return;
+          running = true;
+          rafId = requestAnimationFrame(animateParticles);
+        }
+
+        function stopParticles() {
+          running = false;
+          cancelAnimationFrame(rafId);
+        }
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) stopParticles();
+          else startParticles();
+        });
+
+        startParticles();
+      }
+    }
+
+    // Iconos: primera carga y navegación de Astro
+    function initIcons() {
+      const lucide = (globalThis as any).lucide;
+      if (lucide) lucide.createIcons();
+    }
+
+    window.addEventListener('load', initIcons);
+    document.addEventListener('astro:page-load', initIcons);
+
+    // Medición de clics a WhatsApp
+    trackWhatsAppClick();
+  </script>
+</body>
+</html>

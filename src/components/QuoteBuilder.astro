@@ -1,0 +1,615 @@
+---
+// src/components/QuoteBuilder.astro
+import {
+  PIECE_TYPES,
+  SIZES,
+  RESISTANCE,
+  MATERIALS,
+  PRICING,
+  calculateQuote,
+  formatMoney,
+} from '../lib/pricing';
+
+const types = [
+  { key: 'figurine' as const, ...PIECE_TYPES.figurine },
+  { key: 'prototype' as const, ...PIECE_TYPES.prototype },
+  { key: 'sign' as const, ...PIECE_TYPES.sign },
+];
+
+const sizes = [
+  { key: 'small' as const, ...SIZES.small },
+  { key: 'medium' as const, ...SIZES.medium },
+  { key: 'large' as const, ...SIZES.large },
+];
+
+const resistances = [
+  { key: 'basic' as const, ...RESISTANCE.basic },
+  { key: 'strong' as const, ...RESISTANCE.strong },
+  { key: 'extra' as const, ...RESISTANCE.extra },
+];
+
+const filaments = [
+  { name: 'Morado Neón', hex: '#bf00ff', label: 'Morado', active: 'bg-cyber-purple/20 border border-cyber-purple' },
+  { name: 'Azul Eléctrico', hex: '#00e5ff', label: 'Azul', active: 'bg-cyber-blue/20 border border-cyber-blue' },
+  { name: 'Rojo Ciber', hex: '#ff0055', label: 'Rojo', active: 'bg-cyber-red/20 border border-cyber-red' },
+  { name: 'Blanco Puro', hex: '#ffffff', label: 'Blanco', active: 'bg-white/10 border border-white/40' },
+];
+
+const baseOption = 'p-3 rounded-xl text-left transition cursor-pointer';
+const typeActive = `${baseOption} border border-cyber-blue bg-cyber-blue/15 text-white`;
+const typeInactive = `${baseOption} border border-slate-800 bg-cyber-card text-slate-400 hover:border-slate-700`;
+const sizeActive = `${baseOption} border border-cyber-purple bg-cyber-purple/15 text-white`;
+const sizeInactive = `${baseOption} border border-slate-800 bg-cyber-card text-slate-400 hover:border-slate-700`;
+const resistanceActive = `${baseOption} border border-cyber-red bg-cyber-red/15 text-white`;
+const resistanceInactive = `${baseOption} border border-slate-800 bg-cyber-card text-slate-400 hover:border-slate-700`;
+const materialActive = `${baseOption} border border-cyber-blue bg-cyber-blue/15 text-white`;
+const materialInactive = `${baseOption} border border-slate-800 bg-cyber-card text-slate-400 hover:border-slate-700`;
+
+const materials = [
+  { key: 'pla' as const, ...MATERIALS.pla },
+  { key: 'petg' as const, ...MATERIALS.petg },
+  { key: 'tpu' as const, ...MATERIALS.tpu },
+  { key: 'plaplus' as const, ...MATERIALS.plaplus },
+];
+
+const initialQuote = calculateQuote({
+  type: 'figurine',
+  size: 'medium',
+  resistance: 'strong',
+  material: 'pla',
+  quantity: 1,
+  customDesign: false,
+  finishing: false,
+  urgency: false,
+  shipping: false,
+});
+---
+<section id="builder" class="py-24 relative bg-cyber-card/60 border-t border-cyber-cardBorder">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+
+    <!-- Encabezado de la sección -->
+    <div class="text-center space-y-3 max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-purple/15 border border-cyber-purple/40 text-cyber-purple font-mono text-xs">
+        <i data-lucide="calculator" class="w-4 h-4"></i> COTIZADOR FÁCIL
+      </div>
+      <h2 class="font-orbitron font-black text-3xl sm:text-4xl text-white">
+        Cotiza tu idea en pocos pasos
+      </h2>
+      <p class="text-slate-400 text-sm max-w-xl mx-auto">
+        No necesitas saber de impresión 3D. Elige las opciones, mira un estimado y envíanos tu idea por WhatsApp.
+      </p>
+    </div>
+
+    <!-- Pasos rápidos -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-center font-mono text-[11px]">
+      <div class="rounded-xl border border-slate-800 bg-cyber-black/60 px-4 py-3 text-slate-300">
+        <span class="text-cyber-blue font-bold">1.</span> Elige qué quieres crear
+      </div>
+      <div class="rounded-xl border border-slate-800 bg-cyber-black/60 px-4 py-3 text-slate-300">
+        <span class="text-cyber-purple font-bold">2.</span> Ajusta tamaño y cantidad
+      </div>
+      <div class="rounded-xl border border-slate-800 bg-cyber-black/60 px-4 py-3 text-slate-300">
+        <span class="text-cyber-red font-bold">3.</span> Envía tu idea por WhatsApp
+      </div>
+    </div>
+
+    <!-- Contenedor Principal del Cotizador -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- Controles del Configurador (7 Columnas) -->
+      <div class="lg:col-span-7 bg-cyber-black p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-6 shadow-xl">
+
+        <!-- 1. Tipo de pieza -->
+        <div class="space-y-2">
+          <span id="lbl-type" class="text-xs font-mono text-slate-400 block">1. ¿Qué quieres crear?</span>
+          <div role="group" aria-labelledby="lbl-type" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {types.map((type, index) => (
+              <button
+                type="button"
+                onclick={`setCategory('${type.key}')`}
+                id={`cat-${type.key}`}
+                data-group="type"
+                data-value={type.key}
+                data-active-class={typeActive}
+                data-inactive-class={typeInactive}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+                class={index === 0 ? typeActive : typeInactive}
+              >
+                <span class="block font-rajdhani font-bold text-sm">{type.label}</span>
+                <span class="block text-[10px] font-mono text-slate-400 mt-1 leading-relaxed">{type.description}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- 2. Tamaño -->
+        <div class="space-y-2">
+          <span id="lbl-size" class="text-xs font-mono text-slate-400 block">2. ¿De qué tamaño la imaginas?</span>
+          <div role="group" aria-labelledby="lbl-size" class="grid grid-cols-3 gap-2">
+            {sizes.map((size, index) => (
+              <button
+                type="button"
+                onclick={`setSize('${size.key}')`}
+                id={`size-${size.key}`}
+                data-group="size"
+                data-value={size.key}
+                data-active-class={sizeActive}
+                data-inactive-class={sizeInactive}
+                aria-pressed={index === 1 ? 'true' : 'false'}
+                class={index === 1 ? sizeActive : sizeInactive}
+              >
+                <span class="block font-rajdhani font-bold text-sm">{size.label}</span>
+                <span class="block text-[10px] font-mono text-slate-400 mt-1">{size.cm} cm · {size.hint}</span>
+              </button>
+            ))}
+          </div>
+          <p class="text-[10px] font-mono text-slate-400">¿Otro tamaño? Escríbenos por WhatsApp y lo revisamos.</p>
+        </div>
+
+        <!-- 3. Resistencia -->
+        <div class="space-y-2">
+          <span id="lbl-resistance" class="text-xs font-mono text-slate-400 block">3. ¿Qué tan resistente la necesitas?</span>
+          <div role="group" aria-labelledby="lbl-resistance" class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            {resistances.map((resistance, index) => (
+              <button
+                type="button"
+                onclick={`setResistance('${resistance.key}')`}
+                id={`res-${resistance.key}`}
+                data-group="resistance"
+                data-value={resistance.key}
+                data-active-class={resistanceActive}
+                data-inactive-class={resistanceInactive}
+                aria-pressed={index === 1 ? 'true' : 'false'}
+                class={index === 1 ? resistanceActive : resistanceInactive}
+              >
+                <span class="block font-rajdhani font-bold text-sm">{resistance.label}</span>
+                <span class="block text-[10px] font-mono text-slate-400 mt-1">{resistance.hint}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- 4. Material -->
+        <div class="space-y-2">
+          <span id="lbl-material" class="text-xs font-mono text-slate-400 block">4. ¿De qué material la imaginas?</span>
+          <div role="group" aria-labelledby="lbl-material" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {materials.map((material, index) => (
+              <button
+                type="button"
+                onclick={`setMaterial('${material.key}')`}
+                id={`mat-${material.key}`}
+                data-group="material"
+                data-value={material.key}
+                data-active-class={materialActive}
+                data-inactive-class={materialInactive}
+                aria-pressed={index === 0 ? 'true' : 'false'}
+                class={index === 0 ? materialActive : materialInactive}
+              >
+                <span class="block font-rajdhani font-bold text-sm">{material.label}</span>
+                <span class="block text-[10px] font-mono text-slate-400 mt-1 leading-relaxed">{material.hint}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- 5. Color -->
+        <div class="space-y-2">
+          <span id="lbl-color" class="text-xs font-mono text-slate-400 block">5. Elige un color</span>
+          <div role="group" aria-labelledby="lbl-color" class="grid grid-cols-4 gap-2">
+            {filaments.map((filament, index) => (
+              <button
+                type="button"
+                onclick={`setFilamentColor('${filament.name}', '${filament.hex}')`}
+                data-filament
+                data-name={filament.name}
+                data-active-class={filament.active}
+                data-inactive-class="bg-cyber-card border border-slate-800"
+                aria-pressed={index === 0 ? 'true' : 'false'}
+                class={`p-2.5 rounded-xl text-[11px] font-mono text-white text-center cursor-pointer hover:scale-105 transition ${index === 0 ? filament.active : 'bg-cyber-card border border-slate-800'}`}
+              >
+                {filament.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- 5. Cantidad -->
+        <div class="space-y-2">
+          <div class="flex justify-between text-xs font-mono">
+            <label for="quantity-range" class="text-slate-400">6. ¿Cuántas piezas iguales quieres?</label>
+            <span id="quantity-val" class="text-cyber-blue font-bold">1 pieza</span>
+          </div>
+          <input type="range" id="quantity-range" min="1" max={PRICING.maxQuantity} step="1" value="1" oninput="updateEstimate()" aria-label="Cantidad de piezas" class="w-full h-6 bg-transparent cursor-pointer accent-cyber-blue">
+          <div class="flex justify-between text-[10px] font-mono text-slate-400">
+            <span>1</span>
+            <span>{PRICING.maxQuantity} piezas</span>
+          </div>
+          <p class="text-[10px] font-mono text-slate-400">Puedes pedir de 1 a {PRICING.maxQuantity} piezas iguales. Desde 2 piezas aplicamos descuento automático (hasta 15% en 10). Para más, escríbenos por WhatsApp.</p>
+        </div>
+
+        <!-- 7. Diseño -->
+        <label for="blender-check" class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-cyber-card border border-slate-800 cursor-pointer">
+          <div>
+            <div class="text-sm font-bold text-white">¿Necesitas que la diseñemos desde cero?</div>
+            <div class="text-xs text-slate-400">Si no tienes un archivo 3D, nosotros lo modelamos. Se cobra una sola vez por pedido.</div>
+          </div>
+          <input type="checkbox" id="blender-check" onchange="updateEstimate()" class="w-5 h-5 accent-cyber-purple cursor-pointer">
+        </label>
+
+        <!-- 8. Acabado -->
+        <label for="finishing-check" class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-cyber-card border border-slate-800 cursor-pointer">
+          <div>
+            <div class="text-sm font-bold text-white">¿Quieres el acabado que imaginas?</div>
+            <div class="text-xs text-slate-400">Pintura o lijado. Se cobra una vez por pedido.</div>
+          </div>
+          <input type="checkbox" id="finishing-check" onchange="updateEstimate()" class="w-5 h-5 accent-cyber-purple cursor-pointer">
+        </label>
+
+        <!-- 9. Urgencia -->
+        <label for="urgency-check" class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-cyber-card border border-slate-800 cursor-pointer">
+          <div>
+            <div class="text-sm font-bold text-white">¿Necesitas la pieza antes?</div>
+            <div class="text-xs text-slate-400">Entrega prioritaria. Se aplica un recargo.</div>
+          </div>
+          <input type="checkbox" id="urgency-check" onchange="updateEstimate()" class="w-5 h-5 accent-cyber-purple cursor-pointer">
+        </label>
+
+        <!-- 10. Envío -->
+        <label for="shipping-check" class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-cyber-card border border-slate-800 cursor-pointer">
+          <div>
+            <div class="text-sm font-bold text-white">¿Necesitas envío a tu domicilio?</div>
+            <div class="text-xs text-slate-400">Se cobra el envío.</div>
+          </div>
+          <input type="checkbox" id="shipping-check" onchange="updateEstimate()" class="w-5 h-5 accent-cyber-purple cursor-pointer">
+        </label>
+
+      </div>
+
+      <!-- Resumen de Cotización (5 Columnas) -->
+      <div class="lg:col-span-5 cyber-glass p-8 rounded-3xl border border-cyber-blue/40 space-y-5 shadow-xl">
+        <h3 class="font-orbitron font-bold text-xl text-white border-b border-slate-800 pb-3 flex items-center gap-2">
+          <i data-lucide="receipt" class="w-5 h-5 text-cyber-blue"></i> Tu estimado
+        </h3>
+
+        <div class="space-y-2.5 font-mono text-xs">
+          <div class="flex justify-between gap-4 text-slate-300">
+            <span>Tipo:</span>
+            <span id="summary-cat" class="text-white font-bold text-right">Figura o miniatura</span>
+          </div>
+          <div class="flex justify-between gap-4 text-slate-300">
+            <span>Tamaño:</span>
+            <span id="summary-size" class="text-white font-bold text-right">Mediana · 15 cm</span>
+          </div>
+          <div class="flex justify-between gap-4 text-slate-300">
+            <span>Resistencia:</span>
+            <span id="summary-resistance" class="text-white font-bold text-right">Resistente</span>
+          </div>
+          <div class="flex justify-between gap-4 text-slate-300">
+            <span>Material:</span>
+            <span id="summary-material" class="text-white font-bold text-right">PLA</span>
+          </div>
+          <div class="flex justify-between gap-4 text-slate-300">
+            <span>Color:</span>
+            <span id="summary-color" class="text-cyber-purple font-bold text-right">Morado Neón</span>
+          </div>
+          <div class="flex justify-between gap-4 text-slate-300">
+            <span>Cantidad:</span>
+            <span id="summary-quantity" class="text-white font-bold text-right">1 pieza</span>
+          </div>
+          <div class="flex justify-between gap-4 text-slate-300">
+            <span>Tiempo estimado:</span>
+            <span id="summary-time" class="text-cyber-blue font-bold text-right">~ {initialQuote.hoursPerPiece} h por pieza</span>
+          </div>
+          <div class="flex justify-between gap-4 text-slate-300">
+            <span>Material estimado:</span>
+            <span id="summary-weight" class="text-slate-200 text-right">~ {initialQuote.gramsPerPiece} g por pieza</span>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-800 pt-4 space-y-2" aria-live="polite" aria-atomic="true">
+          <div class="flex justify-between items-baseline gap-3">
+            <span class="text-xs font-mono text-slate-400">Precio por pieza</span>
+            <span id="summary-unit-price" class="font-orbitron font-bold text-lg text-white">{formatMoney(initialQuote.unitPrice)}</span>
+          </div>
+          <p class="text-[10px] font-mono text-slate-400 text-right">Precio mínimo por pieza: {formatMoney(PRICING.minUnitPrice)}.</p>
+          <p id="summary-min-note" class="hidden text-[10px] font-mono text-amber-300 text-right">Se aplicó el precio mínimo por pieza.</p>
+          <div class="flex justify-between items-baseline gap-3">
+            <span class="text-xs font-mono text-slate-400">Total estimado</span>
+            <span id="summary-price" class="font-orbitron font-black text-3xl sm:text-4xl text-transparent bg-clip-text bg-linear-to-r from-cyber-blue via-cyber-purple to-cyber-red">
+              {formatMoney(initialQuote.total)}
+            </span>
+          </div>
+
+          <div id="summary-discount-row" class="hidden">
+            <div class="flex justify-between gap-3 text-[11px] font-mono text-emerald-400">
+              <span>Ahorro por cantidad</span>
+              <span id="summary-discount">-$0 MXN</span>
+            </div>
+          </div>
+
+          <div id="summary-design-row" class="hidden">
+            <div class="flex justify-between gap-3 text-[11px] font-mono text-cyber-purple">
+              <span>Diseño desde cero</span>
+              <span id="summary-design">+$350 MXN</span>
+            </div>
+          </div>
+
+          <div id="summary-finishing-row" class="hidden">
+            <div class="flex justify-between gap-3 text-[11px] font-mono text-cyber-purple">
+              <span>Acabado (pintura/lijado)</span>
+              <span id="summary-finishing">+$200 MXN</span>
+            </div>
+          </div>
+
+          <div id="summary-urgency-row" class="hidden">
+            <div class="flex justify-between gap-3 text-[11px] font-mono text-cyber-purple">
+              <span>Urgencia (entrega prioritaria)</span>
+              <span id="summary-urgency">+$0 MXN</span>
+            </div>
+          </div>
+
+          <div id="summary-shipping-row" class="hidden">
+            <div class="flex justify-between gap-3 text-[11px] font-mono text-cyber-purple">
+              <span>Envío</span>
+              <span id="summary-shipping">+$150 MXN</span>
+            </div>
+          </div>
+
+          <div id="summary-total-time-row" class="hidden">
+            <div class="flex justify-between gap-3 text-[11px] font-mono text-slate-400">
+              <span>Producción total estimada</span>
+              <span id="summary-total-time">~ 7.5 h</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-[11px] font-mono text-amber-200 flex gap-2" role="note">
+          <i data-lucide="alert-triangle" class="w-4 h-4 shrink-0 mt-0.5 text-amber-400"></i>
+          <p>
+            <strong class="text-amber-300">Es un estimado, no el precio final.</strong>
+            El precio puede cambiar según el modelo, los detalles, el tiempo real de impresión y los acabados. Te confirmamos el total por WhatsApp antes de imprimir.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onclick="sendWhatsAppQuote()"
+          data-wa="quote"
+          class="w-full py-4 rounded-xl bg-linear-to-r from-cyber-blue via-cyber-purple to-cyber-red text-white font-orbitron font-bold text-xs tracking-widest shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <i data-lucide="message-square" class="w-4 h-4"></i> ENVIAR MI IDEA POR WHATSAPP
+        </button>
+        <p class="text-[10px] font-mono text-slate-400 text-center">
+          Se abrirá WhatsApp con tu resumen. No se cobra nada por cotizar.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- Toast de Notificación -->
+<div id="toast" role="status" aria-live="polite" class="fixed bottom-6 right-6 z-50 hidden cyber-glass border border-cyber-blue text-slate-100 px-5 py-3 rounded-xl shadow-2xl items-center gap-3">
+  <i data-lucide="sparkles" class="w-5 h-5 text-cyber-blue"></i>
+  <span id="toast-text" class="text-xs font-mono">¡Copiado con éxito!</span>
+</div>
+
+<!-- Lógica JavaScript del Cotizador -->
+<script>
+  import {
+    PIECE_TYPES,
+    SIZES,
+    RESISTANCE,
+    MATERIALS,
+    calculateQuote,
+    formatMoney,
+  } from '../lib/pricing';
+  import type { PieceType, SizeKey, ResistanceKey, MaterialKey } from '../lib/pricing';
+  import { whatsappUrl } from '../config/site';
+
+  declare global {
+    interface Window {
+      setCategory: (type: PieceType) => void;
+      setSize: (size: SizeKey) => void;
+      setResistance: (resistance: ResistanceKey) => void;
+      setMaterial: (material: MaterialKey) => void;
+      setFilamentColor: (colorName: string, hex: string) => void;
+      updateEstimate: () => void;
+      sendWhatsAppQuote: () => void;
+      showToast: (text: string) => void;
+    }
+  }
+
+  let selectedType: PieceType = 'figurine';
+  let selectedSize: SizeKey = 'medium';
+  let selectedResistance: ResistanceKey = 'strong';
+  let selectedMaterial: MaterialKey = 'pla';
+  let selectedColor = 'Morado Neón';
+
+  function updateGroup(group: string, value: string) {
+    document.querySelectorAll<HTMLButtonElement>(`[data-group="${group}"]`).forEach((btn) => {
+      const isActive = btn.dataset.value === value;
+      btn.className = isActive ? btn.dataset.activeClass! : btn.dataset.inactiveClass!;
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
+  }
+
+  window.setCategory = function (type: PieceType) {
+    selectedType = type;
+    updateGroup('type', type);
+    window.updateEstimate();
+  };
+
+  window.setSize = function (size: SizeKey) {
+    selectedSize = size;
+    updateGroup('size', size);
+    window.updateEstimate();
+  };
+
+  window.setResistance = function (resistance: ResistanceKey) {
+    selectedResistance = resistance;
+    updateGroup('resistance', resistance);
+    window.updateEstimate();
+  };
+
+  window.setMaterial = function (material: MaterialKey) {
+    selectedMaterial = material;
+    updateGroup('material', material);
+    window.updateEstimate();
+  };
+
+  window.setFilamentColor = function (colorName: string, hex: string) {
+    selectedColor = colorName;
+
+    document.querySelectorAll<HTMLButtonElement>('[data-filament]').forEach((btn) => {
+      const isActive = btn.dataset.name === colorName;
+      btn.className = `p-2.5 rounded-xl text-[11px] font-mono text-white text-center cursor-pointer hover:scale-105 transition ${
+        isActive ? btn.dataset.activeClass : btn.dataset.inactiveClass
+      }`;
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
+
+    const summaryColor = document.getElementById('summary-color');
+    if (summaryColor) {
+      summaryColor.innerText = colorName;
+      summaryColor.style.color = hex;
+    }
+    window.updateEstimate();
+  };
+
+  function currentQuote() {
+    const quantityInput = document.getElementById('quantity-range') as HTMLInputElement | null;
+    const designCheck = document.getElementById('blender-check') as HTMLInputElement | null;
+    const finishingCheck = document.getElementById('finishing-check') as HTMLInputElement | null;
+    const urgencyCheck = document.getElementById('urgency-check') as HTMLInputElement | null;
+    const shippingCheck = document.getElementById('shipping-check') as HTMLInputElement | null;
+
+    return calculateQuote({
+      type: selectedType,
+      size: selectedSize,
+      resistance: selectedResistance,
+      material: selectedMaterial,
+      quantity: quantityInput ? parseInt(quantityInput.value, 10) : 1,
+      customDesign: designCheck ? designCheck.checked : false,
+      finishing: finishingCheck ? finishingCheck.checked : false,
+      urgency: urgencyCheck ? urgencyCheck.checked : false,
+      shipping: shippingCheck ? shippingCheck.checked : false,
+    });
+  }
+
+  window.updateEstimate = function () {
+    const quote = currentQuote();
+    const size = SIZES[selectedSize];
+    const quantityLabel = quote.quantity === 1 ? 'pieza' : 'piezas';
+
+    const setText = (id: string, text: string) => {
+      const el = document.getElementById(id);
+      if (el) el.innerText = text;
+    };
+
+    setText('quantity-val', `${quote.quantity} ${quantityLabel}`);
+    setText('summary-cat', PIECE_TYPES[selectedType].label);
+    setText('summary-size', `${size.label} · ${size.cm} cm`);
+    setText('summary-resistance', RESISTANCE[selectedResistance].label);
+    setText('summary-material', MATERIALS[selectedMaterial].label);
+    setText('summary-quantity', `${quote.quantity} ${quantityLabel}`);
+    setText('summary-time', `~ ${quote.hoursPerPiece} h por pieza`);
+    setText('summary-weight', `~ ${quote.gramsPerPiece} g por pieza`);
+    setText('summary-unit-price', formatMoney(quote.unitPrice));
+    setText('summary-price', formatMoney(quote.total));
+    setText('summary-discount', `-${formatMoney(quote.discountAmount)}`);
+    setText('summary-design', `+${formatMoney(quote.designFee)}`);
+    setText('summary-total-time', `~ ${quote.totalHours} h`);
+
+    const discountRow = document.getElementById('summary-discount-row');
+    if (discountRow) discountRow.classList.toggle('hidden', quote.discountAmount === 0);
+
+    const designRow = document.getElementById('summary-design-row');
+    if (designRow) designRow.classList.toggle('hidden', quote.designFee === 0);
+
+    const finishingRow = document.getElementById('summary-finishing-row');
+    if (finishingRow) finishingRow.classList.toggle('hidden', quote.finishingFee === 0);
+    setText('summary-finishing', `+${formatMoney(quote.finishingFee)}`);
+
+    const urgencyRow = document.getElementById('summary-urgency-row');
+    if (urgencyRow) urgencyRow.classList.toggle('hidden', quote.urgencyFee === 0);
+    setText('summary-urgency', `+${formatMoney(quote.urgencyFee)}`);
+
+    const shippingRow = document.getElementById('summary-shipping-row');
+    if (shippingRow) shippingRow.classList.toggle('hidden', quote.shippingFee === 0);
+    setText('summary-shipping', `+${formatMoney(quote.shippingFee)}`);
+
+    const totalTimeRow = document.getElementById('summary-total-time-row');
+    if (totalTimeRow) totalTimeRow.classList.toggle('hidden', quote.quantity === 1);
+
+    const minNote = document.getElementById('summary-min-note');
+    if (minNote) minNote.classList.toggle('hidden', !quote.minPriceApplied);
+  };
+
+  window.sendWhatsAppQuote = function () {
+    const quote = currentQuote();
+    const quantityLabel = quote.quantity === 1 ? 'pieza' : 'piezas';
+
+    const msg = [
+      '¡Hola Malvavysco y Bobonsam! Quiero cotizar en IMPRIMEVERS:',
+      `- Tipo: ${PIECE_TYPES[selectedType].label}`,
+      `- Tamaño: ${SIZES[selectedSize].label} (${SIZES[selectedSize].cm} cm)`,
+      `- Resistencia: ${RESISTANCE[selectedResistance].label}`,
+      `- Material: ${MATERIALS[selectedMaterial].label}`,
+      `- Color: ${selectedColor}`,
+      `- Cantidad: ${quote.quantity} ${quantityLabel}`,
+      `- Precio estimado por pieza: ${formatMoney(quote.unitPrice)}`,
+      `- Subtotal: ${formatMoney(quote.subtotal)}`,
+      ...(quote.discountAmount > 0
+        ? [`- Descuento por cantidad (${Math.round(quote.discountRate * 100)}%): -${formatMoney(quote.discountAmount)}`]
+        : []),
+      ...(quote.designFee > 0
+        ? [`- Cargo por diseño desde cero (una vez): +${formatMoney(quote.designFee)}`]
+        : ['- Diseño desde cero: No']),
+      ...(quote.finishingFee > 0
+        ? [`- Acabado (pintura/lijado): +${formatMoney(quote.finishingFee)}`]
+        : ['- Acabado: No']),
+      ...(quote.urgencyFee > 0
+        ? [`- Urgencia (entrega prioritaria): +${formatMoney(quote.urgencyFee)}`]
+        : ['- Urgencia: No']),
+      ...(quote.shippingFee > 0
+        ? [`- Envío: +${formatMoney(quote.shippingFee)}`]
+        : ['- Envío: No']),
+      `- Total estimado: ${formatMoney(quote.total)}`,
+      `- Tiempo estimado: ~${quote.hoursPerPiece} h por pieza`,
+      `- Material estimado: ~${quote.gramsPerPiece} g por pieza`,
+      '',
+      'Entiendo que es un estimado y que el precio final puede cambiar.',
+    ].join('\n');
+
+    const url = whatsappUrl(msg);
+    const popup = window.open(url, '_blank');
+    if (popup) {
+      try {
+        popup.opener = null;
+      } catch {
+        // El navegador puede bloquear el acceso; el enlace ya se abrió.
+      }
+    } else {
+      window.location.href = url;
+    }
+    window.showToast('¡Redirigiendo a WhatsApp!');
+  };
+
+  window.showToast = function (text: string) {
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toast-text');
+    if (!toast || !toastText) return;
+    toastText.innerText = text;
+    toast.classList.remove('hidden');
+    toast.classList.add('flex');
+    setTimeout(() => {
+      toast.classList.add('hidden');
+      toast.classList.remove('flex');
+    }, 3000);
+  };
+
+  window.updateEstimate();
+  document.addEventListener('astro:page-load', () => window.updateEstimate());
+</script>

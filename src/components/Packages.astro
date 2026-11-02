@@ -1,0 +1,181 @@
+---
+// src/components/Packages.astro
+import Icon from './Icon.astro';
+import { whatsappUrl } from '../config/site';
+
+const packages = [
+  {
+    id: 'esencial',
+    name: 'Paquete Esencial',
+    subtitle: 'Llaveros, miniaturas y piezas pequeñas',
+    price: '$60',
+    unit: 'MXN',
+    color: 'border-cyber-blue/30 hover:border-cyber-blue',
+    accentText: 'text-cyber-blue',
+    badge: 'ACCESIBLE',
+    badgeColor: 'border-cyber-blue/40 bg-cyber-blue/10 text-cyber-blue',
+    features: [
+      'Piezas pequeñas (hasta ~6-8 cm)',
+      'Filamento PLA de alta calidad',
+      '1 color a elegir (Morado, Azul, Rojo, Blanco)',
+      'Resolución estándar de capas',
+      'Retiro y limpieza básica de soportes',
+    ],
+    waMessage: 'Hola IMPRIMEVERS, me interesa cotizar una pieza del Paquete Esencial (desde $60 MXN en entrega directa).',
+    popular: false,
+  },
+  {
+    id: 'coleccion',
+    name: 'Paquete Colección',
+    subtitle: 'Figuras detalladas, miniaturas y repuestos',
+    price: '$249',
+    unit: 'MXN',
+    color: 'border-cyber-purple hover:border-cyber-purple shadow-[0_0_25px_rgba(191,0,255,0.2)]',
+    accentText: 'text-cyber-purple',
+    badge: 'MÁS POPULAR',
+    badgeColor: 'border-cyber-purple bg-cyber-purple/20 text-cyber-purple font-bold',
+    features: [
+      'Piezas medianas de hasta ~15 cm',
+      'Filamento PLA o PETG resistente',
+      'Mayor densidad y solidez estructural',
+      'Acabado fino con mayor detalle',
+      'Post-procesado manual cuidadoso',
+      'Orientación técnica para mejor acabado',
+    ],
+    waMessage: 'Hola IMPRIMEVERS, me interesa cotizar una pieza del Paquete Colección (desde $249 MXN).',
+    popular: true,
+  },
+  {
+    id: 'especial',
+    name: 'Paquete Especial / Custom',
+    subtitle: 'Grandes dimensiones o diseño desde cero',
+    price: '$599',
+    unit: 'MXN',
+    color: 'border-cyber-red/30 hover:border-cyber-red',
+    accentText: 'text-cyber-red',
+    badge: 'DISEÑO A MEDIDA',
+    badgeColor: 'border-cyber-red/40 bg-cyber-red/10 text-cyber-red',
+    features: [
+      'Piezas de hasta ~20-25 cm o letreros',
+      'Diseño o modelado 3D desde boceto o foto',
+      'Filamento PLA, PETG o TPU flexible',
+      'Atención personalizada con el taller',
+      'Vista previa digital antes de imprimir',
+      'Ajustes previos incluidos',
+    ],
+    waMessage: 'Hola IMPRIMEVERS, me interesa cotizar un proyecto especial con diseño a medida (desde $599 MXN).',
+    popular: false,
+  },
+];
+---
+
+<section id="paquetes" class="py-24 relative bg-cyber-black border-t border-cyber-cardBorder scroll-mt-20 overflow-hidden">
+  <!-- Luces sutiles cyberpunk de fondo -->
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-72 bg-cyber-purple/10 rounded-full blur-[160px] pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 relative z-10">
+    <!-- Encabezado de la sección -->
+    <div class="text-center space-y-4 max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyber-purple/15 border border-cyber-purple/40 text-cyber-purple font-mono text-xs font-semibold tracking-wider">
+        <Icon name="layers" class="w-4 h-4" /> OPCIONES DE REFERENCIA • SIN SORPRESAS
+      </div>
+      <h2 class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-tight">
+        Paquetes de Referencia
+      </h2>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        Precios estimados de punto de partida para que sepas qué esperar según el tipo de pieza que deseas fabricar.
+      </p>
+    </div>
+
+    <!-- Grid de Paquetes -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+      {packages.map((pkg) => (
+        <div
+          class={`cyber-glass rounded-3xl p-7 sm:p-8 border flex flex-col justify-between transition-all duration-300 relative group ${pkg.color} ${
+            pkg.popular ? 'bg-cyber-card/90 ring-1 ring-cyber-purple/50 md:-translate-y-2' : ''
+          }`}
+        >
+          {pkg.popular && (
+            <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-linear-to-r from-cyber-purple to-cyber-blue text-white font-orbitron font-black text-[10px] tracking-widest uppercase shadow-[0_0_15px_rgba(191,0,255,0.4)]">
+              RECOMENDADO
+            </div>
+          )}
+
+          <div class="space-y-6">
+            <!-- Título y Badge -->
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="font-orbitron font-bold text-xl text-white group-hover:text-cyber-blue transition-colors">
+                  {pkg.name}
+                </h3>
+                <p class="text-slate-400 text-xs mt-1 font-light leading-relaxed">
+                  {pkg.subtitle}
+                </p>
+              </div>
+              <span class={`text-[10px] font-mono px-2.5 py-1 rounded-full border shrink-0 ${pkg.badgeColor}`}>
+                {pkg.badge}
+              </span>
+            </div>
+
+            <!-- Precio "Desde" -->
+            <div class="pt-2 border-t border-slate-800/80">
+              <span class="text-[11px] font-mono text-slate-400 block uppercase tracking-wider">
+                Estimado desde
+              </span>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span class={`font-orbitron font-black text-4xl sm:text-5xl tracking-tight ${pkg.accentText}`}>
+                  {pkg.price}
+                </span>
+                <span class="text-xs font-mono text-slate-400 uppercase font-semibold">
+                  {pkg.unit}
+                </span>
+              </div>
+            </div>
+
+            <!-- Características -->
+            <ul class="space-y-3 pt-2 text-xs sm:text-sm text-slate-300 font-light">
+              {pkg.features.map((feature) => (
+                <li class="flex items-start gap-2.5">
+                  <Icon name="check" class={`w-4 h-4 mt-0.5 shrink-0 ${pkg.accentText}`} />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- CTAs del paquete -->
+          <div class="pt-8 mt-8 border-t border-slate-800/80 space-y-3">
+            <a
+              href="#builder"
+              class={`w-full py-3 px-4 rounded-xl font-orbitron font-bold text-xs tracking-wider transition text-center block ${
+                pkg.popular
+                  ? 'bg-linear-to-r from-cyber-purple via-cyber-blue to-cyber-red text-white shadow-lg hover:opacity-95'
+                  : 'bg-cyber-card border border-slate-700 text-slate-200 hover:border-cyber-blue hover:text-cyber-blue'
+              }`}
+            >
+              CALCULAR EN COTIZADOR
+            </a>
+            <a
+              href={whatsappUrl(pkg.waMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa="paquetes-cta"
+              aria-label={`Cotizar ${pkg.name} por WhatsApp`}
+              class="w-full py-2.5 px-3 rounded-xl border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 font-mono text-xs flex items-center justify-center gap-2 transition"
+            >
+              <Icon name="message-circle" class="w-3.5 h-3.5" />
+              <span>Consultar este paquete</span>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Nota aclaratoria de honestidad -->
+    <div class="max-w-2xl mx-auto text-center space-y-2 pt-4">
+      <p class="text-xs font-mono text-slate-400 leading-relaxed">
+        * Precios de referencia en MXN. El costo exacto se calcula en base al peso en gramos, tiempo de máquina y acabados específicos. Te confirmamos el total antes de imprimir.
+      </p>
+    </div>
+  </div>
+</section>

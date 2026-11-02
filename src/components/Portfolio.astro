@@ -1,0 +1,141 @@
+---
+import Icon from './Icon.astro';
+
+// -------------------------------------------------------------
+// 📸 CONFIGURACIÓN FÁCIL DE FOTOS Y PROYECTOS
+// Para cambiar o agregar fotos, solo edita o añade objetos a esta lista:
+// -------------------------------------------------------------
+const galleryItems = [
+  {
+    title: 'FNAF & Minecraft Chibis',
+    category: 'IMPRESIÓN FDM • FLEXIBLE / COLECCIONABLE',
+    description: 'Figuras articuladas de 5 a 12g diseñadas para resistencia al uso diario. Alto volumen y encanto en tamaño de bolsillo.',
+    image: '/images/gallery/fnaf-chibis.png', // Coloca tus fotos en public/images/gallery/
+    tag: 'PLA+ / 15 MXN',
+    color: 'border-cyber-purple/30 group-hover:border-cyber-purple text-cyber-purple'
+  },
+  {
+    title: 'Dragones y Criaturas Articuladas',
+    category: 'PIEZAS FLEXIBLES • ANTI-ESTRÉS',
+    description: 'Impresión en lotes optimizados en cama completa para garantizar encaje perfecto sin soportes complejos.',
+    image: '/images/gallery/dragones-flex.jpeg',
+    tag: 'PLA+ / PLA',
+    color: 'border-cyber-blue/30 group-hover:border-cyber-blue text-cyber-blue'
+  },
+  {
+    title: 'Metagross Articulado',
+    category: 'BLENDER 3D • ENSAMBLAJE',
+    description: 'Modelo totalmente articulado con tolerancias mecánicas aplicadas con imprimevers_tools para un acople perfecto.',
+    image: '/images/gallery/metagross.jpeg',
+    tag: 'Tolerancia 0.3mm',
+    color: 'border-cyber-purple/30 group-hover:border-cyber-purple text-cyber-purple'
+  },
+  {
+    title: 'Endevor (El Enderman Colosal)',
+    category: 'BLOCKBENCH & BLENDER • LORE PROPIO',
+    description: 'Mutación de 4 brazos y 4 tentáculos nacida de absorber el aliento de la dragona. Co-creación con Bobonsam.',
+    image: '/images/gallery/endevor.png',
+    tag: 'Proyecto Especial',
+    color: 'border-cyber-red/30 group-hover:border-cyber-red text-cyber-red'
+  }
+];
+---
+
+<section id="portfolio" class="py-24 relative bg-cyber-black border-t border-cyber-cardBorder overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    
+    <!-- Encabezado de la sección -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div class="space-y-3 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyber-purple/15 border border-cyber-purple/40 text-cyber-purple font-mono text-xs font-semibold">
+          <Icon name="image" class="w-4 h-4" /> PASARELA DE FOTOS • TALLER IMPRIMEVERS
+        </div>
+        <h2 class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-tight">
+          Materializaciones Reales
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+          Explora la colección de piezas, figuras articuladas y prototipos salidos directamente de nuestra Ender 3 V3 SE.
+        </p>
+      </div>
+
+      <!-- Botones de Navegación de la Pasarela -->
+      <div class="flex items-center gap-3 self-start md:self-end">
+        <button id="scrollLeft" aria-label="Anterior" class="w-12 h-12 rounded-2xl bg-cyber-black border border-slate-800 text-white flex items-center justify-center hover:border-cyber-blue hover:text-cyber-blue hover:shadow-[0_0_15px_rgba(0,229,255,0.3)] transition duration-300 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button id="scrollRight" aria-label="Siguiente" class="w-12 h-12 rounded-2xl bg-cyber-black border border-slate-800 text-white flex items-center justify-center hover:border-cyber-blue hover:text-cyber-blue hover:shadow-[0_0_15px_rgba(0,229,255,0.3)] transition duration-300 cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Pasarela / Carrusel deslizable -->
+    <div id="galleryContainer" class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none py-4 scroll-smooth">
+      {galleryItems.map((item) => (
+        <div class={`min-w-[300px] sm:min-w-[380px] snap-start cyber-glass rounded-3xl overflow-hidden border ${item.color} group transition duration-500 shadow-xl flex flex-col justify-between`}>
+          
+          <!-- Contenedor de la Imagen con fallback si no existe la foto -->
+          <div class="h-72 relative overflow-hidden bg-slate-900/60 flex items-center justify-center">
+            <img 
+              src={item.image} 
+              alt={item.title}
+              class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <!-- Visual de repuesto mientras subes la foto real -->
+            <div class="hidden absolute inset-0 bg-linear-to-br from-slate-900 via-cyber-black to-slate-800 flex-col items-center justify-center p-6 text-center space-y-2">
+              <Icon name="box" class="w-12 h-12 text-slate-600" />
+              <span class="font-orbitron font-bold text-slate-400 text-xs">{item.title}</span>
+              <span class="text-[10px] font-mono text-slate-500">Agrega tu foto en {item.image}</span>
+            </div>
+            
+            <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-cyber-black/80 backdrop-blur-md border border-white/10 text-white text-[10px] font-mono shadow-md">
+              {item.tag}
+            </span>
+          </div>
+
+          <!-- Información del proyecto -->
+          <div class="p-6 space-y-3">
+            <span class="text-[10px] font-mono font-semibold tracking-wider text-slate-400 uppercase block">
+              {item.category}
+            </span>
+            <h3 class="font-orbitron font-bold text-xl text-white group-hover:text-cyber-blue transition duration-300">
+              {item.title}
+            </h3>
+            <p class="text-slate-300 text-xs leading-relaxed font-light">
+              {item.description}
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // Script minimalista para la navegación horizontal con los botones
+  const container = document.getElementById('galleryContainer');
+  const scrollLeftBtn = document.getElementById('scrollLeft');
+  const scrollRightBtn = document.getElementById('scrollRight');
+
+  if (container && scrollLeftBtn && scrollRightBtn) {
+    scrollLeftBtn.addEventListener('click', () => {
+      container.scrollBy({ left: -380, behavior: 'smooth' });
+    });
+    scrollRightBtn.addEventListener('click', () => {
+      container.scrollBy({ left: 380, behavior: 'smooth' });
+    });
+  }
+</script>
+
+<style>
+  /* Ocultar barra de scroll para estética limpia */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

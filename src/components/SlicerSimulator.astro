@@ -1,0 +1,358 @@
+---
+// src/components/SlicerSimulator.astro
+---
+<section id="slicer" class="py-20 relative bg-cyber-card/40 border-y border-cyber-cardBorder">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+    
+    <!-- Título de la Sección -->
+    <div class="text-center space-y-3 max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-blue/10 border border-cyber-blue/30 text-cyber-blue font-mono text-xs">
+        <i data-lucide="layers" class="w-4 h-4"></i> SIMULADOR DE IMPRESIÓN NEÓN EN TIEMPO REAL
+      </div>
+      <h2 class="font-orbitron font-black text-3xl sm:text-4xl text-white">
+        Visualizador de Laminado & Extrusión
+      </h2>
+      <p class="text-slate-400 text-sm font-inter">
+        Controla la altura de capa, la velocidad de extrusión y la temperatura del cabezal térmico mientras la impresora reconstruye el logotipo capa a capa.
+      </p>
+    </div>
+
+    <!-- Contenedor del Simulador y Panel de Control -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-cyber-black/90 p-6 sm:p-8 rounded-3xl border border-cyber-blue/30 shadow-2xl relative overflow-hidden">
+      
+      <!-- Canvas de Visualización (8 Columnas) -->
+      <div class="lg:col-span-8 relative aspect-video bg-[#05050b] rounded-2xl border border-slate-800 overflow-hidden flex items-center justify-center">
+        <canvas id="slicer-canvas" class="w-full h-full object-contain" role="img" aria-label="Simulación de una pieza hexagonal imprimiéndose capa por capa en la cama caliente"></canvas>
+        
+        <!-- HUD de Estadísticas del Canvas -->
+        <div class="absolute top-4 left-4 bg-cyber-black/85 backdrop-blur-md p-3 rounded-xl border border-slate-800 font-mono text-xs space-y-1">
+          <div class="text-cyber-blue flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-cyber-blue animate-pulse"></span>
+            IMPRIMIENDO CAPA: <span id="stat-layer-num" class="text-white font-bold">1 / 100</span>
+          </div>
+          <div class="text-slate-400">ALTURA Z ACUMULADA: <span id="stat-z-height" class="text-slate-200">20.00 mm</span></div>
+          <div class="text-cyber-purple">FILAMENTO: <span id="stat-filament-color" class="font-bold">Morado Neón (#BF00FF)</span></div>
+          <div class="text-amber-400 pt-1 border-t border-slate-800/80">
+            TIEMPO EST.: <span id="stat-time-remaining" class="text-white font-bold">00:42:15</span>
+          </div>
+        </div>
+
+        <!-- HUD de Temperatura -->
+        <div class="absolute top-4 right-4 bg-cyber-black/85 backdrop-blur-md p-3 rounded-xl border border-slate-800 font-mono text-xs text-right space-y-1">
+          <div class="text-cyber-red font-bold flex items-center justify-end gap-1.5">
+            <i data-lucide="thermometer" class="w-4 h-4"></i><span id="stat-hotend-temp">215 °C</span>
+          </div>
+          <div class="text-slate-400">CAMA: 60 °C</div>
+        </div>
+      </div>
+
+      <!-- Panel de Controles (4 Columnas) -->
+      <div class="lg:col-span-4 space-y-6">
+        <div class="space-y-4">
+          <h3 class="font-orbitron font-bold text-lg text-white border-b border-slate-800 pb-2 flex items-center gap-2">
+            <i data-lucide="sliders" class="w-5 h-5 text-cyber-purple"></i> Panel de Control Slicer
+          </h3>
+
+          <!-- Botones Play / Pausa / Reset -->
+          <div class="grid grid-cols-3 gap-2">
+            <button id="btn-slicer-play" onclick="toggleSlicerPrint()" class="py-2.5 rounded-xl bg-cyber-purple hover:bg-cyber-purple/80 text-white font-orbitron font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+              <i data-lucide="play" class="w-4 h-4"></i> Print
+            </button>
+            <button onclick="pauseSlicerPrint()" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-orbitron font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+              <i data-lucide="pause" class="w-4 h-4"></i> Pausa
+            </button>
+            <button onclick="resetSlicerPrint()" class="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-orbitron font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset
+            </button>
+          </div>
+
+          <!-- Slider de Progreso de Capas -->
+          <div class="space-y-2 pt-2">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-400">Progreso de Capas</span>
+              <span id="slider-val-text" class="text-cyber-blue font-bold">Layer: 100%</span>
+            </div>
+            <input type="range" id="slicer-range" min="1" max="100" value="100" oninput="manualSlicerChange(this.value)" aria-label="Progreso de capas del simulador" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyber-blue">
+          </div>
+
+          <!-- Selector de Filamento -->
+          <div class="space-y-2 pt-2">
+            <label class="text-xs font-mono text-slate-400 block">Color de Filamento Actual</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="setSlicerColor('#bf00ff', 'Morado Neón')" data-slicer-color aria-pressed="true" class="p-2.5 rounded-xl bg-cyber-purple/20 border border-cyber-purple text-[11px] font-mono text-white text-center hover:scale-105 transition cursor-pointer">
+                Morado
+              </button>
+              <button type="button" onclick="setSlicerColor('#00e5ff', 'Azul Eléctrico')" data-slicer-color aria-pressed="false" class="p-2.5 rounded-xl bg-cyber-blue/20 border border-cyber-blue text-[11px] font-mono text-white text-center hover:scale-105 transition cursor-pointer">
+                Azul
+              </button>
+              <button type="button" onclick="setSlicerColor('#ff0055', 'Rojo Ciber')" data-slicer-color aria-pressed="false" class="p-2.5 rounded-xl bg-cyber-red/20 border border-cyber-red text-[11px] font-mono text-white text-center hover:scale-105 transition cursor-pointer">
+                Rojo
+              </button>
+            </div>
+          </div>
+
+          <!-- Nota Técnica -->
+          <div class="p-3 rounded-xl bg-cyber-black/60 border border-slate-800/80 text-[11px] text-slate-400 font-mono flex items-start gap-2">
+            <i data-lucide="info" class="w-4 h-4 text-cyber-blue shrink-0 mt-0.5"></i>
+            <span>Simulación matemática trazada con comandos G-Code virtuales sobre Canvas 2D interactivo.</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA hacia el cotizador -->
+    <div class="text-center">
+      <p class="text-slate-400 text-sm font-inter mb-4">
+        ¿Ya tienes una idea? Convierte esa visión en una pieza real.
+      </p>
+      <a href="#builder" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-linear-to-r from-cyber-blue via-cyber-purple to-cyber-red text-white font-orbitron font-bold text-xs tracking-wider shadow-[0_0_20px_rgba(0,229,255,0.35)] hover:shadow-[0_0_30px_rgba(191,0,255,0.55)] transition duration-300">
+        <i data-lucide="calculator" class="w-4 h-4"></i> CALCULAR MI COTIZACIÓN
+      </a>
+    </div>
+  </div>
+</section>
+<script>
+  declare global {
+    interface Window {
+      toggleSlicerPrint: () => void;
+      pauseSlicerPrint: () => void;
+      resetSlicerPrint: () => void;
+      manualSlicerChange: (val: string) => void;
+      setSlicerColor: (colorHex: string, name: string) => void;
+      lucide: { createIcons: () => void };
+    }
+  }
+
+  const slicerCanvas = document.getElementById('slicer-canvas') as HTMLCanvasElement | null;
+  const ctx: CanvasRenderingContext2D | null = slicerCanvas?.getContext('2d') ?? null;
+
+  let slicerLayer = 100;
+  let isPrinting = false;
+  let printInterval: ReturnType<typeof setInterval> | null = null;
+  let currentColor = '#bf00ff';
+  let mouseOffsetX = 0;
+  let mouseOffsetY = 0;
+
+  // Sistema de Partículas Neón
+  interface Particle { x: number; y: number; vx: number; vy: number; life: number; color: string; }
+  let particles: Particle[] = [];
+
+  function initCanvasSize() {
+    if (!slicerCanvas) return;
+    slicerCanvas.width = 800;
+    slicerCanvas.height = 450;
+    drawSlicerFrame(slicerLayer);
+  }
+
+  // Escuchador de parallax
+  slicerCanvas?.addEventListener('mousemove', (e) => {
+    const rect = slicerCanvas.getBoundingClientRect();
+    mouseOffsetX = ((e.clientX - rect.left) / rect.width - 0.5) * 30;
+    mouseOffsetY = ((e.clientY - rect.top) / rect.height - 0.5) * 15;
+    if (!isPrinting) drawSlicerFrame(slicerLayer);
+  });
+
+  slicerCanvas?.addEventListener('mouseleave', () => {
+    mouseOffsetX = 0;
+    mouseOffsetY = 0;
+    if (!isPrinting) drawSlicerFrame(slicerLayer);
+  });
+
+  let remainingSeconds = 42 * 60 + 15;
+
+  function drawSlicerFrame(layerProgress: number) {
+    if (!ctx || !slicerCanvas) return;
+    
+    const w = slicerCanvas.width;
+    const h = slicerCanvas.height;
+
+    ctx.fillStyle = '#05050b';
+    ctx.fillRect(0, 0, w, h);
+
+    // Rejilla de la cama caliente con leve inclinación parallax
+    ctx.strokeStyle = 'rgba(0, 229, 255, 0.12)';
+    ctx.lineWidth = 1;
+    const gridSize = 30;
+    for (let x = 0; x < w; x += gridSize) {
+      ctx.beginPath(); ctx.moveTo(x + mouseOffsetX * 0.5, 0); ctx.lineTo(x + mouseOffsetX, h); ctx.stroke();
+    }
+    for (let y = 0; y < h; y += gridSize) {
+      ctx.beginPath(); ctx.moveTo(0, y + mouseOffsetY * 0.5); ctx.lineTo(w, y + mouseOffsetY); ctx.stroke();
+    }
+
+    // Dibujar capas 3D extruidas
+    const maxLines = Math.floor((layerProgress / 100) * 40);
+    const centerX = w / 2 + mouseOffsetX;
+    const centerY = h / 2 + 50 + mouseOffsetY;
+
+    ctx.save();
+    ctx.shadowColor = currentColor;
+    ctx.shadowBlur = 12;
+
+    for (let i = 0; i < maxLines; i++) {
+      const yOffset = centerY - (i * 6);
+      const scale = 1 - (i * 0.008);
+
+      ctx.strokeStyle = (i === maxLines - 1) ? '#ffffff' : currentColor;
+      ctx.lineWidth = 4;
+
+      ctx.beginPath();
+      const hexRadius = 120 * scale;
+      for (let side = 0; side < 6; side++) {
+        const angle = (side * Math.PI / 3) - (Math.PI / 6);
+        const hx = centerX + hexRadius * Math.cos(angle);
+        const hy = yOffset + (hexRadius * 0.5) * Math.sin(angle);
+        if (side === 0) ctx.moveTo(hx, hy);
+        else ctx.lineTo(hx, hy);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    ctx.restore();
+
+    // Boquilla del Hotend y Chispas
+    if (layerProgress > 0 && maxLines > 0) {
+      const topY = centerY - ((maxLines - 1) * 6);
+      
+      // Boquilla
+      ctx.fillStyle = '#ff0055';
+      ctx.beginPath();
+      ctx.moveTo(centerX - 15, topY - 35);
+      ctx.lineTo(centerX + 15, topY - 35);
+      ctx.lineTo(centerX, topY - 5);
+      ctx.closePath();
+      ctx.fill();
+
+      // Extrusión de Filamento
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(centerX, topY - 5);
+      ctx.lineTo(centerX, topY);
+      ctx.stroke();
+
+      // Generar Partículas en Extrusión
+      if (isPrinting && Math.random() > 0.4) {
+        particles.push({
+          x: centerX,
+          y: topY,
+          vx: (Math.random() - 0.5) * 2,
+          vy: Math.random() * 2 + 1,
+          life: 1,
+          color: currentColor,
+        });
+      }
+    }
+
+    // Dibujar y actualizar partículas
+    particles.forEach((p, index) => {
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.life;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1.0;
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= 0.05;
+      if (p.life <= 0) particles.splice(index, 1);
+    });
+
+    // Actualizar Textos y Fluctuación de Temperatura
+    const layerNumEl = document.getElementById('stat-layer-num');
+    const zHeightEl = document.getElementById('stat-z-height');
+    const sliderTextEl = document.getElementById('slider-val-text');
+    const rangeInput = document.getElementById('slicer-range') as HTMLInputElement | null;
+    const tempEl = document.getElementById('stat-hotend-temp');
+    const timeEl = document.getElementById('stat-time-remaining');
+
+    if (layerNumEl) layerNumEl.innerText = `${layerProgress} / 100`;
+    if (zHeightEl) zHeightEl.innerText = `${(layerProgress * 0.2).toFixed(2)} mm`;
+    if (sliderTextEl) sliderTextEl.innerText = `Layer: ${layerProgress}%`;
+    if (rangeInput) rangeInput.value = String(layerProgress);
+    if (tempEl) {
+      const randomTemp = (215 + (Math.random() * 0.8 - 0.4)).toFixed(1);
+      tempEl.innerText = `${randomTemp} °C`;
+    }
+    if (timeEl) {
+      const currentSecs = Math.max(0, Math.floor(remainingSeconds * (1 - layerProgress / 100)));
+      const mins = Math.floor(currentSecs / 60);
+      const secs = currentSecs % 60;
+      const hours = Math.floor(mins / 60);
+      const displayMins = mins % 60;
+      timeEl.innerText = `${String(hours).padStart(2, '0')}:${String(displayMins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+  }
+
+  window.toggleSlicerPrint = function() {
+    if (isPrinting) {
+      window.pauseSlicerPrint();
+    } else {
+      if (slicerLayer >= 100) slicerLayer = 1;
+      isPrinting = true;
+      const btn = document.getElementById('btn-slicer-play');
+      if (btn) {
+        btn.innerHTML = `<i data-lucide="pause" class="w-4 h-4"></i> Pausa`;
+        window.lucide?.createIcons();
+      }
+
+      printInterval = setInterval(() => {
+        slicerLayer++;
+        if (slicerLayer > 100) {
+          slicerLayer = 100;
+          window.pauseSlicerPrint();
+        }
+        drawSlicerFrame(slicerLayer);
+      }, 50);
+    }
+  };
+
+  window.pauseSlicerPrint = function() {
+    isPrinting = false;
+    if (printInterval !== null) {
+      clearInterval(printInterval);
+      printInterval = null;
+    }
+    const btn = document.getElementById('btn-slicer-play');
+    if (btn) {
+      btn.innerHTML = `<i data-lucide="play" class="w-4 h-4"></i> Print`;
+      window.lucide?.createIcons();
+    }
+  };
+
+  window.resetSlicerPrint = function() {
+    window.pauseSlicerPrint();
+    slicerLayer = 100;
+    particles = [];
+    drawSlicerFrame(slicerLayer);
+  };
+
+  window.manualSlicerChange = function(val: string) {
+    window.pauseSlicerPrint();
+    slicerLayer = parseInt(val);
+    drawSlicerFrame(slicerLayer);
+  };
+
+  window.setSlicerColor = function(colorHex: string, name: string) {
+    currentColor = colorHex;
+    const statEl = document.getElementById('stat-filament-color');
+    if (statEl) {
+      statEl.innerText = `${name} (${colorHex})`;
+      statEl.style.color = colorHex;
+    }
+    document.querySelectorAll<HTMLButtonElement>('[data-slicer-color]').forEach((btn) => {
+      const isActive = btn.getAttribute('onclick')?.includes(colorHex) ?? false;
+      btn.setAttribute('aria-pressed', String(isActive));
+    });
+    drawSlicerFrame(slicerLayer);
+  };
+
+  window.addEventListener('DOMContentLoaded', () => { initCanvasSize(); });
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initCanvasSize();
+  }
+</script>

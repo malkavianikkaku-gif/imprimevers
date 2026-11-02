@@ -1,0 +1,90 @@
+---
+// src/components/FAQ.astro
+import Icon from './Icon.astro';
+import { FAQS } from '../data/faq';
+import { whatsappUrl } from '../config/site';
+---
+
+<section id="faq" class="py-24 relative bg-cyber-black border-t border-cyber-cardBorder scroll-mt-20 overflow-hidden">
+  <!-- Luces decorativas en esquinas -->
+  <div class="absolute top-1/4 right-0 w-96 h-96 bg-cyber-purple/10 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute bottom-10 left-0 w-96 h-96 bg-cyber-blue/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
+    <!-- Encabezado de la sección -->
+    <div class="text-center space-y-4 max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyber-purple/15 border border-cyber-purple/40 text-cyber-purple font-mono text-xs font-semibold tracking-wider">
+        <Icon name="help-circle" class="w-4 h-4" /> PREGUNTAS FRECUENTES • FAQ
+      </div>
+      <h2 class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-tight">
+        Resolvemos tus Dudas
+      </h2>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        Todo lo que necesitas saber sobre nuestro proceso, materiales, costos y entregas en Cuernavaca antes de pedir tu pieza.
+      </p>
+    </div>
+
+    <!-- Lista de Acordeones FAQ -->
+    <div class="space-y-4 max-w-3xl mx-auto">
+      {FAQS.map((faq, index) => (
+        <details
+          class="group cyber-glass rounded-2xl border border-cyber-cardBorder transition-all duration-300 open:border-cyber-purple/60 open:shadow-[0_0_20px_rgba(191,0,255,0.15)] overflow-hidden"
+        >
+          <summary class="flex items-center justify-between gap-4 p-5 sm:p-6 text-left cursor-pointer list-none select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-cyber-purple rounded-2xl">
+            <div class="flex items-center gap-3">
+              <span class="font-orbitron font-bold text-xs text-cyber-purple/80 tracking-wider">
+                {String(index + 1).padStart(2, '0')}.
+              </span>
+              <span class="font-orbitron font-bold text-sm sm:text-base text-white group-hover:text-cyber-purple transition-colors duration-200">
+                {faq.question}
+              </span>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-cyber-card border border-slate-800 flex items-center justify-center shrink-0 group-open:border-cyber-purple/50 group-open:bg-cyber-purple/10 transition duration-300">
+              <svg
+                class="w-4 h-4 text-slate-400 group-hover:text-white group-open:text-cyber-purple group-open:rotate-180 transition-transform duration-300"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </summary>
+          <div class="px-5 sm:px-6 pb-6 pt-1 text-slate-300 text-xs sm:text-sm leading-relaxed border-t border-slate-800/40 font-light">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <!-- Banner de Soporte / Dudas Directas -->
+    <div class="cyber-glass rounded-2xl p-6 sm:p-8 border border-cyber-cardBorder max-w-2xl mx-auto text-center space-y-4">
+      <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mx-auto">
+        <Icon name="message-square" class="w-6 h-6" />
+      </div>
+      <div class="space-y-1">
+        <h3 class="font-orbitron font-bold text-lg text-white">¿Tienes otra pregunta en mente?</h3>
+        <p class="text-slate-400 text-xs sm:text-sm">
+          Escríbenos directamente por WhatsApp y te asesoramos sin ningún compromiso.
+        </p>
+      </div>
+      <div>
+        <a
+          href={whatsappUrl('Hola IMPRIMEVERS, tengo una pregunta sobre el servicio de impresión 3D.')}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-wa="faq-cta"
+          aria-label="Preguntar por WhatsApp"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-orbitron font-bold text-xs tracking-wider transition shadow-[0_0_15px_rgba(52,211,153,0.15)]"
+        >
+          <Icon name="message-circle" class="w-4 h-4" />
+          PREGUNTAR POR WHATSAPP
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

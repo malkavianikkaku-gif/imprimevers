@@ -1,0 +1,83 @@
+---
+// src/components/LabTech.astro
+import Icon from './Icon.astro';
+---
+<section id="lab" class="py-20 bg-cyber-black relative border-t border-cyber-cardBorder">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    
+    <!-- Encabezado -->
+    <div class="text-center space-y-3 max-w-2xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-blue/15 border border-cyber-blue/40 text-cyber-blue font-mono text-xs">
+        <Icon name="cpu" class="w-4 h-4" /> PIPELINE DIGITAL A FÍSICO
+      </div>
+      <h2 class="font-orbitron font-black text-3xl sm:text-4xl text-white">
+        Nuestro Stack de Diseño y Fabricación
+      </h2>
+      <p class="text-slate-400 text-sm">
+        Integración completa de desarrollo de software, modelado 3D de precisión y manufactura aditiva.
+      </p>
+    </div>
+
+    <!-- Grid de Herramientas del Lab -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <!-- 1. Fullstack Code -->
+      <div class="p-6 rounded-3xl cyber-glass border border-slate-800 space-y-4 hover:border-cyber-blue transition duration-300 group shadow-lg">
+        <div class="w-12 h-12 rounded-2xl bg-cyber-blue/20 text-cyber-blue flex items-center justify-center group-hover:scale-110 transition">
+          <Icon name="code" class="w-6 h-6" />
+        </div>
+        <div class="space-y-1">
+          <span class="text-[10px] font-mono text-cyber-blue uppercase">Fase 01</span>
+          <h3 class="font-orbitron font-bold text-white text-base">Fullstack Code</h3>
+        </div>
+        <p class="text-xs text-slate-400 font-light leading-relaxed">
+          Páginas web responsivas, aplicaciones PWA (como Héroes en Casa) y scripts de automatización a la medida.
+        </p>
+      </div>
+
+      <!-- 2. Blender 3D -->
+      <div class="p-6 rounded-3xl cyber-glass border border-slate-800 space-y-4 hover:border-cyber-purple transition duration-300 group shadow-lg">
+        <div class="w-12 h-12 rounded-2xl bg-cyber-purple/20 text-cyber-purple flex items-center justify-center group-hover:scale-110 transition">
+          <Icon name="box" class="w-6 h-6" />
+        </div>
+        <div class="space-y-1">
+          <span class="text-[10px] font-mono text-cyber-purple uppercase">Fase 02</span>
+          <h3 class="font-orbitron font-bold text-white text-base">Blender 3D</h3>
+        </div>
+        <p class="text-xs text-slate-400 font-light leading-relaxed">
+          Modelado orgánico, figuras articuladas y piezas técnicas con topología limpia optimizada para impresión FDM.
+        </p>
+      </div>
+
+      <!-- 3. Blockbench -->
+      <div class="p-6 rounded-3xl cyber-glass border border-slate-800 space-y-4 hover:border-cyber-red transition duration-300 group shadow-lg">
+        <div class="w-12 h-12 rounded-2xl bg-cyber-red/20 text-cyber-red flex items-center justify-center group-hover:scale-110 transition">
+          <Icon name="grid" class="w-6 h-6" />
+        </div>
+        <div class="space-y-1">
+          <span class="text-[10px] font-mono text-cyber-red uppercase">Fase 03</span>
+          <h3 class="font-orbitron font-bold text-white text-base">Blockbench</h3>
+        </div>
+        <p class="text-xs text-slate-400 font-light leading-relaxed">
+          Creación de modelos estilo voxel y low-poly con estética gamer y cyberpunk guiados por la visión creativa de Ángel.
+        </p>
+      </div>
+
+      <!-- 4. Extrusión FDM -->
+      <div class="p-6 rounded-3xl cyber-glass border border-slate-800 space-y-4 hover:border-cyber-blue transition duration-300 group shadow-lg">
+        <div class="w-12 h-12 rounded-2xl bg-cyber-blue/20 text-cyber-blue flex items-center justify-center group-hover:scale-110 transition">
+          <Icon name="printer" class="w-6 h-6" />
+        </div>
+        <div class="space-y-1">
+          <span class="text-[10px] font-mono text-cyber-blue uppercase">Fase 04</span>
+          <h3 class="font-orbitron font-bold text-white text-base">Extrusión FDM</h3>
+        </div>
+        <p class="text-xs text-slate-400 font-light leading-relaxed">
+          Materialización capa por capa con filamentos PLA/PETG de alta calidad y acabados en tonos neón.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>

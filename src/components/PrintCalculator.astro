@@ -1,0 +1,359 @@
+---
+// src/components/PrintCalculator.astro
+import Icon from './Icon.astro';
+---
+<section id="calculator" class="py-24 relative bg-cyber-black text-white border-t border-cyber-cardBorder">
+  <!-- Destellos ambientales -->
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-cyber-purple/10 rounded-full blur-[150px] pointer-events-none"></div>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    
+    <!-- Encabezado -->
+    <div class="text-center mb-12 space-y-3">
+      <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyber-blue/15 border border-cyber-blue/40 text-cyber-blue font-mono text-xs font-semibold">
+        <Icon name="calculator" class="w-4 h-4" /> HERRAMIENTA INTERACTIVA PROFESIONAL
+      </span>
+      <h2 class="font-orbitron font-black text-3xl sm:text-5xl text-white tracking-tight">
+        Calculadora & Cotizador 3D
+      </h2>
+      <p class="text-slate-400 text-sm max-w-xl mx-auto font-light">
+        Obtén costos de producción exactos para archivos listos o genera estimaciones rápidas para proyectos personalizados sin abrir Blender.
+      </p>
+    </div>
+
+    <!-- Sistema de Pestañas (Tabs) -->
+    <div class="flex justify-center mb-8">
+      <div class="inline-flex rounded-2xl cyber-glass p-1.5 border border-cyber-cardBorder shadow-xl">
+        <button 
+          id="tab-precise" 
+          class="px-5 py-2.5 text-xs font-orbitron font-bold uppercase tracking-wider rounded-xl transition-all duration-300 bg-gradient-to-r from-cyber-purple to-cyber-blue text-white shadow-[0_0_15px_rgba(191,0,255,0.4)] cursor-pointer"
+        >
+          🖨️ Con Archivo / STL Listo
+        </button>
+        <button 
+          id="tab-fast" 
+          class="px-5 py-2.5 text-xs font-orbitron font-bold uppercase tracking-wider rounded-xl transition-all duration-300 text-slate-400 hover:text-white cursor-pointer"
+        >
+          📐 Proyecto Nuevo / Exprés
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 1: CALCULADORA PRECISA (CON STL)     -->
+    <!-- ========================================== -->
+    <div id="panel-precise" class="tab-panel cyber-glass border border-cyber-cardBorder rounded-3xl p-6 sm:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Inputs -->
+      <div class="space-y-6">
+        <h3 class="font-orbitron font-bold text-sm text-cyber-blue border-b border-slate-800 pb-2 uppercase tracking-wider">1. Material y Tiempos</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2" for="spool-price">Precio Rollo ($ MXN)</label>
+            <input type="number" id="spool-price" value="450" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-purple text-sm font-mono shadow-inner" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2" for="print-weight">Peso Pieza (Gramos)</label>
+            <input type="number" id="print-weight" value="120" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-purple text-sm font-mono shadow-inner" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2" for="print-hours">Tiempo de Impresión (Horas)</label>
+          <input type="number" id="print-hours" value="8" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-purple text-sm font-mono shadow-inner" />
+        </div>
+
+        <h3 class="font-orbitron font-bold text-sm text-cyber-blue border-b border-slate-800 pb-2 pt-2 uppercase tracking-wider">2. Consumo & Mano de Obra</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2" for="printer-watts">Potencia (Watts)</label>
+            <input type="number" id="printer-watts" value="300" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-purple text-sm font-mono shadow-inner" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2" for="kwh-price">Costo kWh ($)</label>
+            <input type="number" id="kwh-price" value="3.50" step="0.1" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-purple text-sm font-mono shadow-inner" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2" for="labor-minutes">Tiempo Humano (Min)</label>
+            <input type="number" id="labor-minutes" value="20" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-purple text-sm font-mono shadow-inner" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2" for="labor-rate">Costo Hora ($/Hr)</label>
+            <input type="number" id="labor-rate" value="100" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-purple text-sm font-mono shadow-inner" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-2" for="profit-margin">Margen de Utilidad Neto (%)</label>
+          <input type="number" id="profit-margin" value="60" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-purple text-sm font-mono shadow-inner" />
+        </div>
+      </div>
+
+      <!-- Resultados -->
+      <div class="bg-cyber-black border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-inner">
+        <div>
+          <h3 class="font-orbitron font-bold text-base text-white border-b border-slate-800 pb-2 mb-6">Desglose de Costos Reales</h3>
+
+          <div class="space-y-4 text-xs font-mono">
+            <div class="flex justify-between text-slate-400">
+              <span>Costo de Filamento:</span>
+              <span id="res-filament" class="text-white font-bold">$0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Energía y Mantenimiento:</span>
+              <span id="res-energy" class="text-white font-bold">$0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Mano de Obra (Humana):</span>
+              <span id="res-labor" class="text-cyber-purple font-bold">$0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Margen por Riesgo/Fallas (10%):</span>
+              <span id="res-risk" class="text-white font-bold">$0.00</span>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800 flex justify-between text-slate-200 font-semibold">
+              <span>Costo Total de Producción:</span>
+              <span id="res-cost" class="font-mono text-cyber-blue font-bold">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-800 bg-cyber-card/80 p-4 rounded-xl text-center border border-slate-800">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 block mb-1">Precio de Venta Sugerido</span>
+          <span id="res-price" class="text-3xl sm:text-4xl font-black font-orbitron text-transparent bg-clip-text bg-gradient-to-r from-cyber-blue via-cyber-purple to-cyber-red tracking-tight">$0.00</span>
+          <span class="text-[10px] font-mono text-slate-500 block mt-1">MXN</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANEL 2: COTIZADOR EXPRÉS (SIN MODELAR)    -->
+    <!-- ========================================== -->
+    <div id="panel-fast" class="tab-panel hidden cyber-glass border border-cyber-cardBorder rounded-3xl p-6 sm:p-10 shadow-2xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Inputs Exprés -->
+      <div class="space-y-5">
+        <h3 class="font-orbitron font-bold text-sm text-cyber-purple border-b border-slate-800 pb-2 uppercase tracking-wider">1. Dimensiones Máximas (cm)</h3>
+        
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1" for="fast-x">Ancho (X)</label>
+            <input type="number" id="fast-x" value="10" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-cyber-purple outline-none" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1" for="fast-y">Largo (Y)</label>
+            <input type="number" id="fast-y" value="10" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-cyber-purple outline-none" />
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1" for="fast-z">Alto (Z)</label>
+            <input type="number" id="fast-z" value="5" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-cyber-purple outline-none" />
+          </div>
+        </div>
+
+        <h3 class="font-orbitron font-bold text-sm text-cyber-purple border-b border-slate-800 pb-2 pt-2 uppercase tracking-wider">2. Complejidad del Proyecto</h3>
+
+        <div>
+          <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1" for="fast-type">Tipo de Pieza / Modelado</label>
+          <select id="fast-type" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-3 py-2 text-white text-xs focus:border-cyber-purple outline-none">
+            <option value="0.5">Logo 2D a 3D / Placa Simple (30 min diseño)</option>
+            <option value="1.5" selected>Pieza Mecánica / Soporte (1.5 hrs)</option>
+            <option value="3.5">Esculpido Orgánico / Personaje (3.5 hrs)</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1" for="fast-density">Densidad Estimada</label>
+            <select id="fast-density" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-3 py-2 text-white text-xs focus:border-cyber-purple outline-none">
+              <option value="0.20">Ligera / Hueca (20%)</option>
+              <option value="0.35" selected>Estándar / Decorativa (35%)</option>
+              <option value="0.60">Sólida / Resistente (60%)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono text-slate-400 uppercase mb-1" for="fast-design-rate">Costo Hora Diseño ($)</label>
+            <input type="number" id="fast-design-rate" value="150" class="w-full bg-cyber-black border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-xs focus:border-cyber-purple outline-none" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados Exprés -->
+      <div class="bg-cyber-black border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-inner">
+        <div>
+          <h3 class="font-orbitron font-bold text-base text-white border-b border-slate-800 pb-2 mb-6">Aproximación Automática</h3>
+
+          <div class="space-y-4 text-xs font-mono">
+            <div class="flex justify-between text-slate-400">
+              <span>Peso Aprox. Estimado:</span>
+              <span id="fast-res-weight" class="text-white font-bold">0 g</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Costo Material:</span>
+              <span id="fast-res-material" class="text-white font-bold">$0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Diseño 3D (Blender):</span>
+              <span id="fast-res-design" class="text-cyber-purple font-bold">$0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-400">
+              <span>Tiempo de Impresión Aprox:</span>
+              <span id="fast-res-time" class="text-white font-bold">0 hrs</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-slate-800 bg-cyber-card/80 p-4 rounded-xl text-center border border-slate-800">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-slate-400 block mb-1">Rango Estimado de Cotización</span>
+          <div id="fast-res-price-range" class="text-2xl font-black font-orbitron text-cyber-purple">
+            $0.00 - $0.00
+          </div>
+          <span class="text-[10px] font-mono text-slate-500 block mt-1">*Sujeto a validación tras aprobar el diseño.</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import { PRICING, calculateProductionCost } from '../lib/pricing';
+
+  function setupAllCalculators() {
+    const tabPrecise = document.getElementById('tab-precise');
+    const tabFast = document.getElementById('tab-fast');
+    const panelPrecise = document.getElementById('panel-precise');
+    const panelFast = document.getElementById('panel-fast');
+
+    if (tabPrecise && tabFast && panelPrecise && panelFast) {
+      tabPrecise.addEventListener('click', () => {
+        panelPrecise.classList.remove('hidden');
+        panelFast.classList.add('hidden');
+        tabPrecise.className = "px-5 py-2.5 text-xs font-orbitron font-bold uppercase tracking-wider rounded-xl transition-all duration-300 bg-gradient-to-r from-cyber-purple to-cyber-blue text-white shadow-[0_0_15px_rgba(191,0,255,0.4)] cursor-pointer";
+        tabFast.className = "px-5 py-2.5 text-xs font-orbitron font-bold uppercase tracking-wider rounded-xl transition-all duration-300 text-slate-400 hover:text-white cursor-pointer";
+      });
+
+      tabFast.addEventListener('click', () => {
+        panelFast.classList.remove('hidden');
+        panelPrecise.classList.add('hidden');
+        tabFast.className = "px-5 py-2.5 text-xs font-orbitron font-bold uppercase tracking-wider rounded-xl transition-all duration-300 bg-gradient-to-r from-cyber-purple to-cyber-blue text-white shadow-[0_0_15px_rgba(191,0,255,0.4)] cursor-pointer";
+        tabPrecise.className = "px-5 py-2.5 text-xs font-orbitron font-bold uppercase tracking-wider rounded-xl transition-all duration-300 text-slate-400 hover:text-white cursor-pointer";
+      });
+    }
+
+    // --- LÓGICA CALCULADORA PRECISA ---
+    const spoolPriceInput = document.getElementById('spool-price') as HTMLInputElement;
+    const printWeightInput = document.getElementById('print-weight') as HTMLInputElement;
+    const printHoursInput = document.getElementById('print-hours') as HTMLInputElement;
+    const printerWattsInput = document.getElementById('printer-watts') as HTMLInputElement;
+    const kwhPriceInput = document.getElementById('kwh-price') as HTMLInputElement;
+    const laborMinutesInput = document.getElementById('labor-minutes') as HTMLInputElement;
+    const laborRateInput = document.getElementById('labor-rate') as HTMLInputElement;
+    const profitMarginInput = document.getElementById('profit-margin') as HTMLInputElement;
+
+    const resFilament = document.getElementById('res-filament');
+    const resEnergy = document.getElementById('res-energy');
+    const resLabor = document.getElementById('res-labor');
+    const resRisk = document.getElementById('res-risk');
+    const resCost = document.getElementById('res-cost');
+    const resPrice = document.getElementById('res-price');
+
+    function calculatePrecise() {
+      if (!spoolPriceInput) return;
+      const spoolPrice = parseFloat(spoolPriceInput.value) || 0;
+      const weight = parseFloat(printWeightInput.value) || 0;
+      const hours = parseFloat(printHoursInput.value) || 0;
+      const watts = parseFloat(printerWattsInput.value) || 0;
+      const kwhPrice = parseFloat(kwhPriceInput.value) || 0;
+      const laborMinutes = parseFloat(laborMinutesInput.value) || 0;
+      const laborRate = parseFloat(laborRateInput.value) || 0;
+      const margin = parseFloat(profitMarginInput.value) || 0;
+
+      const filamentCost = (spoolPrice / 1000) * weight;
+      const realWattsFactor = 0.35; 
+      const energyCost = ((watts * realWattsFactor) / 1000) * hours * kwhPrice;
+      const machineWearCost = hours * 2.50; 
+      const laborCost = (laborMinutes / 60) * laborRate;
+
+      // Motor único de precios: costo → riesgo → margen → precio de venta sugerido.
+      const cost = calculateProductionCost({
+        materialCost: filamentCost,
+        machineCost: energyCost + machineWearCost,
+        laborCost,
+        complexity: 1,
+        risk: PRICING.risk,
+        margin: margin / 100,
+      });
+
+      if (resFilament) resFilament.textContent = `$${filamentCost.toFixed(2)}`;
+      if (resEnergy) resEnergy.textContent = `$${(energyCost + machineWearCost).toFixed(2)} c/Manto.`;
+      if (resLabor) resLabor.textContent = `$${laborCost.toFixed(2)}`;
+      if (resRisk) resRisk.textContent = `$${cost.riskCost.toFixed(2)}`;
+      if (resCost) resCost.textContent = `$${cost.totalCost.toFixed(2)}`;
+      if (resPrice) resPrice.textContent = `$${cost.unitPriceBeforePsychology.toFixed(2)}`;
+    }
+
+    [spoolPriceInput, printWeightInput, printHoursInput, printerWattsInput, kwhPriceInput, laborMinutesInput, laborRateInput, profitMarginInput].forEach(input => {
+      if (input) input.addEventListener('input', calculatePrecise);
+    });
+
+    calculatePrecise();
+
+    // --- LÓGICA COTIZADOR EXPRÉS ---
+    const xInput = document.getElementById('fast-x') as HTMLInputElement;
+    const yInput = document.getElementById('fast-y') as HTMLInputElement;
+    const zInput = document.getElementById('fast-z') as HTMLInputElement;
+    const typeInput = document.getElementById('fast-type') as HTMLSelectElement;
+    const densityInput = document.getElementById('fast-density') as HTMLSelectElement;
+    const designRateInput = document.getElementById('fast-design-rate') as HTMLInputElement;
+
+    const resWeight = document.getElementById('fast-res-weight');
+    const resMaterial = document.getElementById('fast-res-material');
+    const resDesign = document.getElementById('fast-res-design');
+    const resTime = document.getElementById('fast-res-time');
+    const resRange = document.getElementById('fast-res-price-range');
+
+    function calculateFastQuote() {
+      if (!xInput) return;
+      const x = parseFloat(xInput.value) || 0;
+      const y = parseFloat(yInput.value) || 0;
+      const z = parseFloat(zInput.value) || 0;
+      const designHours = parseFloat(typeInput.value) || 0;
+      const densityFactor = parseFloat(densityInput.value) || 0;
+      const designRate = parseFloat(designRateInput.value) || 0;
+
+      const volumeCm3 = x * y * z;
+      const estimatedWeight = Math.round(volumeCm3 * densityFactor * 1.24);
+      const materialCost = (450 / 1000) * estimatedWeight;
+      const designCost = designHours * designRate;
+      const estimatedHours = Math.max(1, Math.round(estimatedWeight / 15));
+      const machineCost = estimatedHours * 3.5;
+
+      const baseCost = materialCost + designCost + machineCost;
+      const minPrice = Math.round(baseCost * 1.4);
+      const maxPrice = Math.round(baseCost * 1.8);
+
+      if (resWeight) resWeight.textContent = `${estimatedWeight} g`;
+      if (resMaterial) resMaterial.textContent = `$${materialCost.toFixed(2)}`;
+      if (resDesign) resDesign.textContent = `$${designCost.toFixed(2)}`;
+      if (resTime) resTime.textContent = `~${estimatedHours} hrs`;
+      if (resRange) resRange.textContent = `$${minPrice}.00 - $${maxPrice}.00 MXN`;
+    }
+
+    [xInput, yInput, zInput, typeInput, densityInput, designRateInput].forEach(el => {
+      if (el) el.addEventListener('input', calculateFastQuote);
+    });
+
+    calculateFastQuote();
+  }
+
+  document.addEventListener('DOMContentLoaded', setupAllCalculators);
+  document.addEventListener('astro:page-load', setupAllCalculators);
+</script>
