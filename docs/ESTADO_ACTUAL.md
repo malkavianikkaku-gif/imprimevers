@@ -4,9 +4,9 @@
 > Si algo aquí no coincide con el código, **gana el código**: corrige este archivo.
 > No necesitas releer todo el proyecto ni toda la memoria para continuar.
 
-**Última actualización:** 02/11/2026
+**Última actualización:** 03/11/2026
 **Responsable de la última marca:** agente + Fabián
-**Memoria completa (solo si necesitas detalle):** `docs/MEMORIA_MEJORAS_IMPRIMEVERS.md` (§28 es lo más reciente)
+**Memoria completa (solo si necesitas detalle):** `docs/MEMORIA_MEJORAS_IMPRIMEVERS.md` (§29 es lo más reciente)
 **Plan priorizado:** `docs/BACKLOG_PRIORIZADO.csv`
 
 ---
@@ -51,7 +51,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 | Q-20 | Hero con oferta clara: "Tus sueños, impresos en 3D" + CTAs | `Hero.astro` |
 | Q-21 / Q-51 | **7 fotos reales** en la pasarela con **lightbox** (clic, ✕, fondo, Escape) | `Portfolio.astro`, `public/images/gallery/` |
 | Q-23 | "Cómo funciona" en 4 pasos | `HowItWorks.astro` |
-| Q-24 | 3 paquetes con precios ancla | `Packages.astro` |
+| Q-24 / Q-52 | 3 paquetes con precios ancla **alineados al motor real** ($60 / $99 / $149) | `Packages.astro` |
 | Q-25 | FAQ (8 preguntas) + schema `FAQPage` | `FAQ.astro`, `src/data/faq.ts` |
 | Q-27 / Q-49 | Motor único de precios con **costos reales** ($350/kg, 120 W a $1.50/kWh, mano de obra $5/h, fallas 5 %, margen 20 %/60 %) | `src/lib/pricing.ts` |
 | Q-28 | Cotizador con material, acabado, urgencia, envío y cantidad | `QuoteBuilder.astro` |
@@ -64,7 +64,6 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 
 | Prioridad | ID | Tarea | Archivo(s) | Nota |
 |---|---|---|---|---|
-| **P0** | Q-52 | **Alinear los precios ancla de los paquetes con el motor real** | `src/components/Packages.astro` | Hoy Colección dice `$249` y Especial `$599`; el motor ya da otros valores. Requiere confirmación del negocio antes de publicar. |
 | P1 | Q-50 | Optimizar imágenes (peso y dimensiones) | `public/images/gallery/`, `Portfolio.astro` | `endevor.png` pesa **2.6 MB**. `sharp` ya está instalado. |
 | P1 | Q-09 | Pegar IDs de **GA4** y **Meta Pixel** | `src/config/analytics.ts` | El código de eventos ya funciona; solo faltan los IDs. |
 | P1 | Q-26 | Envíos, garantía y pagos | nueva sección | **Requiere datos del negocio**; no inventar. |
@@ -95,7 +94,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 | Filamento | **$350 MXN / kg** | `spoolPricePerKg: 350` |
 | Consumo de la impresora | **120 W por hora** | — |
 | Tarifa de luz | **$1.50 MXN / kWh** | `energyPerHour: 0.18` (0.120 kW × 1.50) |
-| Mano de obra | **$5 MXN / hora** | `laborPerHour: 5` (se cobra por hora estimada) |
+| Mano de obra | **$5 MXN / hora** | `laborPerHour: 5` · **solo post-proceso** (10/20/30 min según tamaño) |
 | Margen · pieza ya diseñada | **20 %** | `marginExistingDesign: 0.2` |
 | Margen · pieza creada desde cero | **60 %** | `marginCustomDesign: 0.6` |
 | Fallas / reimpresión | **5 %** | `risk: 0.05` |
@@ -103,7 +102,9 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 
 **Decisión vigente:** el margen del 60 % **incluye el modelado**, por eso ya **no se cobra un cargo de diseño aparte** (`designFee = 0`).
 
-**Precios de referencia del motor:** default `$149`, grande `$299`, pequeña `$60` (mínimo), TPU `$199`, acabado `$349`, diseño desde cero `$199`, diseño + acabado `$399`, urgencia `$179`, envío `$299`.
+**Precios de referencia del motor:** default `$99`, grande `$199`, pequeña `$60` (mínimo), TPU `$99`, PLA+ `$149`, acabado `$299`, diseño desde cero `$149`, diseño + acabado `$349`, urgencia `$119`, envío `$249`.
+
+**Paquetes alineados al motor:** Esencial `$60` · Colección `$99` · Especial `$149`.
 
 ### Fotos publicadas (7)
 `fnaf-chibis.png`, `dragones-flex.jpeg`, `gatito.jpeg`, `metagross.jpeg`, `onix.jpeg`, `endevor.png`, `tumba.jpeg`
@@ -166,3 +167,4 @@ Datos confirmados de las nuevas:
 | 02/11/2026 | Re-sincronización con cambios del usuario (redes reales, lightbox, tarjetas responsivas) + tests corregidos | 50 ✔ / 4 omitidas |
 | 02/11/2026 | Integradas las 3 fotos restantes (gatito, onix, tumba) con datos reales | 50 ✔ / 4 omitidas |
 | 02/11/2026 | **Q-49:** costos reales aplicados al motor (incluye luz $1.50/kWh); diseño desde cero ahora va dentro del margen | 50 ✔ / 4 omitidas |
+| 03/11/2026 | **Q-52:** paquetes alineados al motor; mano de obra ahora solo por post-proceso | 50 ✔ / 4 omitidas |

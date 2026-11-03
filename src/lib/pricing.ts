@@ -2,7 +2,8 @@
 // Costos reales confirmados por el taller el 02/11/2026:
 // - Filamento: $350 MXN por kg.
 // - Consumo: 120 W por hora × $1.50 MXN/kWh = $0.18 MXN/hora.
-// - Mano de obra: $5 MXN por hora.
+// - Mano de obra: $5 MXN por hora, cobrada solo por el post-proceso
+//   (retiro de soportes, lijado y revisión); la impresión corre sola.
 // - Fallas / reimpresión: 5%.
 // - Margen: 20% si la pieza ya está diseñada, 60% si se crea desde cero.
 // El desgaste de máquina no está confirmado todavía (machineHour = 0).
@@ -34,9 +35,11 @@ export const PIECE_TYPES = {
 } as const;
 
 export const SIZES = {
-  small: { label: 'Pequeña', cm: 6, hint: 'Llaveros y miniaturas' },
-  medium: { label: 'Mediana', cm: 15, hint: 'Figuras y letreros' },
-  large: { label: 'Grande', cm: 25, hint: 'Piezas grandes' },
+  // `postProcessMinutes` es el tiempo estimado de trabajo manual por pieza.
+  // Es un supuesto de trabajo: ajustarlo cuando el taller lo mida.
+  small: { label: 'Pequeña', cm: 6, hint: 'Llaveros y miniaturas', postProcessMinutes: 10 },
+  medium: { label: 'Mediana', cm: 15, hint: 'Figuras y letreros', postProcessMinutes: 20 },
+  large: { label: 'Grande', cm: 25, hint: 'Piezas grandes', postProcessMinutes: 30 },
 } as const;
 
 export const RESISTANCE = {
@@ -62,7 +65,7 @@ export const PRICING = {
   machineHour: 0,
   /** 120 W × $1.50 MXN/kWh = $0.18 MXN por hora. */
   energyPerHour: 0.18,
-  /** $5 MXN por hora de trabajo (confirmado 02/11/2026). */
+  /** $5 MXN por hora de trabajo manual (confirmado 02/11/2026). */
   laborPerHour: 5,
   /** 5% de fallas / reimpresión (confirmado 02/11/2026). */
   risk: 0.05,
@@ -172,8 +175,9 @@ export function calculateQuote(input: QuoteInput): QuoteResult {
   );
   const hoursPerPiece = Number((size.cm * 0.4 * (resistance.infill / 20)).toFixed(1));
 
-  // Mano de obra: $5 MXN por hora estimada de trabajo.
-  const laborCost = hoursPerPiece * PRICING.laborPerHour;
+  // Mano de obra: solo el post-proceso (la impresión no requiere atención).
+  // $5 MXN por hora × los minutos estimados según el tamaño.
+  const laborCost = (size.postProcessMinutes / 60) * PRICING.laborPerHour;
   // El margen sube al 60% cuando el diseño se crea desde cero:
   // ese margen ya incluye el modelado, por eso no se cobra un cargo aparte.
   const margin = input.customDesign

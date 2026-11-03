@@ -68,7 +68,7 @@ Después ejecuta el plan. Si algo falla, investiga la causa antes de proponer la
    - `/robots.txt` bloquea `/interno/` y declara el sitemap.
    - No hay errores de consola ni enlaces rotos.
 5. Revisa accesibilidad básica: menú móvil con `aria-expanded`, foco visible, textos alternativos, `aria-live` del cotizador.
-6. Revisa que los precios mostrados sean coherentes con el motor único (cotizador: $249 MXN para figura/mediana/resistente/1 pieza; calculadora interna: $194.08 MXN con defaults).
+6. Revisa que los precios mostrados sean coherentes con el motor único (cotizador: $99 MXN para figura/mediana/resistente/1 pieza; calculadora interna: $75.78 MXN con defaults).
 7. Revisa que el copy refleje los datos confirmados (Cuernavaca, Morelos; papá + hijo de 7 años; una impresora) y que no invente envíos, pagos, garantías, reseñas ni clientes.
 
 ## Formato del reporte (obligatorio)

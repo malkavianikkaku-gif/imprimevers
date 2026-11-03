@@ -2223,4 +2223,73 @@ Dejar de calcular con supuestos y usar los **costos reales confirmados por el ta
 
 
 
+---
+
+## 29. Mano de obra por post-proceso y paquetes alineados (Q-52, 03/11/2026)
+
+### 29.1 Objetivo
+1. Cobrar la mano de obra **solo por el trabajo manual real** (post-proceso), no por las horas que la impresora trabaja sola.
+2. Alinear los **precios ancla de los paquetes** con el motor de costos reales.
+
+### 29.2 Cambio de mano de obra
+Antes: `laborCost = hoursPerPiece × $5` (la pieza mediana pagaba 7.5 h = $37.50 de mano de obra, aunque nadie estuviera frente a la impresora).
+
+Ahora: `laborCost = (minutos de post-proceso / 60) × $5`.
+
+| Tamaño | Minutos estimados de post-proceso | Costo de mano de obra |
+|---|---|---|
+| Pequeña | 10 min | $0.83 |
+| Mediana | 20 min | $1.67 |
+| Grande | 30 min | $2.50 |
+
+> **Honestidad:** los minutos (10/20/30) son un **supuesto de trabajo**, no una medición del taller. Quedan en `SIZES[...].postProcessMinutes` para ajustarlos cuando el negocio los mida. Incluyen retiro de soportes, lijado y revisión. El acabado con pintura ya se cobra aparte con `FINISHING_FEE`.
+
+### 29.3 Efecto en los precios
+La mano de obra era el componente más grande del costo; al quitarla de las horas de impresión, **los precios bajan**. Esto es correcto con los datos actuales, pero conviene revisarlo con el negocio: con $5/hora y 20 % de margen, una figura mediana queda en **$99 MXN**.
+
+| Caso | Antes (§28) | Ahora |
+|---|---|---|
+| Default (figura mediana, PLA, resistente) | $149 | **$99** |
+| Figura grande | $299 | **$199** |
+| Pieza pequeña + básica | $60 (mínimo) | $60 (mínimo) |
+| TPU (mediana) | $199 | **$99** |
+| PLA+ (mediana) | — | **$149** |
+| Con acabado | $349 | **$299** |
+| Con diseño desde cero | $199 | **$149** |
+| Diseño desde cero + acabado | $399 | **$349** |
+| Con urgencia | $179 | **$119** |
+| Con envío | $299 | **$249** |
+| Calculadora interna (defaults) | $75.78 | $75.78 (sin cambio) |
+
+### 29.4 Paquetes alineados (Q-52)
+| Paquete | Antes | Ahora | Criterio |
+|---|---|---|---|
+| Esencial | $60 | **$60** | Pieza pequeña + básica = precio mínimo del motor. |
+| Colección | $249 | **$99** | Figura mediana + resistente (PLA/PETG) = $99. |
+| Especial / Custom | $599 | **$149** | Grande + básica + diseño desde cero = $149. |
+
+También se actualizaron los mensajes de WhatsApp de cada paquete para que digan el precio correcto.
+
+### 29.5 Cambios aplicados
+| Archivo | Cambio |
+|---|---|
+| `src/lib/pricing.ts` | `SIZES` ahora incluye `postProcessMinutes` (10/20/30). La mano de obra se calcula con esos minutos, no con `hoursPerPiece`. Comentarios actualizados. |
+| `src/components/Packages.astro` | Colección `$249 → $99`; Especial `$599 → $149`; mensajes de WhatsApp actualizados. |
+| `tests/landing.spec.ts` | Precios esperados nuevos. El test de material ahora usa **PLA+** ($149) porque TPU y PLA coinciden en $99 por el redondeo psicológico. |
+| `.opencode/agents/qa-tester.md` | Precios de referencia del QA actualizados ($99 y $75.78). |
+
+### 29.6 Verificación QA
+`npm run qa` → **PASA**
+- `astro check`: **0 errores, 0 warnings, 0 hints**.
+- `astro build`: **3 páginas estáticas** + sitemap y robots.
+- `playwright test`: **50 aprobadas, 4 omitidas por diseño**.
+
+### 29.7 Estado
+- **Q-52:** **completado** (paquetes alineados al motor).
+- **Decisión pendiente del negocio:** confirmar los minutos reales de post-proceso y si los precios resultantes ($99 la figura mediana) son sostenibles. Si no, subir el margen o la tarifa de mano de obra.
+- **Siguiente sugerido:** Q-50 (optimizar imágenes) o Q-09 (IDs de analítica).
+
+
+
+
 
