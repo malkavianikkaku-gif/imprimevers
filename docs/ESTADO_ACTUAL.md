@@ -56,6 +56,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 | Q-27 / Q-49 | Motor único de precios con **costos reales** ($350/kg, 120 W a $1.50/kWh, mano de obra $5/h solo post-proceso, fallas 5 %, margen 40 %/70 %) | `src/lib/pricing.ts` |
 | Q-28 | Cotizador con material, acabado, urgencia, envío y cantidad | `QuoteBuilder.astro` |
 | Q-30 | Formulario de leads → WhatsApp (adjunto manual con WhatsApp Business App) | `LeadForm.astro` |
+| Q-09 | **Analítica real:** GA4 (`G-MNFQ13YBKR`) y Meta Pixel (`1736459944084343`), con evento `whatsapp_click` y respaldo `noscript` | `src/config/analytics.ts`, `Layout.astro` |
 | — | Tests sincronizados con redes reales y HUD móvil | `tests/landing.spec.ts` |
 
 ---
@@ -64,12 +65,11 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 
 | Prioridad | ID | Tarea | Archivo(s) | Nota |
 |---|---|---|---|---|
-| P1 | Q-09 | Pegar IDs de **GA4** y **Meta Pixel** | `.env` (ver `.env.example`) | Cableado listo y validado; **solo faltan los IDs reales**. |
 | P1 | Q-26 | Envíos, garantía y pagos | nueva sección | **Requiere datos del negocio**; no inventar. |
 | P1 | Q-32 | Google Business Profile | externo | El schema `LocalBusiness` ya existe. |
 | P2 | Q-43 | Manifest / PWA | `public/` | 404, `robots.txt` y sitemap ya están hechos. |
 | P2 | Q-31 | Páginas de servicio | `src/pages/` | — |
-| P2 | Q-33 | Aviso de privacidad y términos | `src/pages/` | — |
+| P2 | Q-33 | Aviso de privacidad y términos | `src/pages/` | Ahora que hay analítica, **conviene publicarlo pronto**. |
 | P2 | Q-22 | Testimonios | nueva sección | **Solo con reseñas reales.** |
 | P2 | Q-34 / Q-35 | Catálogo y pago en línea | — | Fase 2. |
 
@@ -122,7 +122,7 @@ Datos confirmados de las nuevas:
 | Archivo | Para qué |
 |---|---|
 | `src/config/site.ts` | WhatsApp, correo, ciudad, redes, textos base |
-| `src/config/analytics.ts` | IDs de GA4 y Meta Pixel (acepta `.env`; **vacíos** hasta tener las cuentas) |
+| `src/config/analytics.ts` | IDs reales de GA4 y Meta Pixel (`.env` puede sobrescribirlos) |
 | `src/lib/pricing.ts` | Motor único de precios con costos reales (única fuente de verdad) |
 | `src/pages/index.astro` | Orden de las secciones + footer |
 | `src/components/Portfolio.astro` | Galería (`galleryItems`) + lightbox |
@@ -171,3 +171,4 @@ Datos confirmados de las nuevas:
 | 03/11/2026 | **Q-52:** paquetes alineados al motor; mano de obra ahora solo por post-proceso | 50 ✔ / 4 omitidas |
 | 03/11/2026 | Margen subido a **40 % / 70 %**; la pieza grande pasa a $249 | 50 ✔ / 4 omitidas |
 | 03/11/2026 | **Q-50:** `endevor` optimizada a WebP (2.49 MB → 77 KB) y galería con dimensiones + lazy load | 50 ✔ / 4 omitidas |
+| 03/11/2026 | **Q-09:** GA4 y Meta Pixel conectados con los IDs reales | 50 ✔ / 4 omitidas |

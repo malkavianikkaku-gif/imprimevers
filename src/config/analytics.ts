@@ -40,9 +40,10 @@ function validPixel(value: string): string {
   return value;
 }
 
-// Opción B: pega aquí los IDs si prefieres no usar `.env`.
-const ga4FromFile = '';
-const pixelFromFile = '';
+// Opción B: IDs reales del negocio (son públicos: aparecen en el HTML).
+// Si existe `.env`, sus valores tienen prioridad sobre estos.
+const ga4FromFile = 'G-MNFQ13YBKR';
+const pixelFromFile = '1736459944084343';
 
 // Los IDs del `.env` tienen prioridad sobre los de este archivo.
 const ga4FromEnv = clean(import.meta.env.PUBLIC_GA4_ID);

@@ -2435,6 +2435,43 @@ Se pueden pegar en `.env` (recomendado) o directamente en `src/config/analytics.
 
 
 
+---
+
+## 33. GA4 y Meta Pixel conectados (Q-09, 03/11/2026)
+
+### 33.1 IDs reales
+| Plataforma | ID |
+|---|---|
+| Google Analytics 4 | **`G-MNFQ13YBKR`** |
+| Meta Pixel | **`1736459944084343`** |
+
+Los IDs los proporcionó el negocio. Son **públicos** (viajan en el HTML), así que no hay problema en tenerlos en el código.
+
+### 33.2 Dónde quedaron
+- `src/config/analytics.ts` → constantes `ga4FromFile` y `pixelFromFile` con los IDs reales.
+- Si existe un `.env` con `PUBLIC_GA4_ID` / `PUBLIC_META_PIXEL_ID`, esos valores **tienen prioridad** (útil para probar o para Vercel).
+- `Layout.astro` → se agregó el **respaldo `<noscript>`** del Pixel, igual al snippet oficial de Meta.
+
+### 33.3 Qué se mide desde ahora
+- **PageView** en GA4 y en Meta Pixel al cargar la página.
+- **`whatsapp_click`** en cualquier enlace con `data-wa`, con la sección de origen (`navbar`, `hero`, `paquetes`, `footer`, etc.). En Meta se reporta como **`Contact`**.
+
+### 33.4 Verificación
+Build de producción revisado:
+- `dist/index.html` contiene `googletagmanager.com/gtag/js?id=G-MNFQ13YBKR` (**1** vez).
+- Contiene el ID del Pixel **2** veces: `fbq('init', ...)` y el `<noscript>`.
+- `npm run qa` → **PASA**: 0 errores/warnings, 3 páginas, **50 aprobadas / 4 omitidas**.
+
+### 33.5 Nota legal
+Con la analítica activa, conviene publicar el **aviso de privacidad** (Q-33) para cumplir con la LFPDPPP en México. Queda como pendiente P1.
+
+### 33.6 Estado
+- **Q-09:** **completado**.
+- **Siguiente sugerido:** Q-33 (aviso de privacidad) o Q-26 (envíos/garantía, requiere datos del negocio).
+
+
+
+
 
 
 
