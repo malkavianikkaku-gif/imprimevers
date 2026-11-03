@@ -1,0 +1,201 @@
+---
+// src/pages/privacidad.astro
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { SITE, whatsappUrl } from '../config/site';
+
+const updated = '03/11/2026';
+---
+
+<Layout
+  title="Aviso de privacidad | IMPRIMEVERS"
+  description="Cómo IMPRIMEVERS trata tus datos personales: formulario, WhatsApp, analítica y derechos ARCO."
+>
+  <!-- Encabezado simple: los enlaces del navbar apuntan a secciones de la home -->
+  <header class="fixed top-0 left-0 right-0 z-50 cyber-glass border-b border-cyber-cardBorder">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3 group" aria-label="IMPRIMEVERS, volver al inicio">
+        <div class="w-10 h-10 rounded-xl bg-linear-to-br from-cyber-purple via-cyber-blue to-cyber-red p-0.5 transition-transform duration-300 group-hover:scale-110">
+          <div class="w-full h-full bg-cyber-black rounded-[10px] flex items-center justify-center font-orbitron font-black text-cyber-blue text-sm tracking-tighter">
+            IV
+          </div>
+        </div>
+        <span class="font-orbitron font-bold text-white text-sm tracking-wider">IMPRIMEVERS</span>
+      </a>
+      <a href="/" class="text-[11px] font-mono text-slate-300 hover:text-cyber-blue transition">
+        ← Volver al inicio
+      </a>
+    </div>
+  </header>
+
+  <main id="main" class="relative z-10 pt-28 pb-24">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article class="cyber-glass border border-cyber-cardBorder rounded-3xl p-6 sm:p-10 space-y-8">
+
+        <header class="space-y-3 border-b border-slate-800 pb-6">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-blue/10 border border-cyber-blue/40 text-cyber-blue font-mono text-[10px] font-semibold tracking-wider">
+            LEGAL • TRANSPARENCIA
+          </span>
+          <h1 class="font-orbitron font-black text-3xl sm:text-4xl text-white tracking-tight">
+            Aviso de Privacidad
+          </h1>
+          <p class="text-slate-400 text-xs font-mono">Última actualización: {updated}</p>
+        </header>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">1. Quién es el responsable</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            <strong class="text-white">IMPRIMEVERS</strong> es un taller familiar de impresión 3D con base en
+            Cuernavaca, Morelos, México. Para efectos de este aviso, IMPRIMEVERS es el responsable del
+            tratamiento de los datos personales que nos compartes a través de este sitio.
+          </p>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Contacto:
+            <a href={`mailto:${SITE.email}`} class="text-cyber-blue hover:underline">{SITE.email}</a>
+            · WhatsApp <span class="text-white">{SITE.phoneDisplay}</span>.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">2. Qué datos podemos recibir</h2>
+          <ul class="space-y-2 text-slate-300 text-sm leading-relaxed list-disc pl-5">
+            <li>
+              <strong class="text-white">Formulario de cotización:</strong> nombre, correo electrónico,
+              ciudad (opcional), descripción de tu idea y el nombre del archivo de referencia (opcional).
+            </li>
+            <li>
+              <strong class="text-white">Conversación de WhatsApp:</strong> tu número, nombre de perfil y
+              los mensajes, fotos o archivos que decidas enviarnos.
+            </li>
+            <li>
+              <strong class="text-white">Analítica del sitio:</strong> páginas visitadas, clics,
+              dispositivo, navegador, ubicación aproximada e IP, mediante Google Analytics 4 y Meta Pixel.
+            </li>
+          </ul>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            <strong class="text-white">Importante:</strong> este sitio no guarda el formulario en una base
+            de datos propia. Al presionar “Enviar datos por WhatsApp”, tu navegador abre WhatsApp con un
+            mensaje que tú puedes revisar antes de enviarlo. El archivo de referencia no se sube al sitio:
+            solo se incluye su nombre. Si quieres compartir el archivo, adjúntalo en la conversación.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">3. Para qué usamos los datos</h2>
+          <ul class="space-y-2 text-slate-300 text-sm leading-relaxed list-disc pl-5">
+            <li>Responder tu cotización y dar seguimiento a tu idea.</li>
+            <li>Coordinar la elaboración y entrega de una pieza, si decides comprarla.</li>
+            <li>Medir visitas y clics para mejorar el sitio y nuestras campañas.</li>
+            <li>Cumplir obligaciones legales cuando corresponda.</li>
+          </ul>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            No vendemos ni rentamos tus datos personales.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">4. Cookies y herramientas de analítica</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Usamos <strong class="text-white">Google Analytics 4</strong> (Google LLC) y
+            <strong class="text-white">Meta Pixel</strong> (Meta Platforms) para saber cuántas personas
+            visitan el sitio y qué botones usan. Estas herramientas emplean cookies o píxeles y pueden
+            reconocer tu navegador entre visitas.
+          </p>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Puedes bloquear o borrar las cookies desde la configuración de tu navegador. El sitio seguirá
+            funcionando, aunque algunas mediciones dejarán de registrarse.
+          </p>
+          <ul class="space-y-1 text-slate-400 text-xs leading-relaxed list-disc pl-5">
+            <li>
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-cyber-blue hover:underline">Política de privacidad de Google</a>
+            </li>
+            <li>
+              <a href="https://www.facebook.com/privacy/policy" target="_blank" rel="noopener noreferrer" class="text-cyber-blue hover:underline">Política de privacidad de Meta</a>
+            </li>
+            <li>
+              <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" class="text-cyber-blue hover:underline">Política de privacidad de WhatsApp</a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">5. Con quién se comparten</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Para operar el sitio, los datos pueden ser tratados por nuestro proveedor de alojamiento
+            (registros técnicos como IP, fecha y hora) y por Google, Meta y WhatsApp, cada uno bajo su
+            propia política. No compartimos tus datos con otros terceros para fines distintos a los
+            descritos, salvo que la ley lo exija.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">6. Tus derechos ARCO</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Puedes solicitar el <strong class="text-white">acceso, rectificación, cancelación u
+            oposición</strong> al tratamiento de tus datos escribiendo a
+            <a href={`mailto:${SITE.email}?subject=Derechos%20ARCO`} class="text-cyber-blue hover:underline">{SITE.email}</a>
+            con el asunto <span class="text-white">“Derechos ARCO”</span>. Incluye tu nombre y lo que
+            deseas solicitar. Atenderemos tu petición conforme a la Ley Federal de Protección de Datos
+            Personales en Posesión de los Particulares (LFPDPPP).
+          </p>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Si tus datos están en una conversación de WhatsApp, también puedes eliminarla directamente
+            desde la aplicación.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">7. Menores de edad</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Si eres menor de edad, pide a tu madre, padre o tutor que revise este aviso y autorice el envío
+            de tus datos. No creamos cuentas de usuario ni solicitamos datos a menores de forma directa.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">8. Cambios a este aviso</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Podemos actualizar este aviso para reflejar cambios en el sitio o en la ley. La versión vigente
+            es la que está publicada en esta página, con su fecha de actualización.
+          </p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="font-orbitron font-bold text-lg text-white">9. Contacto</h2>
+          <p class="text-slate-300 text-sm leading-relaxed">
+            Para cualquier duda sobre este aviso o sobre tus datos, escríbenos:
+          </p>
+          <div class="flex flex-wrap gap-3 pt-1">
+            <a
+              href={`mailto:${SITE.email}`}
+              class="px-4 py-2.5 rounded-xl cyber-glass border border-cyber-blue/40 text-cyber-blue font-mono text-xs hover:bg-cyber-blue/10 transition"
+            >
+              {SITE.email}
+            </a>
+            <a
+              href={whatsappUrl('Hola IMPRIMEVERS, tengo una duda sobre el aviso de privacidad.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-wa="privacidad"
+              class="px-4 py-2.5 rounded-xl cyber-glass border border-emerald-500/40 text-emerald-400 font-mono text-xs hover:bg-emerald-500/10 transition"
+            >
+              Preguntar por WhatsApp
+            </a>
+          </div>
+        </section>
+
+        <footer class="border-t border-slate-800 pt-6">
+          <p class="text-slate-500 text-xs leading-relaxed">
+            Este aviso aplica solo a este sitio. Los enlaces a redes sociales y a WhatsApp se rigen por las
+            políticas de cada plataforma.
+          </p>
+        </footer>
+
+      </article>
+    </div>
+  </main>
+
+  <Footer />
+  <WhatsAppFloat />
+</Layout>

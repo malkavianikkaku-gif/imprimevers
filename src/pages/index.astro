@@ -13,15 +13,8 @@ import QuoteBuilder from '../components/QuoteBuilder.astro';
 import LeadForm from '../components/LeadForm.astro';
 import FAQ from '../components/FAQ.astro';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import Footer from '../components/Footer.astro';
 import { FAQS } from '../data/faq';
-import { SITE, LOCATION_LABEL, whatsappUrl } from '../config/site';
-
-const socials = [
-  { key: 'instagram', label: 'Instagram', href: SITE.socials.instagram, color: 'border-cyber-red/40 text-cyber-red hover:bg-cyber-red/20 hover:border-cyber-red' },
-  { key: 'facebook', label: 'Facebook', href: SITE.socials.facebook, color: 'border-cyber-purple/40 text-cyber-purple hover:bg-cyber-purple/20 hover:border-cyber-purple' },
-  { key: 'tiktok', label: 'TikTok', href: SITE.socials.tiktok, color: 'border-cyber-blue/40 text-cyber-blue hover:bg-cyber-blue/20 hover:border-cyber-blue' },
-  { key: 'youtube', label: 'YouTube', href: SITE.socials.youtube, color: 'border-cyber-red/40 text-cyber-red hover:bg-cyber-red/20 hover:border-cyber-red' },
-].filter((social) => Boolean(social.href));
 ---
 
 <Layout title="IMPRIMEVERS | Impresión 3D en Cuernavaca, Morelos" faq={FAQS}>
@@ -40,93 +33,5 @@ const socials = [
     <WhatsAppFloat />
   </main>
 
-  <!-- FOOTER -->
-  <footer class="bg-cyber-black border-t border-cyber-cardBorder py-12 text-slate-400 font-mono text-xs relative overflow-hidden">
-    <!-- Luz sutil de fondo -->
-    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-cyber-purple/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-
-      <!-- Marca & Copyright -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-linear-to-br from-cyber-purple via-cyber-blue to-cyber-red p-0.5">
-          <div class="w-full h-full bg-cyber-black rounded-[10px] flex items-center justify-center font-orbitron font-black text-cyber-blue text-xs">
-            IV
-          </div>
-        </div>
-        <div>
-          <span class="font-orbitron font-bold text-white text-sm tracking-wider block">IMPRIMEVERS</span>
-          <p class="text-[10px] text-slate-500">Materializando sueños capa por capa © 2026</p>
-          <p class="text-[10px] text-slate-500">Taller familiar en {LOCATION_LABEL}</p>
-        </div>
-      </div>
-
-      <!-- Contacto -->
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        <a
-          href={`mailto:${SITE.email}`}
-          aria-label={`Escríbenos por correo a ${SITE.email}`}
-          class="px-4 h-10 rounded-xl cyber-glass border border-cyber-blue/40 text-cyber-blue flex items-center gap-2 hover:bg-cyber-blue/10 hover:border-cyber-blue hover:scale-105 transition duration-300 text-[11px] font-mono"
-        >
-          <svg class="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-            <path d="m2 7 10 6 10-6"></path>
-          </svg>
-          {SITE.email}
-        </a>
-        <a
-          href={whatsappUrl()}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-wa="footer"
-          aria-label={`Escríbenos por WhatsApp al ${SITE.phoneDisplay}`}
-          class="w-10 h-10 rounded-xl cyber-glass border border-emerald-500/40 text-emerald-400 flex items-center justify-center hover:bg-emerald-500/20 hover:border-emerald-400 hover:scale-110 transition duration-300 shadow-[0_0_12px_rgba(52,211,153,0.2)]"
-        >
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
-          </svg>
-        </a>
-
-        {socials.map((social) => (
-          <a
-            href={social.href!}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={social.label}
-            class={`w-10 h-10 rounded-xl cyber-glass border ${social.color} flex items-center justify-center hover:scale-110 transition duration-300`}
-          >
-            {social.key === 'instagram' && (
-              <svg class="w-5 h-5 fill-none stroke-current stroke-2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            )}
-            {social.key === 'facebook' && (
-              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-            )}
-            {social.key === 'tiktok' && (
-              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-1-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.57-1.31 1.56-1.3 2.56.01 1.01.55 1.97 1.39 2.51.91.56 2.1.6 3.08.16.89-.38 1.51-1.23 1.6-2.19.04-1.29.02-2.58.02-3.87V.02z"/>
-              </svg>
-            )}
-            {social.key === 'youtube' && (
-              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-            )}
-          </a>
-        ))}
-      </div>
-
-      <!-- Creadores -->
-      <div class="flex flex-wrap items-center justify-center gap-4 text-slate-400 text-xs">
-        <span>Papá: <strong class="text-cyber-purple">@Malvavysco</strong></span>
-        <span>Hijo (7 años): <strong class="text-cyber-red">@Bobonsam</strong></span>
-      </div>
-
-    </div>
-  </footer>
+  <Footer />
 </Layout>
