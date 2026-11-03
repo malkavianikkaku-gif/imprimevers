@@ -64,7 +64,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 
 | Prioridad | ID | Tarea | Archivo(s) | Nota |
 |---|---|---|---|---|
-| P1 | Q-09 | Pegar IDs de **GA4** y **Meta Pixel** | `src/config/analytics.ts` | El código de eventos ya funciona; solo faltan los IDs. |
+| P1 | Q-09 | Pegar IDs de **GA4** y **Meta Pixel** | `.env` (ver `.env.example`) | Cableado listo y validado; **solo faltan los IDs reales**. |
 | P1 | Q-26 | Envíos, garantía y pagos | nueva sección | **Requiere datos del negocio**; no inventar. |
 | P1 | Q-32 | Google Business Profile | externo | El schema `LocalBusiness` ya existe. |
 | P2 | Q-43 | Manifest / PWA | `public/` | 404, `robots.txt` y sitemap ya están hechos. |
@@ -122,7 +122,7 @@ Datos confirmados de las nuevas:
 | Archivo | Para qué |
 |---|---|
 | `src/config/site.ts` | WhatsApp, correo, ciudad, redes, textos base |
-| `src/config/analytics.ts` | IDs de GA4 y Meta Pixel (**vacíos**) |
+| `src/config/analytics.ts` | IDs de GA4 y Meta Pixel (acepta `.env`; **vacíos** hasta tener las cuentas) |
 | `src/lib/pricing.ts` | Motor único de precios con costos reales (única fuente de verdad) |
 | `src/pages/index.astro` | Orden de las secciones + footer |
 | `src/components/Portfolio.astro` | Galería (`galleryItems`) + lightbox |

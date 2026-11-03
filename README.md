@@ -61,6 +61,19 @@ Si deseas clonar y levantar el entorno de desarrollo en tu máquina local:
    ```
    
    Abre [http://localhost:4321](http://localhost:4321/) en tu navegador para ver la interfaz en tiempo real.
+
+## 📊 Analítica (GA4 y Meta Pixel)
+
+La página ya tiene los eventos listos (visitas y clics de WhatsApp). Solo faltan los IDs:
+
+1. Copia `.env.example` a `.env`.
+2. Pega tus IDs reales:
+   - **GA4:** Administrador > Flujos de datos > tu sitio web > *ID de medición* (`G-XXXXXXXXXX`).
+   - **Meta Pixel:** Events Manager > Orígenes de datos > tu píxel > *ID del píxel* (15-16 dígitos).
+3. Vuelve a construir o desplegar el sitio.
+
+Si los IDs están vacíos, los scripts no se cargan y la página funciona normal. En Vercel, configura `PUBLIC_GA4_ID` y `PUBLIC_META_PIXEL_ID` en *Settings > Environment Variables*.
+
    
 
 ## 📄 Licencia y Créditos

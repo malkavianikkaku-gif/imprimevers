@@ -2391,6 +2391,51 @@ Dimensiones declaradas: FNAF 656×655, Dragones 1600×1198, Gatito/Metagross/Oni
 
 
 
+---
+
+## 32. Analítica lista para conectar (Q-09, 03/11/2026)
+
+### 32.1 Objetivo
+Dejar GA4 y Meta Pixel **cableados y validados**, de modo que solo falte pegar los IDs reales.
+
+### 32.2 Qué se hizo
+| Cambio | Detalle |
+|---|---|
+| `src/config/analytics.ts` | Ahora lee `PUBLIC_GA4_ID` y `PUBLIC_META_PIXEL_ID` desde `.env` (con prioridad) o desde las constantes del archivo. Valida el formato y **no carga nada si el ID está vacío o mal escrito**. |
+| `.env.example` | **Nuevo.** Plantilla con las dos variables y las instrucciones para encontrar cada ID. |
+| `README.md` | Sección **"Analítica (GA4 y Meta Pixel)"** con los pasos y la nota de Vercel. |
+
+### 32.3 Validaciones incluidas
+- **GA4:** debe cumplir `G-` + letras/números (ej. `G-ABC123XYZ`). Rechaza placeholders tipo `G-XXXXXXXXXX`.
+- **Meta Pixel:** debe tener **15 o 16 dígitos**.
+- Si un ID es inválido, se imprime un `console.warn` en el build y el script **no se carga**. La página nunca se rompe por analítica.
+
+### 32.4 Lo que falta (bloqueado por el negocio)
+Pegar los **IDs reales**:
+1. **GA4:** Administrador > Flujos de datos > sitio web > *ID de medición*.
+2. **Meta Pixel:** Events Manager > Orígenes de datos > píxel > *ID del píxel*.
+
+Se pueden pegar en `.env` (recomendado) o directamente en `src/config/analytics.ts`. En Vercel se configuran en *Settings > Environment Variables*.
+
+> Los IDs de GA4 y Pixel son **públicos** (van en el HTML), no son secretos. Aun así, `.env` evita mezclarlos con el código y permite cambiarlos por entorno.
+
+### 32.5 Eventos que ya se miden
+- `PageView` automático de GA4 y Meta Pixel al cargar.
+- `whatsapp_click` en cualquier enlace con `data-wa` (con la sección de origen). En Meta se envía como `Contact`.
+
+### 32.6 Verificación
+`npm run qa` → **PASA**
+- `astro check`: **0 errores, 0 warnings, 0 hints**.
+- `astro build`: **3 páginas estáticas** + sitemap y robots.
+- `playwright test`: **50 aprobadas, 4 omitidas por diseño**.
+
+### 32.7 Estado
+- **Q-09:** **parcial** — todo el cableado listo; **solo faltan los dos IDs reales**.
+- **Siguiente:** en cuanto el negocio comparta los IDs, se pegan en `.env`, se ejecuta `npm run qa` y Q-09 queda cerrado.
+
+
+
+
 
 
 
