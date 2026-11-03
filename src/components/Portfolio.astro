@@ -1,16 +1,13 @@
 ---
+// src/components/Portfolio.astro
 import Icon from './Icon.astro';
 
-// -------------------------------------------------------------
-// 📸 CONFIGURACIÓN FÁCIL DE FOTOS Y PROYECTOS
-// Para cambiar o agregar fotos, solo edita o añade objetos a esta lista:
-// -------------------------------------------------------------
 const galleryItems = [
   {
     title: 'FNAF & Minecraft Chibis',
     category: 'IMPRESIÓN FDM • FLEXIBLE / COLECCIONABLE',
     description: 'Figuras articuladas de 5 a 12g diseñadas para resistencia al uso diario. Alto volumen y encanto en tamaño de bolsillo.',
-    image: '/images/gallery/fnaf-chibis.png', // Coloca tus fotos en public/images/gallery/
+    image: '/images/gallery/fnaf-chibis.png', 
     tag: 'PLA+ / 15 MXN',
     color: 'border-cyber-purple/30 group-hover:border-cyber-purple text-cyber-purple'
   },
@@ -19,7 +16,7 @@ const galleryItems = [
     category: 'PIEZAS FLEXIBLES • ANTI-ESTRÉS',
     description: 'Impresión en lotes optimizados en cama completa para garantizar encaje perfecto sin soportes complejos.',
     image: '/images/gallery/dragones-flex.jpeg',
-    tag: 'PLA+ / PLA',
+    tag: 'PLA+ / Multicolor',
     color: 'border-cyber-blue/30 group-hover:border-cyber-blue text-cyber-blue'
   },
   {
@@ -54,7 +51,7 @@ const galleryItems = [
           Materializaciones Reales
         </h2>
         <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
-          Explora la colección de piezas, figuras articuladas y prototipos salidos directamente de nuestra Ender 3 V3 SE.
+          Explora la colección de piezas y figuras. <span class="text-cyber-blue font-semibold">Haz clic en cualquier imagen para ampliarla en detalle.</span>
         </p>
       </div>
 
@@ -74,24 +71,39 @@ const galleryItems = [
       {galleryItems.map((item) => (
         <div class={`min-w-[300px] sm:min-w-[380px] snap-start cyber-glass rounded-3xl overflow-hidden border ${item.color} group transition duration-500 shadow-xl flex flex-col justify-between`}>
           
-          <!-- Contenedor de la Imagen con fallback si no existe la foto -->
-          <div class="h-72 relative overflow-hidden bg-slate-900/60 flex items-center justify-center">
+          <!-- Contenedor de la Imagen con centrado profesional y efecto click para ampliar -->
+          <div 
+            class="h-72 relative overflow-hidden bg-slate-950 flex items-center justify-center p-3 cursor-zoom-in gallery-trigger"
+            data-img-src={item.image}
+            data-img-title={item.title}
+          >
+            <div class="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none"></div>
+            
             <img 
               src={item.image} 
               alt={item.title}
-              class="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out"
+              class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500 ease-out shadow-md"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />
-            <!-- Visual de repuesto mientras subes la foto real -->
-            <div class="hidden absolute inset-0 bg-linear-to-br from-slate-900 via-cyber-black to-slate-800 flex-col items-center justify-center p-6 text-center space-y-2">
+            
+            <!-- Visual de repuesto si no existe la foto -->
+            <div class="hidden absolute inset-0 bg-slate-900 flex-col items-center justify-center p-6 text-center space-y-2">
               <Icon name="box" class="w-12 h-12 text-slate-600" />
               <span class="font-orbitron font-bold text-slate-400 text-xs">{item.title}</span>
               <span class="text-[10px] font-mono text-slate-500">Agrega tu foto en {item.image}</span>
             </div>
             
-            <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-cyber-black/80 backdrop-blur-md border border-white/10 text-white text-[10px] font-mono shadow-md">
+            <!-- Badge superior -->
+            <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full bg-cyber-black/80 backdrop-blur-md border border-white/10 text-white text-[10px] font-mono shadow-md pointer-events-none">
               {item.tag}
             </span>
+
+            <!-- Indicador visual de zoom al pasar el mouse -->
+            <div class="absolute inset-0 bg-cyber-purple/10 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center pointer-events-none">
+              <span class="px-3 py-1.5 rounded-xl bg-cyber-black/80 text-white font-mono text-xs border border-cyber-purple/50 shadow-lg flex items-center gap-1.5">
+                <Icon name="image" class="w-3.5 h-3.5 text-cyber-purple" /> Ver en grande
+              </span>
+            </div>
           </div>
 
           <!-- Información del proyecto -->
@@ -113,8 +125,19 @@ const galleryItems = [
   </div>
 </section>
 
+<!-- MODAL LIGHTBOX PARA AMPLIAR FOTOS -->
+<div id="imageModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl hidden items-center justify-center p-4 sm:p-8">
+  <button id="closeModal" aria-label="Cerrar visor" class="absolute top-6 right-6 w-12 h-12 rounded-2xl bg-cyber-card border border-slate-700 text-white flex items-center justify-center hover:border-cyber-red hover:text-cyber-red transition cursor-pointer z-10">
+    <Icon name="x" class="w-6 h-6" />
+  </button>
+  <div class="max-w-5xl w-full max-h-[90vh] flex flex-col items-center justify-center space-y-4 relative">
+    <img id="modalImg" src="" alt="Ampliación" class="max-w-full max-h-[75vh] object-contain rounded-2xl border border-cyber-cardBorder shadow-[0_0_30px_rgba(0,229,255,0.2)]" />
+    <h3 id="modalTitle" class="font-orbitron font-bold text-lg sm:text-xl text-white tracking-wider text-center"></h3>
+  </div>
+</div>
+
 <script>
-  // Script minimalista para la navegación horizontal con los botones
+  // Script para scroll horizontal y Lightbox de imágenes
   const container = document.getElementById('galleryContainer');
   const scrollLeftBtn = document.getElementById('scrollLeft');
   const scrollRightBtn = document.getElementById('scrollRight');
@@ -127,10 +150,45 @@ const galleryItems = [
       container.scrollBy({ left: 380, behavior: 'smooth' });
     });
   }
+
+  // Lógica del Lightbox (Ampliar imagen)
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImg') as HTMLImageElement;
+  const modalTitle = document.getElementById('modalTitle');
+  const closeModal = document.getElementById('closeModal');
+
+  document.querySelectorAll('.gallery-trigger').forEach((card) => {
+    card.addEventListener('click', () => {
+      const src = card.getAttribute('data-img-src');
+      const title = card.getAttribute('data-img-title');
+      if (modal && modalImg && modalTitle && src) {
+        modalImg.src = src;
+        modalTitle.innerText = title || '';
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden'; // Bloquear scroll de fondo
+      }
+    });
+  });
+
+  function closeLightbox() {
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = 'auto';
+    }
+  }
+
+  closeModal?.addEventListener('click', closeLightbox);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
 </script>
 
 <style>
-  /* Ocultar barra de scroll para estética limpia */
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }

@@ -66,14 +66,14 @@ import { whatsappUrl } from '../config/site';
     </div>
 
     <!-- Columna Derecha: Tarjeta Holográfica Interactiva con el Logo Real -->
-    <div class="lg:col-span-5 flex justify-center perspective-[1000px]">
-      <div id="parallax-card" class="w-full max-w-md aspect-4/5 rounded-3xl cyber-glass neon-border-purple p-6 flex flex-col justify-between relative overflow-hidden transition-transform duration-200 ease-out cursor-grab group shadow-2xl">
+    <div class="lg:col-span-5 flex justify-center perspective-[1000px] w-full px-4 sm:px-0">
+      <div id="parallax-card" class="w-full max-w-sm sm:max-w-md h-[380px] sm:h-[480px] rounded-3xl cyber-glass neon-border-purple p-4 sm:p-6 flex flex-col justify-between relative overflow-hidden transition-transform duration-200 ease-out cursor-grab group shadow-2xl">
         
         <!-- Brillo holográfico diagonal -->
         <div class="absolute inset-0 holo-overlay opacity-80 pointer-events-none"></div>
 
         <!-- Header superior de la tarjeta HUD -->
-        <div class="flex justify-between items-center text-xs font-mono text-slate-400 z-10">
+        <div class="flex justify-between items-center text-[11px] sm:text-xs font-mono text-slate-400 z-10">
           <span class="flex items-center gap-1.5 text-cyber-blue">
             <Icon name="shield-check" class="w-4 h-4" /> IMPRIMEVERS_CORE
           </span>
@@ -82,12 +82,12 @@ import { whatsappUrl } from '../config/site';
           </span>
         </div>
 
-        <!-- Contenedor Central con el Logotipo Real que nos compartiste -->
-        <div class="relative my-auto flex items-center justify-center py-6 pointer-events-none">
-          <div id="layer-bg" class="absolute w-64 h-64 rounded-full bg-linear-to-r from-cyber-purple via-cyber-blue to-cyber-red opacity-30 blur-2xl transition-transform duration-300"></div>
+        <!-- Contenedor Central con el Logotipo -->
+        <div class="relative my-auto flex items-center justify-center py-2 sm:py-6 pointer-events-none">
+          <div id="layer-bg" class="absolute w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-linear-to-r from-cyber-purple via-cyber-blue to-cyber-red opacity-30 blur-2xl transition-transform duration-300"></div>
           
           <!-- Imagen del Logotipo Hexagonal -->
-          <div id="layer-shield" class="relative w-72 h-72 transition-transform duration-300 flex items-center justify-center">
+          <div id="layer-shield" class="relative w-48 h-48 sm:w-72 sm:h-72 transition-transform duration-300 flex items-center justify-center">
             <img
               src="/IMPRIMEVERS_Logo_Cyberpunk.svg"
               alt="Logo hexagonal de IMPRIMEVERS"
@@ -101,12 +101,12 @@ import { whatsappUrl } from '../config/site';
         </div>
 
         <!-- Footer de la tarjeta con dedicatoria -->
-        <div class="z-10 bg-cyber-black/85 rounded-2xl p-4 border border-slate-800/80 space-y-1 backdrop-blur-md">
-          <div class="flex justify-between items-center font-orbitron font-black text-sm text-white">
+        <div class="z-10 bg-cyber-black/85 rounded-2xl p-3 sm:p-4 border border-slate-800/80 space-y-1 backdrop-blur-md">
+          <div class="flex justify-between items-center font-orbitron font-black text-xs sm:text-sm text-white">
             <span>MALVAVYSCO & BOBONSAM</span>
-            <span class="text-cyber-blue text-xs">EST. 2026</span>
+            <span class="text-cyber-blue text-[10px] sm:text-xs">EST. 2026</span>
           </div>
-          <p class="text-[11px] font-mono text-slate-400">
+          <p class="text-[10px] sm:text-[11px] font-mono text-slate-400">
             "Construyendo un futuro mejor con cada capa de esfuerzo."
           </p>
         </div>

@@ -25,22 +25,22 @@
         <canvas id="slicer-canvas" class="w-full h-full object-contain" role="img" aria-label="Simulación de una pieza hexagonal imprimiéndose capa por capa en la cama caliente"></canvas>
         
         <!-- HUD de Estadísticas del Canvas -->
-        <div class="absolute top-4 left-4 bg-cyber-black/85 backdrop-blur-md p-3 rounded-xl border border-slate-800 font-mono text-xs space-y-1">
-          <div class="text-cyber-blue flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-cyber-blue animate-pulse"></span>
-            IMPRIMIENDO CAPA: <span id="stat-layer-num" class="text-white font-bold">1 / 100</span>
+        <div class="absolute top-2 left-2 sm:top-4 sm:left-4 bg-cyber-black/90 backdrop-blur-md p-2 sm:p-3 rounded-xl border border-slate-800 font-mono text-[10px] sm:text-xs space-y-0.5 sm:space-y-1 max-w-[55%][cite: 13] sm:max-w-none">
+          <div class="text-cyber-blue flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyber-blue animate-pulse"></span>
+            CAPA: <span id="stat-layer-num" class="text-white font-bold">1 / 100</span>
           </div>
-          <div class="text-slate-400">ALTURA Z ACUMULADA: <span id="stat-z-height" class="text-slate-200">20.00 mm</span></div>
-          <div class="text-cyber-purple">FILAMENTO: <span id="stat-filament-color" class="font-bold">Morado Neón (#BF00FF)</span></div>
-          <div class="text-amber-400 pt-1 border-t border-slate-800/80">
-            TIEMPO EST.: <span id="stat-time-remaining" class="text-white font-bold">00:42:15</span>
+          <div class="text-slate-400">ALTURA Z: <span id="stat-z-height" class="text-slate-200">20.00 mm</span></div>
+          <div class="text-cyber-purple truncate max-w-35 sm:max-w-none">FIL: <span id="stat-filament-color" class="font-bold">Morado Neón</span></div>
+          <div class="text-amber-400 pt-0.5 border-t border-slate-800/80">
+            EST.: <span id="stat-time-remaining" class="text-white font-bold">00:42:15</span>
           </div>
         </div>
 
         <!-- HUD de Temperatura -->
-        <div class="absolute top-4 right-4 bg-cyber-black/85 backdrop-blur-md p-3 rounded-xl border border-slate-800 font-mono text-xs text-right space-y-1">
-          <div class="text-cyber-red font-bold flex items-center justify-end gap-1.5">
-            <i data-lucide="thermometer" class="w-4 h-4"></i><span id="stat-hotend-temp">215 °C</span>
+        <div class="absolute top-2 right-2 sm:top-4 sm:right-4 bg-cyber-black/90 backdrop-blur-md p-2 sm:p-3 rounded-xl border border-slate-800 font-mono text-[10px] sm:text-xs text-right space-y-0.5 sm:space-y-1">
+          <div class="text-cyber-red font-bold flex items-center justify-end gap-1">
+            <i data-lucide="thermometer" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i><span id="stat-hotend-temp">215 °C</span>
           </div>
           <div class="text-slate-400">CAMA: 60 °C</div>
         </div>
