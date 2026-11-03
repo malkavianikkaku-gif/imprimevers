@@ -219,7 +219,7 @@ test.describe('Landing IMPRIMEVERS', () => {
     await builder.locator('#size-large').click();
     await expect(builder.locator('#size-large')).toHaveAttribute('aria-pressed', 'true');
     await expect(builder.locator('#summary-size')).toHaveText('Grande · 25 cm');
-    await expect(builder.locator('#summary-price')).toHaveText('$199 MXN');
+    await expect(builder.locator('#summary-price')).toHaveText('$249 MXN');
 
     // Resistencia.
     await builder.locator('#res-basic').click();

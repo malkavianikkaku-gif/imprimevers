@@ -5,7 +5,7 @@
 // - Mano de obra: $5 MXN por hora, cobrada solo por el post-proceso
 //   (retiro de soportes, lijado y revisión); la impresión corre sola.
 // - Fallas / reimpresión: 5%.
-// - Margen: 20% si la pieza ya está diseñada, 60% si se crea desde cero.
+// - Margen: 40% si la pieza ya está diseñada, 70% si se crea desde cero.
 // El desgaste de máquina no está confirmado todavía (machineHour = 0).
 // El objetivo es que el cliente vea un estimado claro, no el desglose de costos.
 
@@ -69,10 +69,10 @@ export const PRICING = {
   laborPerHour: 5,
   /** 5% de fallas / reimpresión (confirmado 02/11/2026). */
   risk: 0.05,
-  /** 20% cuando el cliente ya trae el diseño. */
-  marginExistingDesign: 0.2,
-  /** 60% cuando la pieza se crea desde cero (incluye el modelado). */
-  marginCustomDesign: 0.6,
+  /** 40% cuando el cliente ya trae el diseño (subido el 03/11/2026). */
+  marginExistingDesign: 0.4,
+  /** 70% cuando la pieza se crea desde cero (incluye el modelado). */
+  marginCustomDesign: 0.7,
   minUnitPrice: 60,
   maxQuantity: 10,
 } as const;
@@ -178,7 +178,7 @@ export function calculateQuote(input: QuoteInput): QuoteResult {
   // Mano de obra: solo el post-proceso (la impresión no requiere atención).
   // $5 MXN por hora × los minutos estimados según el tamaño.
   const laborCost = (size.postProcessMinutes / 60) * PRICING.laborPerHour;
-  // El margen sube al 60% cuando el diseño se crea desde cero:
+  // El margen sube al 70% cuando el diseño se crea desde cero:
   // ese margen ya incluye el modelado, por eso no se cobra un cargo aparte.
   const margin = input.customDesign
     ? PRICING.marginCustomDesign

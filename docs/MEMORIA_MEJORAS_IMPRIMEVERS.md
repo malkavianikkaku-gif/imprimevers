@@ -2291,5 +2291,62 @@ También se actualizaron los mensajes de WhatsApp de cada paquete para que digan
 
 
 
+---
+
+## 30. Margen subido a 40 % / 70 % (03/11/2026)
+
+### 30.1 Motivo
+El negocio pidió **subir un poco el margen** para tener más colchón ante futuros aumentos de costos y no tener que dar un salto fuerte de precio después.
+
+### 30.2 Cambio
+| Concepto | Antes | Ahora |
+|---|---|---|
+| Margen · pieza ya diseñada | 20 % | **40 %** |
+| Margen · pieza desde cero | 60 % | **70 %** |
+
+### 30.3 Efecto real en los precios
+El motor redondea en **pasos de $50** (terminación en 9), así que el margen solo mueve el precio cuando cruza el siguiente escalón. Con 40 %/70 %:
+
+| Caso | Antes | Ahora |
+|---|---|---|
+| Default (mediana PLA) | $99 | $99 (sin cambio) |
+| Figura grande | $199 | **$249** |
+| TPU mediana | $99 | **$149** |
+| PLA+ mediana | $149 | $149 |
+| Acabado | $299 | $299 |
+| Diseño desde cero | $149 | $149 |
+| Diseño + acabado | $349 | $349 |
+| Urgencia | $119 | $119 |
+| Envío | $249 | $249 |
+| Paquetes ($60 / $99 / $149) | — | sin cambio |
+
+**Lectura de negocio:** la entrada sigue en **$99** (no se encarece la primera compra) y la pieza grande sube a **$249**, que es donde más conviene ganar margen. Los paquetes no se movieron.
+
+### 30.4 Nota técnica sobre el redondeo
+El margen se aplica **antes** del redondeo psicológico (`roundToPsychological`). Por eso dos márgenes distintos pueden dar el mismo precio final. Si en el futuro se quiere que cada punto de margen mueva el precio, hay que cambiar el redondeo a pasos de **$10**; eso es una tarea aparte y no se hizo aquí para no alterar todos los precios de golpe.
+
+### 30.5 Cambios aplicados
+| Archivo | Cambio |
+|---|---|
+| `src/lib/pricing.ts` | `marginExistingDesign: 0.4`, `marginCustomDesign: 0.7`; comentarios actualizados. |
+| `tests/landing.spec.ts` | Precio de la figura grande: `$199 → $249`. |
+| `docs/ESTADO_ACTUAL.md` | Tabla de costos, precios de referencia e historial actualizados. |
+| `docs/BACKLOG_PRIORIZADO.csv` | Nota de Q-49 actualizada a 40 %/70 %. |
+
+### 30.6 Verificación QA
+`npm run qa` → **PASA**
+- `astro check`: **0 errores, 0 warnings, 0 hints**.
+- `astro build`: **3 páginas estáticas** + sitemap y robots.
+- `playwright test`: **50 aprobadas, 4 omitidas por diseño**.
+
+### 30.7 Estado
+- **Margen:** 40 % (ya diseñada) / 70 % (desde cero).
+- **Pendiente del negocio:** confirmar los minutos de post-proceso y si $99 de entrada es sostenible.
+- **Mejora futura opcional:** redondeo en pasos de $10 para que el margen tenga efecto más fino.
+- **Siguiente sugerido:** Q-50 (optimizar imágenes) o Q-09 (IDs de analítica).
+
+
+
+
 
 

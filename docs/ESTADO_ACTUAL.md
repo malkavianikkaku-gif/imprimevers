@@ -53,7 +53,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 | Q-23 | "Cómo funciona" en 4 pasos | `HowItWorks.astro` |
 | Q-24 / Q-52 | 3 paquetes con precios ancla **alineados al motor real** ($60 / $99 / $149) | `Packages.astro` |
 | Q-25 | FAQ (8 preguntas) + schema `FAQPage` | `FAQ.astro`, `src/data/faq.ts` |
-| Q-27 / Q-49 | Motor único de precios con **costos reales** ($350/kg, 120 W a $1.50/kWh, mano de obra $5/h, fallas 5 %, margen 20 %/60 %) | `src/lib/pricing.ts` |
+| Q-27 / Q-49 | Motor único de precios con **costos reales** ($350/kg, 120 W a $1.50/kWh, mano de obra $5/h solo post-proceso, fallas 5 %, margen 40 %/70 %) | `src/lib/pricing.ts` |
 | Q-28 | Cotizador con material, acabado, urgencia, envío y cantidad | `QuoteBuilder.astro` |
 | Q-30 | Formulario de leads → WhatsApp (adjunto manual con WhatsApp Business App) | `LeadForm.astro` |
 | — | Tests sincronizados con redes reales y HUD móvil | `tests/landing.spec.ts` |
@@ -95,14 +95,16 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 | Consumo de la impresora | **120 W por hora** | — |
 | Tarifa de luz | **$1.50 MXN / kWh** | `energyPerHour: 0.18` (0.120 kW × 1.50) |
 | Mano de obra | **$5 MXN / hora** | `laborPerHour: 5` · **solo post-proceso** (10/20/30 min según tamaño) |
-| Margen · pieza ya diseñada | **20 %** | `marginExistingDesign: 0.2` |
-| Margen · pieza creada desde cero | **60 %** | `marginCustomDesign: 0.6` |
+| Margen · pieza ya diseñada | **40 %** | `marginExistingDesign: 0.4` |
+| Margen · pieza creada desde cero | **70 %** | `marginCustomDesign: 0.7` |
 | Fallas / reimpresión | **5 %** | `risk: 0.05` |
 | Desgaste de máquina | **Sin dato confirmado** | `machineHour: 0` (campo listo) |
 
-**Decisión vigente:** el margen del 60 % **incluye el modelado**, por eso ya **no se cobra un cargo de diseño aparte** (`designFee = 0`).
+**Decisión vigente:** el margen del 70 % **incluye el modelado**, por eso ya **no se cobra un cargo de diseño aparte** (`designFee = 0`).
 
-**Precios de referencia del motor:** default `$99`, grande `$199`, pequeña `$60` (mínimo), TPU `$99`, PLA+ `$149`, acabado `$299`, diseño desde cero `$149`, diseño + acabado `$349`, urgencia `$119`, envío `$249`.
+**Precios de referencia del motor:** default `$99`, grande `$249`, pequeña `$60` (mínimo), TPU `$149`, PLA+ `$149`, acabado `$299`, diseño desde cero `$149`, diseño + acabado `$349`, urgencia `$119`, envío `$249`.
+
+> El motor redondea en pasos de **$50** (terminación en 9). Por eso subir el margen solo mueve el precio cuando cruza el siguiente escalón; con 40 %/70 % el único precio que cambió fue la pieza grande ($199 → $249).
 
 **Paquetes alineados al motor:** Esencial `$60` · Colección `$99` · Especial `$149`.
 
@@ -168,3 +170,4 @@ Datos confirmados de las nuevas:
 | 02/11/2026 | Integradas las 3 fotos restantes (gatito, onix, tumba) con datos reales | 50 ✔ / 4 omitidas |
 | 02/11/2026 | **Q-49:** costos reales aplicados al motor (incluye luz $1.50/kWh); diseño desde cero ahora va dentro del margen | 50 ✔ / 4 omitidas |
 | 03/11/2026 | **Q-52:** paquetes alineados al motor; mano de obra ahora solo por post-proceso | 50 ✔ / 4 omitidas |
+| 03/11/2026 | Margen subido a **40 % / 70 %**; la pieza grande pasa a $249 | 50 ✔ / 4 omitidas |
