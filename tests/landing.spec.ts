@@ -93,7 +93,13 @@ test.describe('Landing IMPRIMEVERS', () => {
     );
     expect(organization.email).toBe('fhazaelfcmalva@gmail.com');
     expect(localBusiness.email).toBe('fhazaelfcmalva@gmail.com');
-    expect(organization.sameAs ?? []).toEqual([]);
+
+    // Los perfiles sociales reales ya existen y deben aparecer en sameAs.
+    const sameAs: string[] = organization.sameAs ?? [];
+    expect(sameAs.some((url) => /instagram\.com\/imprimevers/i.test(url))).toBe(true);
+    expect(sameAs.some((url) => /facebook\.com/i.test(url))).toBe(true);
+    expect(sameAs.some((url) => /tiktok\.com\/@imprimevers/i.test(url))).toBe(true);
+    expect(sameAs.some((url) => /youtube\.com/i.test(url))).toBe(true);
   });
 
   test('refleja los datos confirmados del negocio sin inventar', async ({ page }) => {
@@ -108,7 +114,7 @@ test.describe('Landing IMPRIMEVERS', () => {
     await expect(page.locator('footer')).toContainText('Hijo (7 años)');
     await expect(page.locator('footer')).toContainText('fhazaelfcmalva@gmail.com');
     await expect(page.locator('footer a[href="mailto:fhazaelfcmalva@gmail.com"]')).toBeVisible();
-    await expect(page.locator('#slicer')).toContainText('ALTURA Z ACUMULADA');
+    await expect(page.locator('#slicer')).toContainText('ALTURA Z');
 
     const bodyText = await page.locator('body').innerText();
     expect(bodyText).not.toMatch(/env[ií]os a todo M[eé]xico/i);
@@ -139,17 +145,33 @@ test.describe('Landing IMPRIMEVERS', () => {
     await expect(page.getByRole('link', { name: /volver al inicio/i })).toHaveAttribute('href', '/');
   });
 
-  test('no expone redes sociales genéricas ni el teléfono placeholder', async ({ page }) => {
+  test('usa perfiles sociales reales y no expone el teléfono placeholder', async ({ page }) => {
     await page.goto('/');
 
     const hrefs = await page.locator('a[href]').evaluateAll((links) =>
       links.map((link) => link.getAttribute('href') ?? ''),
     );
 
+    // Ya existen perfiles reales: lo que se prohíbe es enlazar a la home genérica.
+    const genericSocialHomes = [
+      /^https?:\/\/(www\.)?instagram\.com\/?$/i,
+      /^https?:\/\/(www\.)?facebook\.com\/?$/i,
+      /^https?:\/\/(www\.)?tiktok\.com\/?$/i,
+      /^https?:\/\/(www\.)?youtube\.com\/?$/i,
+    ];
+
     for (const href of hrefs) {
-      expect(href).not.toMatch(/instagram\.com|facebook\.com|tiktok\.com/i);
+      for (const generic of genericSocialHomes) {
+        expect(href).not.toMatch(generic);
+      }
       expect(href).not.toContain(OLD_PLACEHOLDER);
     }
+
+    const socialHrefs = hrefs.filter((href) =>
+      /instagram\.com|facebook\.com|tiktok\.com|youtube\.com/i.test(href),
+    );
+    expect(socialHrefs.length).toBeGreaterThanOrEqual(3);
+    expect(socialHrefs.some((href) => /instagram\.com\/imprimevers/i.test(href))).toBe(true);
 
     expect(hrefs.some((href) => href.includes(REAL_PHONE))).toBe(true);
   });

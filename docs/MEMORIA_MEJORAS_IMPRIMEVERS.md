@@ -1495,9 +1495,9 @@ Fecha de ejecución: 31/10/2026
 
 | Área | Cambio | Archivos |
 |---|---|---|
-| Configuración | Fuente única de WhatsApp, dominio, correo, ciudad y redes (redes en `null`) | `src/config/site.ts` |
+| Configuración | Fuente única de WhatsApp, dominio, correo, ciudad y redes (redes reales desde 02/11/2026) | `src/config/site.ts` |
 | Contacto | Footer y cotizador usan el WhatsApp real `527776500848`; se eliminó `521234567890` | `src/pages/index.astro`, `src/components/QuoteBuilder.astro` |
-| Redes | Iconos de Instagram, Facebook y TikTok ocultos hasta que existan perfiles reales | `src/pages/index.astro`, `src/components/Navbar.astro` |
+| Redes | Perfiles reales de Instagram, Facebook, TikTok y YouTube en navbar, historia y footer (antes ocultos) | `src/pages/index.astro`, `src/components/Navbar.astro`, `src/components/Story.astro` |
 | Mobile | Menú hamburguesa accesible con `aria-expanded`, `aria-controls`, cierre con Escape y al navegar | `src/components/Navbar.astro` |
 | Oferta | `PrintCalculator` movida a `/interno/calculadora` con `noindex` y sin enlace público | `src/pages/interno/calculadora.astro` |
 | Cotizador | Único cotizador público; estado activo de filamentos, `aria-live`, infill y modelado en el mensaje, fallback si el navegador bloquea la ventana | `src/components/QuoteBuilder.astro` |
@@ -1523,8 +1523,8 @@ Fecha de ejecución: 31/10/2026
 
 1. Confirmar dominio real y actualizar `SITE.url`, `astro.config.mjs` y `robots.txt`.
 2. Confirmar correo y horarios; el teléfono visible ya está definido (`+52 777 650 0848`).
-3. Crear los perfiles sociales y poner sus URLs en `SITE.socials`.
-4. Sustituir la galería de iconos por fotos reales de piezas.
+3. ~~Crear los perfiles sociales y poner sus URLs en `SITE.socials`.~~ **Hecho (02/11/2026):** Instagram, Facebook, TikTok y YouTube configurados.
+4. ~~Sustituir la galería de iconos por fotos reales de piezas.~~ **Parcial (02/11/2026):** 4 fotos reales integradas con lightbox; faltan `gatito.jpeg`, `onix.jpeg` y `tumba.jpeg` (Q-21 / Q-51).
 5. Unificar el motor de precios entre `QuoteBuilder` y la calculadora interna (Q-27).
 6. Configurar GA4 y Meta Pixel cuando existan las cuentas.
 7. Confirmar envíos, métodos de pago y garantía antes de afirmarlos en la web.
@@ -1545,12 +1545,13 @@ Fecha de ejecución: 31/10/2026
 | Capacidad actual | **Una impresora 3D** |
 | Diferenciador | Imaginación, diseño propio y trabajo familiar |
 | WhatsApp | `527776500848` |
-| Redes sociales | Aún no existen; permanecen ocultas hasta crear los perfiles |
+| Redes sociales | Instagram, Facebook, TikTok y YouTube reales (configurados 02/11/2026) |
 | Dominio | Pendiente de confirmar (`https://imprimevers.mx` es provisional) |
 | Correo | **`fhazaelfcmalva@gmail.com`** (confirmado 31/10/2026; publicado en footer y JSON-LD) |
 | Horarios | Pendientes de confirmar |
 | Envíos, pagos, garantía | Pendientes de confirmar; no afirmarlos todavía |
-| Fotos y reseñas | No hay; no inventarlas |
+| Fotos | 7 fotos reales en `public/images/gallery/`; 4 publicadas en la pasarela y 3 pendientes de integrar |
+| Reseñas | No hay; no inventarlas |
 
 ### 20.2 Reglas de trabajo obligatorias
 
@@ -2068,3 +2069,98 @@ Reducir la fricción de cotización proporcionando 3 anclas de precio visibles (
 
 ### 25.4 Estado de Q-24
 **Completado.** La landing dispone de anclas de precio visuales y la responsividad móvil quedó blindada contra desbordamientos.
+
+
+---
+
+## 26. Re-sincronización con los cambios del usuario (02/11/2026)
+
+### 26.1 Objetivo
+Volver a leer el proyecto después de los cambios hechos directamente por el usuario (redes sociales reales, pasarela de fotos con lightbox y tarjetas responsivas), dejar la documentación y el backlog coherentes con el código real, y restaurar el QA en verde.
+
+### 26.2 Cambios del usuario detectados (commits `093f132` y `c8b32a2`)
+
+| Archivo | Cambio |
+|---|---|
+| `src/config/site.ts` | Redes sociales reales configuradas: Instagram (`/imprimevers`), Facebook (`profile.php?id=61596268494824`), TikTok (`@imprimevers`) y YouTube (`channel/UCtD3ln61vyyEvdBoJt95zSg`). |
+| `src/components/Navbar.astro` | Enlaces sociales en la barra de escritorio y dentro del menú móvil ("SÍGUENOS EN REDES"). |
+| `src/components/Story.astro` | Bloque de redes sociales en la historia del taller. |
+| `src/pages/index.astro` | Iconos sociales del footer con SVG propios (Instagram, Facebook, TikTok y YouTube). |
+| `src/layouts/Layout.astro` | `Organization.sameAs` se llena automáticamente con las redes configuradas (`Object.values(SITE.socials)`). |
+| `src/components/Portfolio.astro` | Pasarela con **lightbox**: las fotos se abren en grande (clic, botón de cierre, clic en el fondo o tecla Escape), `object-contain` para no recortar piezas y aviso "Ver en grande" al pasar el mouse. |
+| `src/components/Hero.astro` | Tarjeta holográfica responsiva: altura fija 380/480 px, logo y textos escalados para móvil. |
+| `src/components/SlicerSimulator.astro` | HUD compacto en móvil: "CAPA", "ALTURA Z", "FIL" y "EST." en lugar de las etiquetas largas. |
+| `public/images/gallery/` | 7 fotos reales del taller: `fnaf-chibis.png`, `dragones-flex.jpeg`, `metagross.jpeg`, `endevor.png`, `gatito.jpeg`, `onix.jpeg`, `tumba.jpeg`. |
+| `README.md` | README profesional del proyecto (stack, estructura, instalación). |
+
+### 26.3 Cambios aplicados por el agente (esta iteración)
+
+| Archivo | Cambio | Motivo |
+|---|---|---|
+| `tests/landing.spec.ts` | Test SEO: ahora exige que `sameAs` incluya los 4 perfiles reales (antes exigía lista vacía). Test de redes: ahora prohíbe solo las **home genéricas** (`instagram.com/`, `facebook.com/`, etc.) y exige al menos 3 perfiles reales. Test de datos: `ALTURA Z ACUMULADA` → `ALTURA Z`. | Los tests quedaron desactualizados con los cambios del usuario y hacían fallar el QA. |
+| `src/components/SlicerSimulator.astro` | Clase inválida `max-w-[55%][cite: 13]` → `max-w-[55%]`. | Residuo de copia que Tailwind no interpreta. |
+| `src/config/site.ts` | Comentario obsoleto ("aún no existen los perfiles") y URL de TikTok sin parámetros de tracking (`?_r=1&_t=...`). | Coherencia y enlaces limpios. |
+| `README.md` | URL del repo real (`malkavianikkaku-gif/imprimevers`) y puerto de desarrollo `4321` (el README decía 3000). | Evitar pasos de instalación incorrectos. |
+
+### 26.4 Verificación QA
+`npm run qa` → **PASA**
+- `astro check`: **0 errores, 0 warnings, 0 hints**.
+- `astro build`: **3 páginas estáticas** + sitemap y robots.
+- `playwright test`: **50 aprobadas, 4 omitidas por diseño**.
+
+### 26.5 Backlog actualizado en esta iteración
+- **Q-03** → Hecho (redes reales en navbar, historia y footer).
+- **Q-09** → Parcial: código y eventos listos, faltan IDs de GA4 y Meta Pixel.
+- **Q-21** → Parcial: 4 fotos reales integradas con lightbox.
+- **Q-23 / Q-24 / Q-25** → Hecho (ya estaban implementadas en memoria §23–§25, el CSV seguía en "Pendiente").
+- **Q-43** → Parcial: 404, robots y sitemap hechos; falta manifest/PWA.
+- Nuevos: **Q-50** (optimizar imágenes de galería) y **Q-51** (integrar las 3 fotos restantes con datos reales).
+
+### 26.6 Pendientes detectados
+1. ~~**3 fotos sin integrar** en la pasarela: `gatito.jpeg`, `onix.jpeg` y `tumba.jpeg`.~~ **Hecho (02/11/2026):** integradas en §27.
+2. **Peso de imágenes**: `endevor.png` pesa **2.6 MB**; conviene convertirla a WebP/JPEG y usar `width`/`height` + `loading="lazy"` (Q-50).
+3. **Analítica sin IDs**: `src/config/analytics.ts` está vacío, así que GA4 y Meta Pixel no envían datos todavía (Q-09).
+4. **Manifest/PWA** y **Google Business Profile** siguen pendientes (Q-43 y Q-32).
+
+
+---
+
+## 27. Integración de las 3 fotos restantes de la galería (Q-51, 02/11/2026)
+
+### 27.1 Objetivo
+Publicar en la pasarela las 3 fotos reales que ya estaban en `public/images/gallery/` pero no se mostraban, usando **solo los datos confirmados por el dueño del taller** (sin inventar medidas, precios ni características).
+
+### 27.2 Datos confirmados por el negocio
+| Foto | Dato confirmado |
+|---|---|
+| `gatito.jpeg` | Pieza de **PLA** de un gato **estático** pero tierno. |
+| `onix.jpeg` | **Onix de Pokémon**, pieza **flexible** y de **buen tamaño**. |
+| `tumba.jpeg` | **Adorno de Halloween** que **Bobonsam está pintando**. |
+
+### 27.3 Cambios aplicados
+| Archivo | Cambio |
+|---|---|
+| `src/components/Portfolio.astro` | Se agregaron 3 piezas a `galleryItems`: **Gatito Tierno** (`PLA • FIGURA ESTÁTICA`, tag `PLA`), **Onix Flexible** (`POKÉMON • PIEZA FLEXIBLE`, tag `Flexible`) y **Tumba de Halloween** (`HALLOWEEN • ADORNO EN PROCESO`, tag `En pintura`). Quedan **7 piezas** en la pasarela, todas ampliables con el lightbox existente. |
+
+**Nota de honestidad:** la tumba se describe como pieza **en proceso** (la está pintando Bobonsam), no como producto terminado.
+
+### 27.4 Verificación QA
+`npm run qa` → **PASA**
+- `astro check`: **0 errores, 0 warnings, 0 hints**.
+- `astro build`: **3 páginas estáticas** + sitemap y robots.
+- `playwright test`: **50 aprobadas, 4 omitidas por diseño**.
+
+### 27.5 Estado
+- **Q-51:** **completado** (las 3 fotos integradas con datos reales).
+- **Q-21:** **completado en contenido** (7 fotos reales con lightbox). Solo queda la optimización de peso → **Q-50**.
+
+### 27.6 Marca de continuación (para no releer el proyecto)
+| Archivo | Cambio |
+|---|---|
+| `docs/ESTADO_ACTUAL.md` | **Nuevo.** Marca de continuación con: resumen del proyecto, estado de QA, lo ya hecho (no rehacer), pendientes priorizados, datos confirmados del negocio, **costos reales confirmados pendientes de aplicar**, archivos clave, cómo continuar y plantilla de actualización. |
+| `AGENTS.md` | El paso 1 del flujo ahora indica leer primero `docs/ESTADO_ACTUAL.md`. |
+
+> **Importante para la siguiente sesión:** los costos reales ya están confirmados (filamento $350/kg, 120 W/h, mano de obra $5/h, margen 20 % pieza ya diseñada / 60 % desde cero, fallas 5 %), pero **el motor de precios sigue con los valores viejos**. Falta únicamente la tarifa de luz en MXN/kWh para cerrar **Q-49**.
+
+
+

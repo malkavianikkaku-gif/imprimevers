@@ -24,11 +24,11 @@ export const SITE = {
     printers: 1,
   },
   socials: {
-    // Aún no existen los perfiles. Cuando se creen, agrega la URL completa aquí
-    // y los iconos aparecerán automáticamente en el footer.
+    // Perfiles reales del taller. Si algún día se desactiva uno, ponlo en null
+    // y los iconos desaparecen automáticamente del navbar, la historia y el footer.
     instagram: "https://www.instagram.com/imprimevers/" as string | null,
     facebook: "https://www.facebook.com/profile.php?id=61596268494824" as string | null,
-    tiktok: "https://www.tiktok.com/@imprimevers?_r=1&_t=ZS-9B3Xc9kwKWK" as string | null,
+    tiktok: "https://www.tiktok.com/@imprimevers" as string | null,
     youtube: "https://www.youtube.com/channel/UCtD3ln61vyyEvdBoJt95zSg" as string | null,
   },
 } as const;

@@ -40,7 +40,7 @@ Si deseas clonar y levantar el entorno de desarrollo en tu máquina local:
    Bash
    
    ```
-   git clone https://github.com/TU_USUARIO/imprimevers.git
+   git clone https://github.com/malkavianikkaku-gif/imprimevers.git
    cd imprimevers
    ```
    
@@ -60,7 +60,7 @@ Si deseas clonar y levantar el entorno de desarrollo en tu máquina local:
    npm run dev
    ```
    
-   Abre [http://localhost:3000](http://localhost:3000/) en tu navegador para ver la interfaz en tiempo real.
+   Abre [http://localhost:4321](http://localhost:4321/) en tu navegador para ver la interfaz en tiempo real.
    
 
 ## 📄 Licencia y Créditos

@@ -13,7 +13,7 @@
 
 ## Flujo de trabajo obligatorio
 
-1. **Leer la memoria antes de cambiar código.** Abrir `docs/MEMORIA_MEJORAS_IMPRIMEVERS.md` y revisar la sección 19 (estado de implementación) y la sección 20 (contexto del negocio y reglas).
+1. **Leer la memoria antes de cambiar código.** Abrir `docs/MEMORIA_MEJORAS_IMPRIMEVERS.md` y revisar la sección 19 (estado de implementación) y la sección 20 (contexto del negocio y reglas). **Atajo:** lee primero `docs/ESTADO_ACTUAL.md` (marca de continuación); la memoria completa solo si necesitas detalle.
 2. **Crear un plan de acción antes de investigar o implementar.** Indicar objetivo, archivos, orden, riesgos y criterio de aceptación.
 3. **Implementar en orden de fases.** No adelantar catálogo, pagos o funciones que dependan de datos sin confirmar.
 4. **Verificar con QA.** Ejecutar `npm run qa` (Astro check + build + Playwright). Si algo falla, corregir antes de continuar.
