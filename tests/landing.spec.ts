@@ -196,8 +196,8 @@ test.describe('Landing IMPRIMEVERS', () => {
     await page.goto('/');
     const builder = page.locator('#builder');
 
-    await expect(builder.locator('#summary-unit-price')).toHaveText('$249 MXN');
-    await expect(builder.locator('#summary-price')).toHaveText('$249 MXN');
+    await expect(builder.locator('#summary-unit-price')).toHaveText('$149 MXN');
+    await expect(builder.locator('#summary-price')).toHaveText('$149 MXN');
     await expect(builder.locator('#summary-time')).toHaveText('~ 7.5 h por pieza');
     await expect(builder.locator('#summary-weight')).toHaveText('~ 143 g por pieza');
 
@@ -219,7 +219,7 @@ test.describe('Landing IMPRIMEVERS', () => {
     await builder.locator('#size-large').click();
     await expect(builder.locator('#size-large')).toHaveAttribute('aria-pressed', 'true');
     await expect(builder.locator('#summary-size')).toHaveText('Grande · 25 cm');
-    await expect(builder.locator('#summary-price')).not.toHaveText('$249 MXN');
+    await expect(builder.locator('#summary-price')).toHaveText('$299 MXN');
 
     // Resistencia.
     await builder.locator('#res-basic').click();
@@ -239,10 +239,10 @@ test.describe('Landing IMPRIMEVERS', () => {
     await expect(builder.locator('#summary-discount-row')).toBeVisible();
     await expect(builder.locator('#summary-discount')).toContainText('-$');
 
-    // Diseño desde cero: cargo único.
+    // Diseño desde cero: el margen sube al 60% y ya va incluido en el precio.
     await builder.locator('#blender-check').check();
     await expect(builder.locator('#summary-design-row')).toBeVisible();
-    await expect(builder.locator('#summary-design')).toContainText('$350');
+    await expect(builder.locator('#summary-design')).toContainText('Incluido');
 
     // En piezas pequeñas se avisa que se aplicó el precio mínimo ($60 MXN).
     await builder.locator('#size-small').click();
@@ -255,14 +255,14 @@ test.describe('Landing IMPRIMEVERS', () => {
     await page.goto('/');
     const builder = page.locator('#builder');
 
-    // Material por defecto: PLA (factor 1.0) → estimado base de $249 MXN.
+    // Material por defecto: PLA (factor 1.0) → estimado base de $149 MXN.
     await expect(builder.locator('#summary-material')).toHaveText('PLA');
-    await expect(builder.locator('#summary-price')).toHaveText('$249 MXN');
+    await expect(builder.locator('#summary-price')).toHaveText('$149 MXN');
 
-    // Material PETG (factor 1.15) → el precio estimado cambia.
-    await builder.locator('#mat-petg').click();
-    await expect(builder.locator('#summary-material')).toHaveText('PETG');
-    await expect(builder.locator('#summary-price')).not.toHaveText('$249 MXN');
+    // TPU (factor 1.3) → el precio estimado sube con el mismo motor.
+    await builder.locator('#mat-tpu').click();
+    await expect(builder.locator('#summary-material')).toHaveText('TPU');
+    await expect(builder.locator('#summary-price')).toHaveText('$199 MXN');
   });
 
   test('el cotizador agrega el acabado con su cargo cuando se pide', async ({ page }) => {
@@ -272,15 +272,15 @@ test.describe('Landing IMPRIMEVERS', () => {
     // Acabado desactivado por defecto: el cargo no se muestra.
     await expect(builder.locator('#summary-finishing-row')).toBeHidden();
 
-    // Diseño + acabado: total = $249 (base) + $350 (diseño) + $200 (acabado) = $799 MXN.
+    // Diseño + acabado: total = $199 (base con margen 60%) + $200 (acabado) = $399 MXN.
     await builder.locator('#blender-check').check();
     await builder.locator('#finishing-check').check();
 
     await expect(builder.locator('#summary-design-row')).toBeVisible();
     await expect(builder.locator('#summary-finishing-row')).toBeVisible();
-    await expect(builder.locator('#summary-design')).toContainText('$350');
+    await expect(builder.locator('#summary-design')).toContainText('Incluido');
     await expect(builder.locator('#summary-finishing')).toContainText('$200');
-    await expect(builder.locator('#summary-price')).toHaveText('$799 MXN');
+    await expect(builder.locator('#summary-price')).toHaveText('$399 MXN');
   });
 
   test('el cotizador agrega urgencia con su recargo cuando se pide', async ({ page }) => {
@@ -290,11 +290,11 @@ test.describe('Landing IMPRIMEVERS', () => {
     // Urgencia desactivada por defecto: el recargo no se muestra.
     await expect(builder.locator('#summary-urgency-row')).toBeHidden();
 
-    // Urgencia: total = $249 (base) × (1 + 0.2) = $299 MXN.
+    // Urgencia: total = $149 (base) × (1 + 0.2) = $179 MXN.
     await builder.locator('#urgency-check').check();
     await expect(builder.locator('#summary-urgency-row')).toBeVisible();
-    await expect(builder.locator('#summary-urgency')).toContainText('$50');
-    await expect(builder.locator('#summary-price')).toHaveText('$299 MXN');
+    await expect(builder.locator('#summary-urgency')).toContainText('$30');
+    await expect(builder.locator('#summary-price')).toHaveText('$179 MXN');
   });
 
   test('el cotizador agrega envío con su cargo cuando se pide', async ({ page }) => {
@@ -304,11 +304,11 @@ test.describe('Landing IMPRIMEVERS', () => {
     // Envío desactivado por defecto: el cargo no se muestra.
     await expect(builder.locator('#summary-shipping-row')).toBeHidden();
 
-    // Envío: total = $249 (base) + $150 (envío) = $399 MXN.
+    // Envío: total = $149 (base) + $150 (envío) = $299 MXN.
     await builder.locator('#shipping-check').check();
     await expect(builder.locator('#summary-shipping-row')).toBeVisible();
     await expect(builder.locator('#summary-shipping')).toContainText('$150');
-    await expect(builder.locator('#summary-price')).toHaveText('$399 MXN');
+    await expect(builder.locator('#summary-price')).toHaveText('$299 MXN');
   });
 
   test('el formulario de leads captura datos y abre WhatsApp con la idea', async ({ page }) => {
@@ -460,10 +460,10 @@ test.describe('Landing IMPRIMEVERS', () => {
       await page.evaluate(() => (window as any).__openedUrl as string),
     );
 
-    expect(message).toContain('Subtotal: $996 MXN');
-    expect(message).toContain('Descuento por cantidad (5%): -$50 MXN');
-    expect(message).toContain('Cargo por diseño desde cero (una vez): +$350 MXN');
-    expect(message).toContain('Total estimado: $1,296 MXN');
+    expect(message).toContain('Subtotal: $796 MXN');
+    expect(message).toContain('Descuento por cantidad (5%): -$40 MXN');
+    expect(message).toContain('Diseño desde cero: Sí (incluido en el precio)');
+    expect(message).toContain('Total estimado: $756 MXN');
   });
 
   test('el botón del cotizador construye un enlace de WhatsApp válido', async ({ page }) => {
@@ -489,24 +489,24 @@ test.describe('Landing IMPRIMEVERS', () => {
     expect(message).toContain('Resistente');
     expect(message).toContain('Morado Neón');
     expect(message).toContain('1 pieza');
-    expect(message).toContain('Precio estimado por pieza: $249 MXN');
-    expect(message).toContain('Total estimado: $249 MXN');
+    expect(message).toContain('Precio estimado por pieza: $149 MXN');
+    expect(message).toContain('Total estimado: $149 MXN');
     expect(message).toContain('es un estimado');
   });
 
   test('la calculadora interna usa el motor de precios del cotizador', async ({ page }) => {
     await page.goto('/interno/calculadora');
 
-    // Motor único: el precio de venta sugerido con los defaults del motor
-    // (rollo $450, 120 g, 8 h, 20 min mano de obra, margen 60%).
+    // Motor único: el precio de venta sugerido con los defaults reales
+    // (rollo $350, 120 g, 8 h, 120 W a $1.50/kWh, 20 min de mano de obra a $5/h, margen 60%).
     const price = page.locator('#res-price');
     await expect(price).toBeVisible();
-    await expect(price).toHaveText('$194.08');
+    await expect(price).toHaveText('$75.78');
 
     // Cambiar el precio del rollo recalcula el precio sugerido con el mismo motor.
     const spoolPrice = page.locator('#spool-price');
     await spoolPrice.fill('900');
-    await expect(price).toHaveText('$289.12');
+    await expect(price).toHaveText('$186.66');
   });
 
   test('la ruta interna existe, está marcada noindex y no se enlaza desde la landing', async ({ page, request }) => {

@@ -231,7 +231,7 @@ const initialQuote = calculateQuote({
         <label for="blender-check" class="flex items-center justify-between gap-4 p-4 rounded-2xl bg-cyber-card border border-slate-800 cursor-pointer">
           <div>
             <div class="text-sm font-bold text-white">¿Necesitas que la diseñemos desde cero?</div>
-            <div class="text-xs text-slate-400">Si no tienes un archivo 3D, nosotros lo modelamos. Se cobra una sola vez por pedido.</div>
+            <div class="text-xs text-slate-400">Si no tienes un archivo 3D, nosotros lo modelamos. Se aplica el margen de diseño desde cero.</div>
           </div>
           <input type="checkbox" id="blender-check" onchange="updateEstimate()" class="w-5 h-5 accent-cyber-purple cursor-pointer">
         </label>
@@ -330,7 +330,7 @@ const initialQuote = calculateQuote({
           <div id="summary-design-row" class="hidden">
             <div class="flex justify-between gap-3 text-[11px] font-mono text-cyber-purple">
               <span>Diseño desde cero</span>
-              <span id="summary-design">+$350 MXN</span>
+              <span id="summary-design">Incluido</span>
             </div>
           </div>
 
@@ -519,14 +519,15 @@ const initialQuote = calculateQuote({
     setText('summary-unit-price', formatMoney(quote.unitPrice));
     setText('summary-price', formatMoney(quote.total));
     setText('summary-discount', `-${formatMoney(quote.discountAmount)}`);
-    setText('summary-design', `+${formatMoney(quote.designFee)}`);
+    setText('summary-design', 'Incluido');
     setText('summary-total-time', `~ ${quote.totalHours} h`);
 
     const discountRow = document.getElementById('summary-discount-row');
     if (discountRow) discountRow.classList.toggle('hidden', quote.discountAmount === 0);
 
     const designRow = document.getElementById('summary-design-row');
-    if (designRow) designRow.classList.toggle('hidden', quote.designFee === 0);
+    const designOn = (document.getElementById('blender-check') as HTMLInputElement | null)?.checked ?? false;
+    if (designRow) designRow.classList.toggle('hidden', !designOn);
 
     const finishingRow = document.getElementById('summary-finishing-row');
     if (finishingRow) finishingRow.classList.toggle('hidden', quote.finishingFee === 0);
@@ -564,8 +565,8 @@ const initialQuote = calculateQuote({
       ...(quote.discountAmount > 0
         ? [`- Descuento por cantidad (${Math.round(quote.discountRate * 100)}%): -${formatMoney(quote.discountAmount)}`]
         : []),
-      ...(quote.designFee > 0
-        ? [`- Cargo por diseño desde cero (una vez): +${formatMoney(quote.designFee)}`]
+      ...((document.getElementById('blender-check') as HTMLInputElement | null)?.checked
+        ? ['- Diseño desde cero: Sí (incluido en el precio)']
         : ['- Diseño desde cero: No']),
       ...(quote.finishingFee > 0
         ? [`- Acabado (pintura/lijado): +${formatMoney(quote.finishingFee)}`]

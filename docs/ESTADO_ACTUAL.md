@@ -6,7 +6,7 @@
 
 **Última actualización:** 02/11/2026
 **Responsable de la última marca:** agente + Fabián
-**Memoria completa (solo si necesitas detalle):** `docs/MEMORIA_MEJORAS_IMPRIMEVERS.md` (§26 y §27 son lo más reciente)
+**Memoria completa (solo si necesitas detalle):** `docs/MEMORIA_MEJORAS_IMPRIMEVERS.md` (§28 es lo más reciente)
 **Plan priorizado:** `docs/BACKLOG_PRIORIZADO.csv`
 
 ---
@@ -53,7 +53,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 | Q-23 | "Cómo funciona" en 4 pasos | `HowItWorks.astro` |
 | Q-24 | 3 paquetes con precios ancla | `Packages.astro` |
 | Q-25 | FAQ (8 preguntas) + schema `FAQPage` | `FAQ.astro`, `src/data/faq.ts` |
-| Q-27 | Motor único de precios | `src/lib/pricing.ts` |
+| Q-27 / Q-49 | Motor único de precios con **costos reales** ($350/kg, 120 W a $1.50/kWh, mano de obra $5/h, fallas 5 %, margen 20 %/60 %) | `src/lib/pricing.ts` |
 | Q-28 | Cotizador con material, acabado, urgencia, envío y cantidad | `QuoteBuilder.astro` |
 | Q-30 | Formulario de leads → WhatsApp (adjunto manual con WhatsApp Business App) | `LeadForm.astro` |
 | — | Tests sincronizados con redes reales y HUD móvil | `tests/landing.spec.ts` |
@@ -64,7 +64,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 
 | Prioridad | ID | Tarea | Archivo(s) | Nota |
 |---|---|---|---|---|
-| **P0** | Q-49 | **Aplicar los costos reales al motor de precios** | `src/lib/pricing.ts` | Datos confirmados en §5. Falta definir la tarifa kWh. |
+| **P0** | Q-52 | **Alinear los precios ancla de los paquetes con el motor real** | `src/components/Packages.astro` | Hoy Colección dice `$249` y Especial `$599`; el motor ya da otros valores. Requiere confirmación del negocio antes de publicar. |
 | P1 | Q-50 | Optimizar imágenes (peso y dimensiones) | `public/images/gallery/`, `Portfolio.astro` | `endevor.png` pesa **2.6 MB**. `sharp` ya está instalado. |
 | P1 | Q-09 | Pegar IDs de **GA4** y **Meta Pixel** | `src/config/analytics.ts` | El código de eventos ya funciona; solo faltan los IDs. |
 | P1 | Q-26 | Envíos, garantía y pagos | nueva sección | **Requiere datos del negocio**; no inventar. |
@@ -89,17 +89,21 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 - Redes reales: Instagram `/imprimevers`, Facebook `profile.php?id=61596268494824`, TikTok `@imprimevers`, YouTube `channel/UCtD3ln61vyyEvdBoJt95zSg`.
 - **No hay reseñas** ni envíos/garantía confirmados.
 
-### Costos reales confirmados por el dueño (02/11/2026) — PENDIENTES DE APLICAR
-| Dato | Valor confirmado | Constante actual (incorrecta) |
+### Costos reales confirmados por el dueño (02/11/2026) — APLICADOS EN EL MOTOR
+| Dato | Valor confirmado | Constante en `src/lib/pricing.ts` |
 |---|---|---|
-| Filamento | **$350 MXN / kg** | `spoolPricePerKg: 450` |
-| Consumo de la impresora | **120 W por hora** | `energyPerHour: 0.37` (falta tarifa kWh) |
-| Mano de obra | **$5 MXN / hora** | `laborPerPiece: 30` (hoy es por pieza, no por hora) |
-| Margen · pieza ya diseñada | **20 %** | `margin: 0.6` |
-| Margen · pieza creada desde cero | **60 %** | `margin: 0.6` |
-| Fallas / reimpresión | **5 %** | `risk: 0.1` |
+| Filamento | **$350 MXN / kg** | `spoolPricePerKg: 350` |
+| Consumo de la impresora | **120 W por hora** | — |
+| Tarifa de luz | **$1.50 MXN / kWh** | `energyPerHour: 0.18` (0.120 kW × 1.50) |
+| Mano de obra | **$5 MXN / hora** | `laborPerHour: 5` (se cobra por hora estimada) |
+| Margen · pieza ya diseñada | **20 %** | `marginExistingDesign: 0.2` |
+| Margen · pieza creada desde cero | **60 %** | `marginCustomDesign: 0.6` |
+| Fallas / reimpresión | **5 %** | `risk: 0.05` |
+| Desgaste de máquina | **Sin dato confirmado** | `machineHour: 0` (campo listo) |
 
-**Dato que falta para cerrar Q-49:** la **tarifa de luz en MXN por kWh** (CFE). Sin ese número no se puede convertir 120 W/h a pesos. El resto ya está confirmado.
+**Decisión vigente:** el margen del 60 % **incluye el modelado**, por eso ya **no se cobra un cargo de diseño aparte** (`designFee = 0`).
+
+**Precios de referencia del motor:** default `$149`, grande `$299`, pequeña `$60` (mínimo), TPU `$199`, acabado `$349`, diseño desde cero `$199`, diseño + acabado `$399`, urgencia `$179`, envío `$299`.
 
 ### Fotos publicadas (7)
 `fnaf-chibis.png`, `dragones-flex.jpeg`, `gatito.jpeg`, `metagross.jpeg`, `onix.jpeg`, `endevor.png`, `tumba.jpeg`
@@ -117,13 +121,13 @@ Datos confirmados de las nuevas:
 |---|---|
 | `src/config/site.ts` | WhatsApp, correo, ciudad, redes, textos base |
 | `src/config/analytics.ts` | IDs de GA4 y Meta Pixel (**vacíos**) |
-| `src/lib/pricing.ts` | Motor único de precios (constantes a actualizar) |
+| `src/lib/pricing.ts` | Motor único de precios con costos reales (única fuente de verdad) |
 | `src/pages/index.astro` | Orden de las secciones + footer |
 | `src/components/Portfolio.astro` | Galería (`galleryItems`) + lightbox |
 | `src/components/QuoteBuilder.astro` | Cotizador público |
 | `tests/landing.spec.ts` | 27 tests × 2 proyectos (escritorio y móvil) |
-| `docs/MEMORIA_MEJORAS_IMPRIMEVERS.md` | Detalle histórico (§26 y §27 = último) |
-| `docs/BACKLOG_PRIORIZADO.csv` | Plan priorizado (Q-01 … Q-51) |
+| `docs/MEMORIA_MEJORAS_IMPRIMEVERS.md` | Detalle histórico (§28 = último) |
+| `docs/BACKLOG_PRIORIZADO.csv` | Plan priorizado (Q-01 … Q-52) |
 
 ---
 
@@ -131,7 +135,7 @@ Datos confirmados de las nuevas:
 
 1. Lee **este archivo** y el punto 4 (pendientes).
 2. Ejecuta `npm run qa` para confirmar que sigues en verde.
-3. Elige **una** tarea del punto 4 (recomendado: **Q-49**).
+3. Elige **una** tarea del punto 4 (recomendado: **Q-50**, optimizar imágenes).
 4. Escribe un plan corto (objetivo, archivos, riesgo, criterio de aceptación).
 5. Implementa, ejecuta `npm run qa`, y **actualiza este archivo + la memoria**.
 6. Si el cambio afecta precios, actualiza también los valores esperados en `tests/landing.spec.ts`.
@@ -161,3 +165,4 @@ Datos confirmados de las nuevas:
 |---|---|---|
 | 02/11/2026 | Re-sincronización con cambios del usuario (redes reales, lightbox, tarjetas responsivas) + tests corregidos | 50 ✔ / 4 omitidas |
 | 02/11/2026 | Integradas las 3 fotos restantes (gatito, onix, tumba) con datos reales | 50 ✔ / 4 omitidas |
+| 02/11/2026 | **Q-49:** costos reales aplicados al motor (incluye luz $1.50/kWh); diseño desde cero ahora va dentro del margen | 50 ✔ / 4 omitidas |

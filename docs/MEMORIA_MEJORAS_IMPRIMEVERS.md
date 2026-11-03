@@ -2163,4 +2163,64 @@ Publicar en la pasarela las 3 fotos reales que ya estaban en `public/images/gall
 > **Importante para la siguiente sesión:** los costos reales ya están confirmados (filamento $350/kg, 120 W/h, mano de obra $5/h, margen 20 % pieza ya diseñada / 60 % desde cero, fallas 5 %), pero **el motor de precios sigue con los valores viejos**. Falta únicamente la tarifa de luz en MXN/kWh para cerrar **Q-49**.
 
 
+---
+
+## 28. Costos reales aplicados al motor de precios (Q-49, 02/11/2026)
+
+### 28.1 Objetivo
+Dejar de calcular con supuestos y usar los **costos reales confirmados por el taller**, incluida la tarifa eléctrica.
+
+### 28.2 Datos finales usados
+| Concepto | Valor | Cómo queda en el motor |
+|---|---|---|
+| Filamento | **$350 MXN/kg** | `spoolPricePerKg: 350` |
+| Consumo | **120 W/h** | — |
+| Tarifa de luz | **$1.50 MXN/kWh** | `energyPerHour: 0.18` (0.120 kW × 1.50) |
+| Mano de obra | **$5 MXN/hora** | `laborPerHour: 5` (antes era por pieza) |
+| Fallas / reimpresión | **5 %** | `risk: 0.05` |
+| Margen · pieza ya diseñada | **20 %** | `marginExistingDesign: 0.2` |
+| Margen · pieza desde cero | **60 %** | `marginCustomDesign: 0.6` |
+| Desgaste de máquina | **Sin dato confirmado** | `machineHour: 0` |
+
+### 28.3 Decisiones tomadas (y por qué)
+1. **El 60 % sustituye el cargo de diseño provisional** ($350 / $450 / $200). Antes se cobraba margen 60 % **más** un cargo de diseño; eso cobraba dos veces el modelado. Ahora el margen sube según el caso y el cargo desaparece.
+2. **`machineHour = 0`** porque el taller no dio un costo de desgaste. Queda el campo listo para cuando lo confirmen.
+3. **La mano de obra se cobra por hora estimada de impresión** (`hoursPerPiece × $5`). Si el taller prefiere cobrarla solo por post-proceso, se cambia en una línea.
+
+### 28.4 Cambios aplicados
+| Archivo | Cambio |
+|---|---|
+| `src/lib/pricing.ts` | Constantes reales; mano de obra por hora; margen dinámico 20 %/60 %; `designFee = 0`; se quitó `designFee` de `PIECE_TYPES`; comentarios actualizados. |
+| `src/components/QuoteBuilder.astro` | La fila "Diseño desde cero" ahora muestra **"Incluido"** cuando se activa. El mensaje de WhatsApp dice "Diseño desde cero: Sí (incluido en el precio)". Se ajustó el texto del checkbox. |
+| `src/components/PrintCalculator.astro` | Defaults reales: rollo $350, 120 W, $1.50/kWh, mano de obra $5/h. Se eliminó el factor 0.35 y el desgaste fijo de $2.50/h (ahora usa `PRICING.machineHour`). |
+| `src/components/Navbar.astro` | Se quitó el import `Icon` que ya no se usaba (evitaba un warning de `astro check`). |
+| `tests/landing.spec.ts` | Valores esperados actualizados al motor real (ver 28.5). |
+
+### 28.5 Precios resultantes (referencia)
+| Caso | Precio |
+|---|---|
+| Default (figura mediana, PLA, resistente) | **$149 MXN** |
+| Figura grande | $299 MXN |
+| Pieza pequeña + básica | $60 MXN (precio mínimo) |
+| TPU (mediana) | $199 MXN |
+| Con acabado | $349 MXN |
+| Con diseño desde cero | $199 MXN |
+| Diseño desde cero + acabado | $399 MXN |
+| Con urgencia | $179 MXN |
+| Con envío | $299 MXN |
+| Calculadora interna (defaults) | **$75.78** (rollo $900 → $186.66) |
+
+### 28.6 Verificación QA
+`npm run qa` → **PASA**
+- `astro check`: **0 errores, 0 warnings, 0 hints**.
+- `astro build`: **3 páginas estáticas** + sitemap y robots.
+- `playwright test`: **50 aprobadas, 4 omitidas por diseño**.
+
+### 28.7 Estado
+- **Q-49:** **completado** (costos reales aplicados).
+- **Pendiente detectado:** los precios ancla de los paquetes (`$249` Colección y `$599` Especial) son **anteriores** al motor real y conviene revisarlos con el negocio → **Q-52**.
+- **Pendiente:** optimizar imágenes (Q-50) y pegar IDs de analítica (Q-09).
+
+
+
 

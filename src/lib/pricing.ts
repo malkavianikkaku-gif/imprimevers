@@ -1,7 +1,11 @@
 // Motor de precios del cotizador público.
-// Las constantes son supuestos de trabajo alineados con la calculadora interna:
-// rollo de $450/kg, desgaste de máquina, energía, mano de obra, 10% de riesgo
-// y 60% de margen. Deben validarse con costos reales antes de publicar precios.
+// Costos reales confirmados por el taller el 02/11/2026:
+// - Filamento: $350 MXN por kg.
+// - Consumo: 120 W por hora × $1.50 MXN/kWh = $0.18 MXN/hora.
+// - Mano de obra: $5 MXN por hora.
+// - Fallas / reimpresión: 5%.
+// - Margen: 20% si la pieza ya está diseñada, 60% si se crea desde cero.
+// El desgaste de máquina no está confirmado todavía (machineHour = 0).
 // El objetivo es que el cliente vea un estimado claro, no el desglose de costos.
 
 export type PieceType = 'figurine' | 'prototype' | 'sign';
@@ -14,21 +18,18 @@ export const PIECE_TYPES = {
     short: 'Figura',
     description: 'Personajes, figuras y regalos personalizados.',
     complexity: 1.15,
-    designFee: 350,
   },
   prototype: {
     label: 'Prototipo o pieza útil',
     short: 'Prototipo',
     description: 'Piezas funcionales, repuestos y prototipos.',
     complexity: 1.0,
-    designFee: 450,
   },
   sign: {
     label: 'Letrero o decoración',
     short: 'Letrero',
     description: 'Letreros, logos y decoración para tu espacio.',
     complexity: 1.2,
-    designFee: 200,
   },
 } as const;
 
@@ -55,12 +56,20 @@ export type MaterialKey = keyof typeof MATERIALS;
 
 export const PRICING = {
   currency: 'MXN',
-  spoolPricePerKg: 450,
-  machineHour: 2.5,
-  energyPerHour: 0.37,
-  laborPerPiece: 30,
-  risk: 0.1,
-  margin: 0.6,
+  /** $350 MXN por kg de filamento (confirmado 02/11/2026). */
+  spoolPricePerKg: 350,
+  /** Desgaste de máquina: sin costo confirmado todavía. */
+  machineHour: 0,
+  /** 120 W × $1.50 MXN/kWh = $0.18 MXN por hora. */
+  energyPerHour: 0.18,
+  /** $5 MXN por hora de trabajo (confirmado 02/11/2026). */
+  laborPerHour: 5,
+  /** 5% de fallas / reimpresión (confirmado 02/11/2026). */
+  risk: 0.05,
+  /** 20% cuando el cliente ya trae el diseño. */
+  marginExistingDesign: 0.2,
+  /** 60% cuando la pieza se crea desde cero (incluye el modelado). */
+  marginCustomDesign: 0.6,
   minUnitPrice: 60,
   maxQuantity: 10,
 } as const;
@@ -101,6 +110,7 @@ export interface QuoteResult {
   subtotal: number;
   discountRate: number;
   discountAmount: number;
+  /** Se conserva en 0: el modelado desde cero ya va dentro del margen del 60%. */
   designFee: number;
   finishingFee: number;
   urgencyFee: number;
@@ -162,14 +172,20 @@ export function calculateQuote(input: QuoteInput): QuoteResult {
   );
   const hoursPerPiece = Number((size.cm * 0.4 * (resistance.infill / 20)).toFixed(1));
 
-  const laborCost = input.size === 'small' ? 10 : PRICING.laborPerPiece;
+  // Mano de obra: $5 MXN por hora estimada de trabajo.
+  const laborCost = hoursPerPiece * PRICING.laborPerHour;
+  // El margen sube al 60% cuando el diseño se crea desde cero:
+  // ese margen ya incluye el modelado, por eso no se cobra un cargo aparte.
+  const margin = input.customDesign
+    ? PRICING.marginCustomDesign
+    : PRICING.marginExistingDesign;
   const cost = calculateProductionCost({
     materialCost: gramsPerPiece * (PRICING.spoolPricePerKg / 1000) * MATERIALS[input.material].factor,
     machineCost: hoursPerPiece * (PRICING.machineHour + PRICING.energyPerHour),
     laborCost,
     complexity: type.complexity,
     risk: PRICING.risk,
-    margin: PRICING.margin,
+    margin,
   });
 
   const roundedUnitPrice = roundToPsychological(cost.unitPriceBeforePsychology);
@@ -178,7 +194,8 @@ export function calculateQuote(input: QuoteInput): QuoteResult {
   const subtotal = unitPrice * quantity;
   const discountRate = getQuantityDiscount(quantity);
   const discountAmount = Math.round(subtotal * discountRate);
-  const designFee = input.customDesign ? type.designFee : 0;
+  // Sin cargo de diseño aparte: el 60% de margen ya cubre el modelado.
+  const designFee = 0;
   const finishingFee = input.finishing ? FINISHING_FEE : 0;
   const shippingFee = input.shipping ? SHIPPING_FEE : 0;
   const baseTotal = Math.round(subtotal - discountAmount + designFee + finishingFee + shippingFee);
