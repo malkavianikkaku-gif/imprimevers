@@ -8,6 +8,8 @@ const galleryItems = [
     category: 'IMPRESIÓN FDM • FLEXIBLE / COLECCIONABLE',
     description: 'Figuras articuladas de 5 a 12g diseñadas para resistencia al uso diario. Alto volumen y encanto en tamaño de bolsillo.',
     image: '/images/gallery/fnaf-chibis.png', 
+    width: 656,
+    height: 655,
     tag: 'PLA+ / 15 MXN',
     color: 'border-cyber-purple/30 group-hover:border-cyber-purple text-cyber-purple'
   },
@@ -16,6 +18,8 @@ const galleryItems = [
     category: 'PIEZAS FLEXIBLES • ANTI-ESTRÉS',
     description: 'Impresión en lotes optimizados en cama completa para garantizar encaje perfecto sin soportes complejos.',
     image: '/images/gallery/dragones-flex.jpeg',
+    width: 1600,
+    height: 1198,
     tag: 'PLA+ / Multicolor',
     color: 'border-cyber-blue/30 group-hover:border-cyber-blue text-cyber-blue'
   },
@@ -24,6 +28,8 @@ const galleryItems = [
     category: 'PLA • FIGURA ESTÁTICA',
     description: 'Figura estática de un gato impresa en PLA. Una pieza de escritorio sencilla y tierna, ideal para regalo.',
     image: '/images/gallery/gatito.jpeg',
+    width: 958,
+    height: 1280,
     tag: 'PLA',
     color: 'border-cyber-purple/30 group-hover:border-cyber-purple text-cyber-purple'
   },
@@ -32,6 +38,8 @@ const galleryItems = [
     category: 'BLENDER 3D • ENSAMBLAJE',
     description: 'Modelo totalmente articulado con tolerancias mecánicas aplicadas con imprimevers_tools para un acople perfecto.',
     image: '/images/gallery/metagross.jpeg',
+    width: 958,
+    height: 1280,
     tag: 'Tolerancia 0.3mm',
     color: 'border-cyber-purple/30 group-hover:border-cyber-purple text-cyber-purple'
   },
@@ -40,6 +48,8 @@ const galleryItems = [
     category: 'POKÉMON • PIEZA FLEXIBLE',
     description: 'Onix de Pokémon impreso en material flexible y en buen tamaño, pensado para exhibirse o manipularse.',
     image: '/images/gallery/onix.jpeg',
+    width: 958,
+    height: 1280,
     tag: 'Flexible',
     color: 'border-cyber-blue/30 group-hover:border-cyber-blue text-cyber-blue'
   },
@@ -47,7 +57,9 @@ const galleryItems = [
     title: 'Endevor (El Enderman Colosal)',
     category: 'BLOCKBENCH & BLENDER • LORE PROPIO',
     description: 'Mutación de 4 brazos y 4 tentáculos nacida de absorber el aliento de la dragona. Co-creación con Bobonsam.',
-    image: '/images/gallery/endevor.png',
+    image: '/images/gallery/endevor.webp',
+    width: 1080,
+    height: 1920,
     tag: 'Proyecto Especial',
     color: 'border-cyber-red/30 group-hover:border-cyber-red text-cyber-red'
   },
@@ -56,6 +68,8 @@ const galleryItems = [
     category: 'HALLOWEEN • ADORNO EN PROCESO',
     description: 'Adorno de Halloween que Bobonsam está pintando a mano. Una pieza decorativa del taller que sigue en proceso.',
     image: '/images/gallery/tumba.jpeg',
+    width: 958,
+    height: 1280,
     tag: 'En pintura',
     color: 'border-cyber-red/30 group-hover:border-cyber-red text-cyber-red'
   }
@@ -106,6 +120,10 @@ const galleryItems = [
             <img 
               src={item.image} 
               alt={item.title}
+              width={item.width}
+              height={item.height}
+              loading="lazy"
+              decoding="async"
               class="max-w-full max-h-full object-contain rounded-xl group-hover:scale-105 transition duration-500 ease-out shadow-md"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
             />

@@ -2347,6 +2347,51 @@ El margen se aplica **antes** del redondeo psicológico (`roundToPsychological`)
 
 
 
+---
+
+## 31. Imagen de Endevor optimizada (Q-50, 03/11/2026)
+
+### 31.1 Objetivo
+Reducir el peso de la foto más grande de la galería para que la página cargue más rápido, sin perder calidad visible.
+
+### 31.2 Resultado
+| Archivo | Antes | Ahora |
+|---|---|---|
+| `endevor` | `endevor.png` · **2.49 MB** (1080×1920) | `endevor.webp` · **77 KB** (1080×1920, calidad 85) |
+
+**Reducción: ~97 %** (de 2.49 MB a 77 KB). La imagen conserva el mismo tamaño y se ve igual en la tarjeta y en el lightbox. Se probaron calidades 75/80/85/90 y se eligió **85** por ser el mejor equilibrio peso/calidad.
+
+### 31.3 Mejoras adicionales en la galería
+Todas las imágenes de `Portfolio.astro` ahora declaran:
+- `width` y `height` reales (evita saltos de layout / CLS).
+- `loading="lazy"` (no se descargan hasta acercarse a la sección).
+- `decoding="async"` (no bloquean el render).
+
+Dimensiones declaradas: FNAF 656×655, Dragones 1600×1198, Gatito/Metagross/Onix/Tumba 958×1280, Endevor 1080×1920.
+
+### 31.4 Cambios aplicados
+| Archivo | Cambio |
+|---|---|
+| `public/images/gallery/endevor.webp` | **Nuevo.** Versión optimizada (77 KB). |
+| `public/images/gallery/endevor.png` | **Eliminado** del proyecto (sigue en el historial de Git por si se necesita). |
+| `src/components/Portfolio.astro` | `image` apunta a `endevor.webp`; se agregaron `width`/`height` por pieza y `loading="lazy"` + `decoding="async"` en el `<img>`. |
+| `docs/BACKLOG_PRIORIZADO.csv` | Q-50 → **Hecho**. |
+| `docs/ESTADO_ACTUAL.md` | Q-50 movido a "ya está hecho", lista de fotos e historial actualizados. |
+
+### 31.5 Verificación QA
+`npm run qa` → **PASA**
+- `astro check`: **0 errores, 0 warnings, 0 hints**.
+- `astro build`: **3 páginas estáticas** + sitemap y robots.
+- `playwright test`: **50 aprobadas, 4 omitidas por diseño**.
+
+### 31.6 Estado
+- **Q-50:** **completado**.
+- **Resto de la galería:** todas las demás fotos ya pesan menos de 160 KB; no requieren conversión urgente.
+- **Siguiente sugerido:** Q-09 (pegar IDs de GA4 y Meta Pixel) o Q-26 (envíos/garantía, requiere datos del negocio).
+
+
+
+
 
 
 

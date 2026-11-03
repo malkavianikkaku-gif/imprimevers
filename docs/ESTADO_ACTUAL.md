@@ -49,7 +49,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 | Q-07/08 | SEO, OG, canonical, favicon, JSON-LD, OG PNG | `Layout.astro`, `public/` |
 | Q-11/12/15/16/17/18 | Offsets, Tailwind sin CDN, skip link, reduced motion, partículas, `rel=noopener` | varios |
 | Q-20 | Hero con oferta clara: "Tus sueños, impresos en 3D" + CTAs | `Hero.astro` |
-| Q-21 / Q-51 | **7 fotos reales** en la pasarela con **lightbox** (clic, ✕, fondo, Escape) | `Portfolio.astro`, `public/images/gallery/` |
+| Q-21 / Q-51 / Q-50 | **7 fotos reales** en la pasarela con **lightbox**; `endevor` convertida a WebP (**2.49 MB → 77 KB**) y todas con `width`/`height` + `loading="lazy"` | `Portfolio.astro`, `public/images/gallery/` |
 | Q-23 | "Cómo funciona" en 4 pasos | `HowItWorks.astro` |
 | Q-24 / Q-52 | 3 paquetes con precios ancla **alineados al motor real** ($60 / $99 / $149) | `Packages.astro` |
 | Q-25 | FAQ (8 preguntas) + schema `FAQPage` | `FAQ.astro`, `src/data/faq.ts` |
@@ -64,7 +64,6 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 
 | Prioridad | ID | Tarea | Archivo(s) | Nota |
 |---|---|---|---|---|
-| P1 | Q-50 | Optimizar imágenes (peso y dimensiones) | `public/images/gallery/`, `Portfolio.astro` | `endevor.png` pesa **2.6 MB**. `sharp` ya está instalado. |
 | P1 | Q-09 | Pegar IDs de **GA4** y **Meta Pixel** | `src/config/analytics.ts` | El código de eventos ya funciona; solo faltan los IDs. |
 | P1 | Q-26 | Envíos, garantía y pagos | nueva sección | **Requiere datos del negocio**; no inventar. |
 | P1 | Q-32 | Google Business Profile | externo | El schema `LocalBusiness` ya existe. |
@@ -109,7 +108,7 @@ Comando único: **`npm run qa`** (= `astro check` + `astro build` + Playwright)
 **Paquetes alineados al motor:** Esencial `$60` · Colección `$99` · Especial `$149`.
 
 ### Fotos publicadas (7)
-`fnaf-chibis.png`, `dragones-flex.jpeg`, `gatito.jpeg`, `metagross.jpeg`, `onix.jpeg`, `endevor.png`, `tumba.jpeg`
+`fnaf-chibis.png`, `dragones-flex.jpeg`, `gatito.jpeg`, `metagross.jpeg`, `onix.jpeg`, `endevor.webp`, `tumba.jpeg`
 
 Datos confirmados de las nuevas:
 - **Gatito Tierno:** PLA, gato estático.
@@ -171,3 +170,4 @@ Datos confirmados de las nuevas:
 | 02/11/2026 | **Q-49:** costos reales aplicados al motor (incluye luz $1.50/kWh); diseño desde cero ahora va dentro del margen | 50 ✔ / 4 omitidas |
 | 03/11/2026 | **Q-52:** paquetes alineados al motor; mano de obra ahora solo por post-proceso | 50 ✔ / 4 omitidas |
 | 03/11/2026 | Margen subido a **40 % / 70 %**; la pieza grande pasa a $249 | 50 ✔ / 4 omitidas |
+| 03/11/2026 | **Q-50:** `endevor` optimizada a WebP (2.49 MB → 77 KB) y galería con dimensiones + lazy load | 50 ✔ / 4 omitidas |
